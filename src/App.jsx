@@ -15,11 +15,11 @@ function App() {
 				<Header/>
 			</header>
 			<div className='flex grow'>
-				<div className='w-[300px] flex'>
+				<div className='basis-1/12 flex'>
 					<Sidebar/>
 				</div>
 				<QueryClientProvider client={queryClient}>
-					<main className='grow'>
+					<main className='basis-5/6'>
 						<Outlet/>
 					</main>
 				</QueryClientProvider>

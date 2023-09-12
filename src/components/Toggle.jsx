@@ -17,12 +17,12 @@ export default function Toggle() {
 	return (
 		<div className='w-[200px]'>
 			<div className='flex items-center'>
-				<h3 className='text-2xl font-bold'>결재 문서</h3>
+				<h3 className='text-xl font-bold'>결재 문서</h3>
 			</div>
 			<ul className='mt-1'>
 				{list.map((item) =>
 					<li
-						className='py-2 text-xl hover:bg-brand hover:opacity-60 rounded-lg hover:text-white cursor-pointer'
+						className='py-2 text-lg hover:bg-brand hover:opacity-60 rounded-lg hover:text-white cursor-pointer'
 						onClick={() => handleClick(item.path)}
 					>
 						> {item.name}
