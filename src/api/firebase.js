@@ -8,6 +8,7 @@ import {
 } from 'firebase/auth';
 import {child, get, getDatabase, ref, set, remove} from 'firebase/database';
 import {v4 as uuid} from 'uuid';
+import moment from "moment";
 
 const firebaseConfig = {
 	apiKey     : process.env.REACT_APP_FIREBASE_KEY,
@@ -19,10 +20,9 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 const auth = getAuth();
-// const dbRef = ref(getDatabase());
+const dbRef = ref(getDatabase());
 const provider = new GoogleAuthProvider();
-
-// const db = getDatabase();
+const db = getDatabase();
 
 export function login() {
 	 signInWithPopup(auth, provider).catch(console.error)
@@ -37,3 +37,55 @@ export function onUserStateChange(callback) {
 		callback(user)
 	});
 }
+
+export async function addNewProduct(product) {
+	const userId = auth.currentUser?.uid;
+	if (!userId) {
+		throw new Error("User is not authenticated");
+	}
+
+	const id = uuid();
+	let now = moment();
+	let dateTime = now.format("YY.MM.DD | HH:mm");
+
+	return set(ref(db, `products/${id}`), {
+		...product,
+		id,
+		userId,
+		date: dateTime,
+		state: '대기',
+	});
+}
+
+
+export async function getProduct(filterState) {
+	const userId = auth.currentUser?.uid;
+	if (!userId) {
+		throw new Error("User is not authenticated");
+	}
+
+	return get(child(dbRef, 'products')).then(snapshot => {
+		if(snapshot.exists()) {
+			const allProducts = Object.values(snapshot.val());
+			const filteredProducts = allProducts.filter(product => {
+				// userId가 일치하는지 확인
+				if (product.userId !== userId) return false;
+
+				// filterState 값이 주어졌을 때만 state를 확인
+				if (filterState && product.state !== filterState) return false;
+
+				return true;
+			});
+
+			// 시간 순으로 정렬 (최신 데이터가 맨 위로)
+			return filteredProducts.sort((a, b) => {
+				if (a.date < b.date) return 1;
+				if (a.date > b.date) return -1;
+				return 0;
+			});
+		}
+		return [];
+	})
+}
+
+

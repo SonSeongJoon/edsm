@@ -15,7 +15,7 @@ function App() {
 				<Header/>
 			</header>
 			<div className='flex grow'>
-				<div className='basis-1/12 flex'>
+				<div className='basis-1/6 flex'>
 					<Sidebar/>
 				</div>
 				<QueryClientProvider client={queryClient}>

@@ -1,9 +1,10 @@
 import React from 'react';
+import PeperList from "../components/PaperList";
 
 export default function Wait() {
 	return (
 		<div>
-			대기
+			<PeperList state='대기'/>
 		</div>
 	);
 }

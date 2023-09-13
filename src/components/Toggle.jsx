@@ -1,5 +1,5 @@
 import React from 'react';
-import {useNavigate} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const list = [
 	{ name: '전체', path: 'total' },
@@ -9,6 +9,7 @@ const list = [
 
 export default function Toggle() {
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const handleClick = (path) => {
 		navigate(`/${path}`)
@@ -22,10 +23,11 @@ export default function Toggle() {
 			<ul className='mt-1'>
 				{list.map((item) =>
 					<li
-						className='py-2 text-lg hover:bg-brand hover:opacity-60 rounded-lg hover:text-white cursor-pointer'
+						className={`py-2 px-1 text-lg rounded-lg cursor-pointer 
+                            ${location.pathname.includes(item.path) ? 'bg-brand opacity-60 text-white' : 'hover:bg-brand hover:bg-opacity-20 hover:text-black'}`}
 						onClick={() => handleClick(item.path)}
 					>
-						> {item.name}
+						{item.name}
 					</li>
 				)}
 			</ul>

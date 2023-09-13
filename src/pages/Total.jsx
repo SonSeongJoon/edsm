@@ -1,5 +1,5 @@
 import React from 'react';
-import PeperList from "../components/PeperList";
+import PeperList from "../components/PaperList";
 
 export default function Total() {
 	return (
