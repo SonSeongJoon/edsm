@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { expenditure } from '../components/html/Expenditure';
 import { ItemOutput } from '../components/html/ItemOutput';
 import { updateProduct } from '../api/firebase';
 import { getDatabase, ref, onValue, off } from 'firebase/database';
-import {EditModal} from "../components/EditModal";
+import { EditModal } from '../components/EditModal';
 
 export default function Detail() {
-  const { state: { product } } = useLocation();
+  const {
+    state: { product },
+  } = useLocation();
   const htmlString = expenditure(product);
   const navigate = useNavigate();
   const [showEditModal, setShowEditModal] = useState(false);
@@ -33,7 +35,7 @@ export default function Detail() {
   function htmlToFile(fileExtension) {
     const sourceMap = {
       doc: 'data:application/msword;charset=utf-8,',
-      html: 'data:text/html;charset=utf-8,'
+      html: 'data:text/html;charset=utf-8,',
     };
     const source = sourceMap[fileExtension] || sourceMap['html'];
     const fileDownload = document.createElement('a');
@@ -66,70 +68,77 @@ export default function Detail() {
     });
   };
 
-
   function handleSave() {
     updateProduct(product, modalProduct)
-    .then(() => {
-      setShowEditModal(false);
-    })
-    .catch((error) => {
-      console.error('Failed to update product:', error);
-    });
+      .then(() => {
+        setShowEditModal(false);
+      })
+      .catch((error) => {
+        console.error('Failed to update product:', error);
+      });
   }
 
   const displayProduct = updatedProduct || product;
 
   return (
-     <div className="max-w-screen-2xl mx-auto border-b border-gray-300 p-5">
-       {showEditModal &&  (
-          <EditModal
-             modalProduct={modalProduct}
-             handleEditChange={handleEditChange}
-             handleItemValue={handleItemValue}
-             handleSave={handleSave}
-             closeEditModal={closeEditModal}
-          />
-       )}
-       <div className="container border-gray-500">
-         <div className="w-full flex justify-between mb-3">
-           <div className="flex items-center">
-             <h1 className="text-2xl font-bold mr-2">{displayProduct.title}</h1>
-             <p className="text-brand text-2xl font-bold mr-2">|</p>
-             <p className="text-gray-500 text-lg">{product.file}</p>
-             <button
-                className="bg-gray-500 text-white p-1 rounded-md text-sm mx-2"
-                onClick={openEditModal}
-             >
-               수정하기
-             </button>
-             <button className="bg-gray-500 text-white p-1 rounded-md text-sm">삭제하기</button>
-           </div>
-           <h1>{product.date}</h1>
-         </div>
-         <div className="flex flex-col header">
-           <div className="flex">
-             <h1 className="font-bold mr-2 mb-1">부서명 : </h1>
-             <p>{displayProduct.dept}</p>
-           </div>
-           <div className="flex">
-             <h1 className="font-bold mr-2 mb-1">거래처 : </h1>
-             <p>{displayProduct.deel}</p>
-           </div>
-           {displayProduct.items.map((item, idx) => (
-              <div key={idx} className="flex items-center mt-5">
-                <ItemOutput item={item} idx={idx + 1} />
-              </div>
-           ))}
-         </div>
-       </div>
-       <div className="mt-2 flex w-full justify-end">
-         <button onClick={() => navigate(-1)} className="bg-brand text-white p-1 rounded-md mr-2">
-           뒤로 가기
-         </button>
-         <button className="bg-blue-800 text-white p-1 rounded-md" onClick={() => htmlToFile('doc')}>
-           워드 다운로드
-         </button>
-       </div>
-     </div>
+    <div className="w-full border-b border-gray-300 p-5 md:p-10 lg:p-20">
+      {showEditModal && (
+        <EditModal
+          modalProduct={modalProduct}
+          handleEditChange={handleEditChange}
+          handleItemValue={handleItemValue}
+          handleSave={handleSave}
+          closeEditModal={closeEditModal}
+        />
+      )}
+      <div className="container mx-auto p-6 md:p-10 lg:p-16 shadow-lg rounded-lg bg-white border border-gray-200">
+        <div className="w-full flex justify-between items-center mb-3">
+          <div className="flex items-center space-x-2">
+            <h1 className="text-2xl font-bold">{displayProduct.title}</h1>
+            <p className="text-brand text-2xl font-bold">|</p>
+            <p className="text-gray-500 text-lg">{product.file}</p>
+            <button
+              className="bg-gray-500 text-white px-2 py-1 rounded text-sm mx-2 hover:bg-gray-600"
+              onClick={openEditModal}
+            >
+              수정하기
+            </button>
+            <button className="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">
+              삭제하기
+            </button>
+          </div>
+          <h1 className="text-gray-600">{product.date}</h1>
+        </div>
+        <div className="flex flex-col header space-y-4 md:space-y-6 lg:space-y-8">
+          <div className="flex items-center">
+            <h1 className="font-bold mr-2">부서명 : </h1>
+            <p className="text-gray-600">{displayProduct.dept}</p>
+          </div>
+          <div className="flex items-center">
+            <h1 className="font-bold mr-2">거래처 : </h1>
+            <p className="text-gray-600">{displayProduct.deel}</p>
+          </div>
+          {displayProduct.items.map((item, idx) => (
+            <div key={idx} className="flex items-center">
+              <ItemOutput item={item} idx={idx + 1} />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="mt-4 flex w-full justify-end space-x-2 md:space-x-4 lg:space-x-8">
+        <button
+          onClick={() => navigate(-1)}
+          className="bg-brand text-white px-4 py-2 rounded hover:bg-brand-dark"
+        >
+          뒤로 가기
+        </button>
+        <button
+          className="bg-blue-800 text-white px-4 py-2 rounded hover:bg-blue-900"
+          onClick={() => htmlToFile('doc')}
+        >
+          워드 다운로드
+        </button>
+      </div>
+    </div>
   );
 }
