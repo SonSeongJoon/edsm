@@ -15,19 +15,24 @@ import Write from "./pages/Write";
 const router = createBrowserRouter([
    {
       path: '/',
-      element: <App/>,
-      errorElement: <NotFound/>,
+      element: <App />,
+      errorElement: <NotFound />,
       children: [
-         {index: true, element: <Home/>},
-         {path: '/total', element:<Total/>},
-         {path: '/wait', element:<Wait/>},
-         {path: '/complete', element:<Complete/>},
-         {path: '/detail/:id', element: <Detail/>},
-         {path: '/write', element: <Write/>}
+         { index: true, element: <Home /> },
+         { path: 'total', element: <Total />, children: [
+               { path: 'page/:pageId', element: <Total /> }
+            ]},
+         { path: 'wait', element: <Wait />, children: [
+               { path: 'page/:pageId', element: <Wait /> }
+            ]},
+         { path: 'complete', element: <Complete />, children: [
+               { path: 'page/:pageId', element: <Complete /> }
+            ]},
+         { path: 'detail/:id', element: <Detail /> },
+         { path: 'write', element: <Write /> }
       ]
    }
-
-])
+]);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

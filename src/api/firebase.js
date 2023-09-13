@@ -1,14 +1,14 @@
-import {initializeApp} from 'firebase/app';
+import { initializeApp } from 'firebase/app';
 import {
-	getAuth,
-	GoogleAuthProvider,
-	onAuthStateChanged,
-	signInWithPopup,
-	signOut,
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut,
 } from 'firebase/auth';
-import {child, get, getDatabase, ref, set, remove} from 'firebase/database';
-import {v4 as uuid} from 'uuid';
-import moment from "moment";
+import { child, get, getDatabase, ref, set } from 'firebase/database';
+import { v4 as uuid } from 'uuid';
+import moment from 'moment';
 
 const firebaseConfig = {
 	apiKey     : process.env.REACT_APP_FIREBASE_KEY,
@@ -87,5 +87,20 @@ export async function getProduct(filterState) {
 		return [];
 	})
 }
+
+export async function updateProduct(product, updatedProduct) {
+	return set(ref(db, `products/${product.id}`), updatedProduct)
+	.then(() => {
+		console.log('성공적으로 수정되었습니다.')
+	}).catch(console.error);
+}
+
+export async function yourFirebaseFunctionToGetProduct(productId) {
+	return get(child(dbRef, `products/${productId}`))
+	.then(snapshot => {
+		return snapshot.val();
+	}).catch("dfdfdfdfdfdf"+console.error);
+}
+
 
 

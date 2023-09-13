@@ -2,9 +2,9 @@ import React from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 
 const list = [
-	{ name: '전체', path: 'total' },
-	{ name: '대기', path: 'wait' },
-	{ name: '완료', path: 'complete' }
+	{ key: 1, name: '전체', path: 'total' },
+	{ key: 2, name: '대기', path: 'wait' },
+	{ key: 3, name: '완료', path: 'complete' }
 ];
 
 export default function Toggle() {
@@ -23,6 +23,7 @@ export default function Toggle() {
 			<ul className='mt-1'>
 				{list.map((item) =>
 					<li
+						key={item.key}
 						className={`py-2 px-1 text-lg rounded-lg cursor-pointer 
                             ${location.pathname.includes(item.path) ? 'bg-brand opacity-60 text-white' : 'hover:bg-brand hover:bg-opacity-20 hover:text-black'}`}
 						onClick={() => handleClick(item.path)}
