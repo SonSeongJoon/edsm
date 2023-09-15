@@ -1,6 +1,6 @@
 export const ItemOutput = ({ item, idx }) => {
 	return (
-		<table className="w-1/2 border-collapse border border-gray-300 mt-2 text-center">
+		<table className="w-full border-collapse border border-gray-300 mt-2 text-center">
 			<thead>
 			<tr>
 				<th className="border border-gray-300 px-4 py-2 w-20">항 목</th>
