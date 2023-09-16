@@ -1,11 +1,15 @@
 import React from 'react';
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 export default function PaperRow({product}) {
 	const {id, title, file, date, state} = product;
 	const navigate = useNavigate();
+	const location = useLocation();
+	const basePath = location.pathname.split('/')[1];
+
+
 	const handleClick = () => {
-		navigate(`/detail/${id}`, { state: { product } });
+		navigate(`/${basePath}/detail/${id}`, { state: { product } });
 	}
 	return (
 		<tr key={product.id}  className='cursor-pointer hover:bg-gray-100'>

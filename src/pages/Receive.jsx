@@ -1,10 +1,13 @@
 import React from 'react';
-import PeperList from "../components/PaperList";
+import PeperList from '../components/PaperList';
+import { useAuthContext } from '../context/AuthContext';
 
 export default function Receive() {
-	return (
-		<div>
-			<PeperList state='수신함'/>
-		</div>
-	);
+  const admin = useAuthContext();
+  const uid = admin.user.uid;
+  return (
+     <div>
+       <PeperList category='receive' state={uid} adminData={true}/>
+     </div>
+  );
 }

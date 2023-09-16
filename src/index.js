@@ -49,20 +49,23 @@ const router = createBrowserRouter([
         ),
         children: [{ path: 'page/:pageId', element: <Complete /> }],
       },
-      { path: 'detail/:id', element: <Detail /> },
-      {
-        path: 'write',
-        element: (
-          <ProtectRoute>
-            <Write />
-          </ProtectRoute>
-        ),
-      },
       {
         path: 'receive',
         element: (
           <ProtectRoute requireAdmin={true}>
             <Receive />
+          </ProtectRoute>
+        ),
+      },
+      { path: 'total/detail/:id', element: <Detail /> },
+      { path: 'wait/detail/:id', element: <Detail /> },
+      { path: 'complete/detail/:id', element: <Detail /> },
+      { path: 'receive/detail/:id', element: <Detail /> },
+      {
+        path: 'write',
+        element: (
+          <ProtectRoute>
+            <Write />
           </ProtectRoute>
         ),
       },

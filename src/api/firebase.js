@@ -1,21 +1,25 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+} from 'firebase/auth';
 import {
   child,
+  equalTo,
   get,
   getDatabase,
-  ref,
-  set,
-  remove,
-  equalTo,
-  query,
   orderByChild,
+  query,
+  ref,
+  remove,
+  set,
 } from 'firebase/database';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import {} from 'firebase/database'; // 필요한 함수와 변수들을 import 해야 합니다.
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_KEY,
@@ -48,7 +52,11 @@ export function onUserStateChange(callback) {
 }
 
 async function adminUser(user) {
-  const usersQuery = query(child(dbRef, 'userdata'), orderByChild('role'), equalTo('부서장&대표'));
+  const usersQuery = query(
+    child(dbRef, 'userdata'),
+    orderByChild('role'),
+    equalTo('부서장&대표'),
+  );
 
   return get(usersQuery).then((snapshot) => {
     if (snapshot.exists()) {
@@ -91,20 +99,21 @@ export async function addNewProduct(product) {
         }
       }
       if (matchedUserId) {
-        console.log("Matched User ID:", matchedUserId);
+        console.log('Matched User ID:', matchedUserId);
         await set(ref(db, `admins/${matchedUserId}/${id}`), {
-          fileId: id,
+          id,
           oneState: '대기',
-          data: {
-            ...product,
-          },
+          date: dateTime,
+          writeUser: userId,
+          ...product,
+          isAdmin: true,
         });
       } else {
-        console.log("No matching user found for email:", email);
+        console.log('No matching user found for email:', email);
       }
     });
   } else {
-    console.log("No users found in the database.");
+    console.log('No users found in the database.');
   }
 }
 
@@ -178,5 +187,46 @@ export const signupEmail = async (formData) => {
 };
 
 export async function getReceive(adminId) {
-  const userId = auth.currentUser?.uid;
+  return get(child(dbRef, `admins/${adminId}`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      const allEntries = snapshot.val();
+      const sortedEntries = Object.values(allEntries).sort((a, b) => {
+        if (a.date < b.date) return 1;
+        if (a.date > b.date) return -1;
+        return 0;
+      });
+      return sortedEntries;
+    }
+    return [];
+  });
+}
+
+// 승인버튼 클릭
+export async function setOneState(adminId, fileId) {
+  return get(child(dbRef, `admins/${adminId}/${fileId}/oneState`)).then(
+     async (snapshot) => {
+       if (snapshot.exists()) {
+         const state = snapshot.val();
+         let newState = "";
+         if (state === '대기') {
+           newState = '승인';
+         } else if (state === '승인' || state === '반려') {
+           newState = state === '승인' ? '반려' : '승인';
+         }
+         await set(ref(db, `admins/${adminId}/${fileId}/oneState`), newState);
+         return newState;
+       }
+     },
+  );
+}
+
+export async function getOneState(adminId, fileId) {
+  return get(child(dbRef, `admins/${adminId}/${fileId}/oneState`)).then(
+    (snapshot) => {
+      if (snapshot.exists()) {
+        console.log(snapshot.val())
+        return snapshot.val();
+      }
+    },
+  );
 }
