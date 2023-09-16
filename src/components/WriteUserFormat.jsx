@@ -32,19 +32,19 @@ export default function WriteUserFormat({
         <div className="container mx-auto p-6 md:p-10 lg:p-16 shadow-lg rounded-lg bg-white border border-gray-200">
           <div className="w-full flex justify-between items-center mb-3">
             <div className="flex items-center space-x-2">
-              <h1 className="text-2xl font-bold">{displayProduct.title}</h1>
-              <p className="text-brand text-2xl font-bold">|</p>
-              <p className="text-gray-500 text-lg">{product.file}</p>
+              <h1 className="sm:text-2xl font-bold text-md">{displayProduct.title}</h1>
+              <p className="text-brand sm:text-2xl font-bold text-lg">|</p>
+              <p className="text-gray-500 text-xm sm:text-lg">{product.file}</p>
             </div>
-            <h1 className="text-gray-600">{product.date}</h1>
+            <h1 className="text-gray-600 text-xm sm:text-md">{product.date}</h1>
           </div>
           <div className="flex flex-col header space-y-4 md:space-y-6 lg:space-y-8">
             <div className="flex items-center">
-              <h1 className="font-bold mr-2">부서명 : </h1>
+              <h1 className="font-bold mr-2 sm:text-md text-xm">부서명 : </h1>
               <p className="text-gray-600">{displayProduct.dept}</p>
             </div>
             <div className="flex items-center">
-              <h1 className="font-bold mr-2">거래처 : </h1>
+              <h1 className="font-bold mr-2 sm:text-md text-xm">거래처 : </h1>
               <p className="text-gray-600">{displayProduct.deel}</p>
             </div>
             {displayProduct.items.map((item, idx) => (

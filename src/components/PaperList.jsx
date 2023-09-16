@@ -52,7 +52,7 @@ export default function PaperList({ category, state , adminData}) {
         pageNumbers={pageNumbers}
         currentPage={currentPage}
         handlePageClick={handlePageClick}
-        isAmdins = {adminData}
+        isAdmins = {adminData}
      />
   );
 }

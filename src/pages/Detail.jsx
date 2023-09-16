@@ -34,7 +34,7 @@ export default function Detail() {
     return () => {
       off(productRef, 'value', handleDataChange);
     };
-  }, [product.id]);
+  }, [product]);
 
   function htmlToFile(fileExtension) {
     const sourceMap = {
@@ -51,7 +51,11 @@ export default function Detail() {
   }
 
   const openEditModal = () => {
-    setModalProduct({ ...product });
+    if (updatedProduct) {
+      setModalProduct(updatedProduct);
+    } else {
+      setModalProduct(product);
+    }
     setShowEditModal(true);
   };
 
@@ -74,12 +78,12 @@ export default function Detail() {
 
   function handleSave() {
     updateProduct(product, modalProduct)
-      .then(() => {
-        setShowEditModal(false);
-      })
-      .catch((error) => {
-        console.error('Failed to update product:', error);
-      });
+    .then(() => {
+      setShowEditModal(false);
+    })
+    .catch((error) => {
+      console.error('Failed to update product:', error);
+    });
   }
 
   function handleDelete() {

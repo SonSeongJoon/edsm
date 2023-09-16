@@ -68,7 +68,7 @@ async function adminUser(user) {
   });
 }
 
-export async function addNewProduct(product) {
+export async function addNewProduct(product ,userName) {
   const userId = auth.currentUser?.uid;
   if (!userId) {
     throw new Error('User is not authenticated');
@@ -83,6 +83,7 @@ export async function addNewProduct(product) {
     userId,
     date: dateTime,
     state: '대기',
+    displayName : userName,
   });
   const emails = product.agree;
   const usersRef = ref(db, 'userdata');
@@ -107,6 +108,7 @@ export async function addNewProduct(product) {
           writeUser: userId,
           ...product,
           isAdmin: true,
+          displayName : userName,
         });
       } else {
         console.log('No matching user found for email:', email);

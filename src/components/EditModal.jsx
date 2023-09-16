@@ -1,15 +1,15 @@
 import {ItemModify} from "./html/ItemModify";
 
 export function EditModal({
-	                   modalProduct,
-	                   handleEditChange,
-	                   handleItemValue,
-	                   handleSave,
-	                   closeEditModal
-                   }) {
+	                          modalProduct,
+	                          handleEditChange,
+	                          handleItemValue,
+	                          handleSave,
+	                          closeEditModal
+                          }) {
 	return (
-		<div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
-			<div className="bg-white p-5 rounded shadow-lg w-[800px] border border-gray-500">
+		<div className="fixed top-0 left-0 w-full h-full flex justify-center items-center sm:text-md text-xm">
+			<div className="bg-white p-5 rounded shadow-lg w-[800px] border border-gray-500 max-h-[500px] overflow-y-auto">
 				<h1 className='text-3xl font-bold mb-5'>수정하기</h1>
 				<div className="flex items-center mb-2">
 					<h1 className="font-bold mr-2 mb-1">제&nbsp;&nbsp;&nbsp;&nbsp;목 : </h1>

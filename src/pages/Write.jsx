@@ -4,6 +4,7 @@ import { addNewProduct } from '../api/firebase';
 import ExpendForm from '../components/ExpendForm';
 import VacationForm from '../components/VacationForm';
 import {useNavigate} from "react-router-dom";
+import {useAuthContext} from "../context/AuthContext";
 
 const options = ['지출결의서', '휴가계'];
 const approvers = [
@@ -26,9 +27,11 @@ export default function Write() {
     agree: [],
   };
 
+  const user = useAuthContext();
+  const userName = user.user.displayName
   const [product, setProduct] = useState(init);
   const handleSubmit = (e) => {
-    addNewProduct(product).then(() => {
+    addNewProduct(product, userName).then(() => {
       alert('등록 되었습니다.');
       setProduct(init);
       navigator(`/wait`)
