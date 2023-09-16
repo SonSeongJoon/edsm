@@ -4,14 +4,18 @@ import Button from '../ui/Button';
 import { logout } from '../api/firebase';
 import User from './User';
 import { useAuthContext } from '../context/AuthContext';
+import {FiMenu} from "react-icons/fi";
 
-export default function Header() {
+export default function Header({ toggleSidebar }) {
   const navigator = useNavigate();
   const { user } = useAuthContext();
 
   return (
     <div className="flex p-3 border-b border-b-gray-300 justify-between items-center">
-      <div className="flex items-end">
+      <div className="flex items-center">
+         <button onClick={toggleSidebar} className="mr-4 sm:hidden">
+            <FiMenu size={24} />
+         </button>
         <Link to="/">
           <p className="text-4xl font-bold mr-5 text-brand">SeoulIR</p>
         </Link>

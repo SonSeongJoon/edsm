@@ -9,7 +9,7 @@ export default function Sidebar() {
 		navigate(`/write`);
 	}
 	return (
-		<div className='w-full flex flex-col border-r border-r-gray-300 bg-red-50 p-5'>
+		<div className='w-full flex flex-col  p-5'>
 			<div className='w-full flex justify-center'>
 				<MainButton onclick={handleOnclick}/>
 			</div>

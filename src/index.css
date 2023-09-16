@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @font-face {
     font-family: 'SUIT-Regular';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');
@@ -10,6 +11,9 @@
 
 body {
     font-family: "SUIT-Regular";
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
 }
 
 code {
@@ -17,8 +21,22 @@ code {
     monospace;
 }
 
-body {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 8px;           /* Width of vertical scrollbar */
+    height: 8px;          /* Height of horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color of the scrollbar track */
+    border-radius: 4px;  /* Rounded corners for scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;    /* Color of the scrollbar thumb (the draggable part) */
+    border-radius: 4px;  /* Rounded corners for scrollbar thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;    /* Color of the scrollbar thumb on hover */
 }
