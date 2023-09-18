@@ -8,7 +8,6 @@ export const ItemModify = ({ item, idx, handleItemValue }) => {
     setLocalItem(updatedItem);
   };
 
-  // 항목의 수정이 완료될 때만 handleItemValue 함수를 호출합니다.
   useEffect(() => {
     return () => {
       handleItemValue(idx - 1, localItem);

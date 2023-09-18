@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { EditModal } from './EditModal';
-import {ItemOutput} from "./html/ItemOutput"; // 경로는 실제로 해당 컴포넌트가 위치한 곳으로 수정해야 합니다.
+import {ItemOutput} from "./html/ItemOutput";
+import ReasonText from "./ReasonText"; // 경로는 실제로 해당 컴포넌트가 위치한 곳으로 수정해야 합니다.
 
 export default function WriteUserFormat({
   showEditModal,
@@ -83,7 +84,7 @@ export default function WriteUserFormat({
           </button>
         </div>
         <div className='w-full border-b'>
-          <p className='text-xl font-bold'>반려 사유</p>
+          <ReasonText fileId={product.id}/>
         </div>
       </div>
     </div>

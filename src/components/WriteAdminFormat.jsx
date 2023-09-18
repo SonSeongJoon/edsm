@@ -69,7 +69,7 @@ export default function WriteAdminFormat({
            현재 {data} 상태
           </button>
         </div>
-        {data === '반려' ? <ReturnText/> : null}
+        {data === '반려' ? <ReturnText product={product}/> : null}
       </div>
     </div>
   );

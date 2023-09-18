@@ -68,7 +68,7 @@ async function adminUser(user) {
   });
 }
 
-export async function addNewProduct(product ,userName) {
+export async function addNewProduct(product, userName) {
   const userId = auth.currentUser?.uid;
   if (!userId) {
     throw new Error('User is not authenticated');
@@ -83,7 +83,7 @@ export async function addNewProduct(product ,userName) {
     userId,
     date: dateTime,
     state: '대기',
-    displayName : userName,
+    displayName: userName,
   });
   const emails = product.agree;
   const usersRef = ref(db, 'userdata');
@@ -108,7 +108,7 @@ export async function addNewProduct(product ,userName) {
           writeUser: userId,
           ...product,
           isAdmin: true,
-          displayName : userName,
+          displayName: userName,
         });
       } else {
         console.log('No matching user found for email:', email);
@@ -206,19 +206,27 @@ export async function getReceive(adminId) {
 // 승인버튼 클릭
 export async function setOneState(adminId, fileId) {
   return get(child(dbRef, `admins/${adminId}/${fileId}/oneState`)).then(
-     async (snapshot) => {
-       if (snapshot.exists()) {
-         const state = snapshot.val();
-         let newState = "";
-         if (state === '대기') {
-           newState = '승인';
-         } else if (state === '승인' || state === '반려') {
-           newState = state === '승인' ? '반려' : '승인';
-         }
-         await set(ref(db, `admins/${adminId}/${fileId}/oneState`), newState);
-         return newState;
-       }
-     },
+    async (snapshot) => {
+      if (snapshot.exists()) {
+        const state = snapshot.val();
+        let newState = '';
+        switch (state) {
+          case '대기':
+            newState = '승인';
+            break;
+          case '승인':
+            newState = '반려';
+            break;
+          case '반려':
+            newState = '대기';
+            break;
+          default:
+            break;
+        }
+        await set(ref(db, `admins/${adminId}/${fileId}/oneState`), newState);
+        return newState;
+      }
+    },
   );
 }
 
@@ -226,9 +234,28 @@ export async function getOneState(adminId, fileId) {
   return get(child(dbRef, `admins/${adminId}/${fileId}/oneState`)).then(
     (snapshot) => {
       if (snapshot.exists()) {
-        console.log(snapshot.val())
+        console.log(snapshot.val());
         return snapshot.val();
       }
     },
   );
 }
+
+// 반려사유등록하기
+export async function setRejectReason(fileId, reasonText, userId) {
+  return set(ref(db, `products/${fileId}/reason/${userId}`), reasonText);
+}
+
+export async function removeRejectReason(fileId, userId) {
+  return remove(ref(db, `products/${fileId}/reason/${userId}`));
+}
+
+export async function getRejectReason(fileId) {
+  return get(child(dbRef, `products/${fileId}`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      return snapshot.val().reason;
+    }
+    return null;
+  });
+}
+

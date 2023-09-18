@@ -1,22 +1,28 @@
 import React, { useState } from 'react';
+import {removeRejectReason, setRejectReason} from "../api/firebase";
+import {useAuthContext} from "../context/AuthContext";
 
-export default function ReturnText() {
+export default function ReturnText({product}) {
   const [reason, setReason] = useState('');
-  const [displayText, setDisplayText] = useState('');  // Store the text to be displayed as a paragraph
-  const [isSubmitted, setIsSubmitted] = useState(false);  // Determine whether the text has been submitted
-
+  const [displayText, setDisplayText] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const user = useAuthContext();
   const handleChange = (e) => {
     setReason(e.target.value);
   };
 
+
   const handleSubmit = () => {
     if (!isSubmitted) {
-      setDisplayText(reason);  // Store the input value as the display text
-      setReason('');  // Clear the input
-      setIsSubmitted(true);  // Mark as submitted
+      setDisplayText(reason);
+      setReason('');
+      setRejectReason(product.id, reason, user.user.displayName).catch(console.error);
+      setIsSubmitted(true);
     } else {
-      setDisplayText('');  // Clear the display text
-      setIsSubmitted(false);  // Reset the submission state
+      setDisplayText('');
+      setIsSubmitted(false);
+      removeRejectReason(product.id, user.user.displayName).catch(console.error);
+
     }
   };
 
@@ -25,8 +31,7 @@ export default function ReturnText() {
        <h1 className="text-xl font-bold mb-4">반려 사유 입력</h1>
        <div className="flex mb-2 items-center justify-between">
          {!isSubmitted ? (
-            <input
-               type="text"
+            <textarea
                id="reason"
                name="reason"
                value={reason}
@@ -39,7 +44,7 @@ export default function ReturnText() {
          )}
          <button
             onClick={handleSubmit}
-            className={`border p-2 rounded-lg text-white ${isSubmitted ? 'bg-brand' : 'bg-blue-500'}`}
+            className={`border py-2 px-4 rounded-lg text-white ${isSubmitted ? 'bg-brand' : 'bg-blue-500'}`}
          >
            {isSubmitted ? '삭제' : '등록'}
          </button>
