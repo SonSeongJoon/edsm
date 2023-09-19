@@ -16,7 +16,7 @@ export const TableComponent = ({
     getAllOneState(),
   );
   return (
-    <div className="w-full text-sm sm:text-md">
+    <div className="w-full text-xm sm:text-md">
       {isLoading && <p>Loading...</p>}
       {error && <p>Error...</p>}
       <table className="min-w-full bg-white border-t border-b border-gray-300 divide-y divide-gray-300 ">

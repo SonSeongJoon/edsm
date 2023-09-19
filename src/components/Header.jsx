@@ -22,15 +22,18 @@ export default function Header({ toggleSidebar }) {
 
    return (
     <div className="flex p-3 border-b border-b-gray-300 justify-between items-center">
-      <div className="flex items-center">
+      <div className="flex">
          <button onClick={toggleSidebar} className="mr-4 sm:hidden">
             <FiMenu size={24} />
          </button>
-        <Link to="/">
-          <p className="text-4xl font-bold mr-5 text-brand">SeoulIR</p>
-        </Link>
+         <div className='flex items-end'>
+            <Link to="/">
+               <p className="text-lg sm:text-4xl font-bold mr-2 text-brand">SeoulIR</p>
+            </Link>
 
-        <p className="text-2xl">전자결재</p>
+            <p className="text-md sm:text-xl items-end">전자결재</p>
+         </div>
+
       </div>
       <div className="flex items-center">
         {user && <User user={user} />}

@@ -20,7 +20,7 @@ export default function Toggle() {
   return (
     <div className="w-[200px]">
       <div className="flex items-center">
-        <h3 className="text-xl font-bold">결재 문서</h3>
+        <h3 className="text-md sm:text-lg font-bold">결재 문서</h3>
       </div>
        <ul className="mt-1">
           {list.map((item) => {
@@ -30,7 +30,7 @@ export default function Toggle() {
              return (
                 <li
                    key={item.key}
-                   className={`py-2 px-1 text-lg rounded-lg cursor-pointer 
+                   className={`py-2 px-1 text-sm sm:text-md rounded-lg cursor-pointer 
                           ${
                       location.pathname.includes(item.path)
                          ? 'bg-brand opacity-60 text-white'
