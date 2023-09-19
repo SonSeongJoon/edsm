@@ -29,7 +29,7 @@ export default function PaperRow({ product, isAdmins, states }) {
   };
 
   function determineState(states) {
-    if (!states || states.length === 0) return '데이터 로딩 중...';
+    if (!states || states.length === 0) return '대기';
 
     if (states.includes('대기')) return '대기';
     if (states.includes('반려')) return '반려';
