@@ -100,7 +100,6 @@ export async function addNewProduct(product, userName) {
         }
       }
       if (matchedUserId) {
-        console.log('Matched User ID:', matchedUserId);
         await set(ref(db, `admins/${matchedUserId}/${id}`), {
           id,
           oneState: '대기',
@@ -148,9 +147,6 @@ export async function getProduct(filterState) {
 
 export async function updateProduct(product, updatedProduct) {
   return set(ref(db, `products/${product.id}`), updatedProduct)
-    .then(() => {
-      console.log('성공적으로 수정되었습니다.');
-    })
     .catch(console.error);
 }
 
@@ -303,6 +299,7 @@ export async function getAllOneState() {
 
   if (!data) {
     console.log('No matching documents found.');
+
     return [];
   }
 
