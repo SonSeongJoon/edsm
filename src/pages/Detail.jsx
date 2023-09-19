@@ -9,7 +9,7 @@ import WriteAdminFormat from '../components/WriteAdminFormat';
 
 export default function Detail() {
   const {
-    state: { product },
+    state: { product, resultState },
   } = useLocation();
   const htmlString = expenditure(product);
   const navigate = useNavigate();
@@ -78,12 +78,12 @@ export default function Detail() {
 
   function handleSave() {
     updateProduct(product, modalProduct)
-    .then(() => {
-      setShowEditModal(false);
-    })
-    .catch((error) => {
-      console.error('Failed to update product:', error);
-    });
+      .then(() => {
+        setShowEditModal(false);
+      })
+      .catch((error) => {
+        console.error('Failed to update product:', error);
+      });
   }
 
   function handleDelete() {
@@ -112,6 +112,7 @@ export default function Detail() {
       ) : (
         <>
           <WriteUserFormat
+            oneState={resultState}
             showEditModal={showEditModal}
             modalProduct={modalProduct}
             handleEditChange={handleEditChange}

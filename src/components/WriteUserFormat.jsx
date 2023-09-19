@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { EditModal } from './EditModal';
-import {ItemOutput} from "./html/ItemOutput";
-import ReasonText from "./ReasonText"; // 경로는 실제로 해당 컴포넌트가 위치한 곳으로 수정해야 합니다.
+import { ItemOutput } from './html/ItemOutput';
+import ReasonText from './ReasonText'; // 경로는 실제로 해당 컴포넌트가 위치한 곳으로 수정해야 합니다.
 
 export default function WriteUserFormat({
   showEditModal,
@@ -17,6 +17,7 @@ export default function WriteUserFormat({
   handleDelete,
   navigate,
   htmlToFile,
+  oneState,
 }) {
   return (
     <div className="w-full">
@@ -31,9 +32,13 @@ export default function WriteUserFormat({
       )}
       <div className="p-10">
         <div className="container mx-auto p-6 md:p-10 lg:p-16 shadow-lg rounded-lg bg-white border border-gray-200">
+          <p className='text-sm text-brand font-bold'>[{oneState}]</p>
           <div className="w-full flex justify-between items-center mb-3">
+
             <div className="flex items-center space-x-2">
-              <h1 className="sm:text-2xl font-bold text-md">{displayProduct.title}</h1>
+              <h1 className="sm:text-2xl font-bold text-md">
+                {displayProduct.title}
+              </h1>
               <p className="text-brand sm:text-2xl font-bold text-lg">|</p>
               <p className="text-gray-500 text-xm sm:text-lg">{product.file}</p>
             </div>
@@ -83,8 +88,8 @@ export default function WriteUserFormat({
             워드 다운로드
           </button>
         </div>
-        <div className='w-full border-b'>
-          <ReasonText fileId={product.id}/>
+        <div className="w-full border-b">
+          <ReasonText fileId={product.id} />
         </div>
       </div>
     </div>

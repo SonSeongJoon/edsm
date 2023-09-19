@@ -234,7 +234,6 @@ export async function getOneState(adminId, fileId) {
   return get(child(dbRef, `admins/${adminId}/${fileId}/oneState`)).then(
     (snapshot) => {
       if (snapshot.exists()) {
-        console.log(snapshot.val());
         return snapshot.val();
       }
     },
@@ -242,20 +241,80 @@ export async function getOneState(adminId, fileId) {
 }
 
 // 반려사유등록하기
-export async function setRejectReason(fileId, reasonText, userId) {
-  return set(ref(db, `products/${fileId}/reason/${userId}`), reasonText);
+export async function setRejectReason(fileId, reasonText, userName, userId) {
+  // 첫 번째 경로에 저장
+  const firstPath = ref(db, `products/${fileId}/reason/${userName}`);
+
+  const secondPath = ref(db, `admins/${userId}/${fileId}/reason`);
+
+  await Promise.all([
+    set(firstPath, reasonText),
+    set(secondPath, reasonText)
+  ]);
+
+  return true;
 }
 
-export async function removeRejectReason(fileId, userId) {
-  return remove(ref(db, `products/${fileId}/reason/${userId}`));
+// 반려사유 삭제하기
+export async function removeRejectReason(fileId, userName, userId) {
+  const firstPath = ref(db, `products/${fileId}/reason/${userName}`);
+
+  const secondPath = ref(db, `admins/${userId}/${fileId}/reason`);
+
+  await Promise.all([
+     remove(firstPath),
+     remove(secondPath)
+  ]);
+  return true;
 }
 
-export async function getRejectReason(fileId) {
+export async function getRejectReasonProduct(fileId) {
   return get(child(dbRef, `products/${fileId}`)).then((snapshot) => {
     if (snapshot.exists()) {
       return snapshot.val().reason;
     }
     return null;
   });
+}
+
+export async function getRejectReasonAdmin(userId, fileId) {
+  return get(child(dbRef, `admins/${userId}/${fileId}/reason`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      return snapshot.val()
+    }
+    return null;
+  });
+}
+
+export async function setAdmit(fileId, userName) {
+  return set(ref(db, `products/${fileId}/admitMember/${userName}`), true);
+}
+
+
+
+export async function removeAdmit(fileId, userName) {
+  return remove(ref(db, `products/${fileId}/admitMember/${userName}`))
+}
+
+export async function getAllOneState() {
+  const adminsRef = ref(db, 'admins'); // 'admins' 참조를 가져옵니다.
+  const snapshot = await get(adminsRef);
+  const data = snapshot.val();
+
+  if (!data) {
+    console.log('No matching documents found.');
+    return [];
+  }
+
+  let oneStates = [];
+  for (let userId in data) {
+    for (let file in data[userId]) {
+      oneStates.push({
+        id: data[userId][file].id,
+        state: data[userId][file].oneState
+      });
+    }
+  }
+  return oneStates;
 }
 

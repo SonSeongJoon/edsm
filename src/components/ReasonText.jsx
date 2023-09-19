@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {getRejectReason} from "../api/firebase";
+import {getRejectReasonProduct} from "../api/firebase";
 
 export default function ReasonText({fileId}) {
 	const [reasonText, setReasonText] = useState(null);
 
 	useEffect(() => {
 		const fetchReason = async () => {
-			const result = await getRejectReason(fileId);
+			const result = await getRejectReasonProduct(fileId);
 			setReasonText(result);
 		};
 

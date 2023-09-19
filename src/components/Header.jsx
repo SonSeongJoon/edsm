@@ -10,7 +10,17 @@ export default function Header({ toggleSidebar }) {
   const navigator = useNavigate();
   const { user } = useAuthContext();
 
-  return (
+   const handleLogout = async () => {
+      try {
+         await logout();
+         navigator("/login");
+      } catch (error) {
+         console.error("Error during logout:", error);
+      }
+   };
+
+
+   return (
     <div className="flex p-3 border-b border-b-gray-300 justify-between items-center">
       <div className="flex items-center">
          <button onClick={toggleSidebar} className="mr-4 sm:hidden">
@@ -25,7 +35,7 @@ export default function Header({ toggleSidebar }) {
       <div className="flex items-center">
         {user && <User user={user} />}
         {!user && <Button text="Login" onClick={() => navigator(`/login`)} />}
-        {user && <Button text="Logout" onClick={logout} />}
+        {user && <Button text="Logout" onClick={handleLogout} />}
         <div className="ml-2">
           {!user && <Button text="Sign" onClick={() => navigator(`/sign`)} />}
         </div>
