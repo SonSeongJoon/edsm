@@ -12,7 +12,7 @@ export const ItemModify = ({ item, idx, handleItemValue }) => {
     return () => {
       handleItemValue(idx - 1, localItem);
     };
-  }, [handleItemValue, idx, localItem]);
+  }, [localItem]);
 
   return (
      <table className="w-full border-collapse border border-gray-300 mt-2 text-center">
