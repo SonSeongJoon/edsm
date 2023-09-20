@@ -11,7 +11,10 @@ export default function Sidebar({toggleSidebar}) {
   return (
     <div className="w-full flex flex-col  p-5">
       <div className="w-full flex justify-center">
-        <MainButton onclick={handleOnclick} />
+        <MainButton onclick={() => {
+           handleOnclick();
+           toggleSidebar();
+        }} />
       </div>
       <div className="w-full flex mt-5 justify-center">
          <Toggle toggleSidebar={toggleSidebar} />
