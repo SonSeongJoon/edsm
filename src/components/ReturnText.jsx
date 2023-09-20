@@ -22,6 +22,7 @@ export default function ReturnText({ product, onChildSubmit }) {
         );
         if (loadedReason) {
           setDisplayText(loadedReason);
+          onChildSubmit(loadedReason);
           setIsSubmitted(true);
         } else {
           setIsSubmitted(false);
@@ -42,7 +43,6 @@ export default function ReturnText({ product, onChildSubmit }) {
     if (!isSubmitted) {
       setDisplayText(reason);
       setReason('');
-      onChildSubmit('loadedReason');
       setRejectReason(
         product.id,
         reason,
