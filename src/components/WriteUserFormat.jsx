@@ -77,7 +77,7 @@ export default function WriteUserFormat({
         <div className="container mx-auto mt-10 flex w-full justify-end space-x-2 md:space-x-4 lg:space-x-8">
           <button
             onClick={() => navigate(-1)}
-            className="bg-brand text-white px-4 py-2 rounded hover:bg-brand-dark"
+            className="px-4 py-2 rounded hover:bg-brand-dark border bg-gray-200 border-gray-300"
           >
             뒤로 가기
           </button>

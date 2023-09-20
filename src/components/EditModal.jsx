@@ -39,7 +39,7 @@ export function EditModal({
 					/>
 				</div>
 				{modalProduct.items.map((item, idx) => (
-					<div key={idx} className="flex items-center mt-5">
+					<div key={idx} className="flex items-center mt-5 z-100">
 						<ItemModify item={item} idx={idx + 1} handleItemValue={handleItemValue} />
 					</div>
 				))}

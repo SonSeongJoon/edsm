@@ -53,24 +53,39 @@ export default function WriteAdminFormat({
 
   return (
     <div className="w-full p-10 lg:flex">
-      <div className='lg:w-2/3'>
+      <div className="lg:w-2/3">
         <div className="container mx-auto p-6 md:p-10 lg:p-16 shadow-lg rounded-lg bg-white border border-gray-200">
+          <p className="flex items-center mb-3 sm:text-md text-sm">
+            현재 해당 결재를 &nbsp;
+            <span
+              className={` text-white py-1 px-1.5 rounded-md ${
+                data === '승인'
+                  ? 'bg-emerald-600'
+                  : data === '대기'
+                  ? 'bg-gray-600'
+                  : 'bg-red-800'
+              }`}
+            >
+              {data}
+            </span>
+            &nbsp;하신 상태입니다!
+          </p>
           <div className="w-full flex justify-between items-center mb-3">
             <div className="flex items-center space-x-2">
-              <h1 className="text-2xl font-bold">{displayProduct.title}</h1>
-              <p className="text-brand text-2xl font-bold">|</p>
-              <p className="text-gray-500 text-lg">{product.file}</p>
+              <h1 className="sm:text-2xl text-md font-bold">{displayProduct.title}</h1>
+              <p className="text-brand sm:text-2xl text-lg font-bold">|</p>
+              <p className="text-xm sm:text-lg text-gray-500 text-lg">{product.file}</p>
             </div>
-            <h1 className="text-gray-600">{product.date}</h1>
+            <h1 className="text-gray-600 text-xm sm:text-md">{product.date}</h1>
           </div>
           <div className="flex flex-col header space-y-4 md:space-y-6 lg:space-y-8">
             <div className="flex items-center">
-              <h1 className="font-bold mr-2">부서명 : </h1>
-              <p className="text-gray-600">{displayProduct.dept}</p>
+              <h1 className="sm:text-md text-xm font-bold mr-2">부서명 : </h1>
+              <p className="text-gray-600 text-sm sm:text-md">{displayProduct.dept}</p>
             </div>
             <div className="flex items-center">
-              <h1 className="font-bold mr-2">거래처 : </h1>
-              <p className="text-gray-600">{displayProduct.deel}</p>
+              <h1 className="font-bold mr-2 sm:text-md text-xm">거래처 : </h1>
+              <p className="text-gray-600 text-sm sm:text-md">{displayProduct.deel}</p>
             </div>
             {displayProduct.items.map((item, idx) => (
               <div key={idx} className="flex items-center">
@@ -82,19 +97,28 @@ export default function WriteAdminFormat({
         <div className="container mx-auto mt-10 flex w-full justify-end">
           <button
             onClick={() => navigate(-1)}
-            className="bg-brand text-white px-4 py-2 rounded hover:bg-brand-dark"
+            className="px-4 py-2 rounded hover:bg-brand-dark border bg-gray-200 border-gray-300"
           >
             뒤로 가기
           </button>
           <button
-            className="bg-blue-800 text-white px-4 py-2 rounded hover:bg-blue-900 ml-2"
+            className={`
+        ${
+          data === '승인'
+            ? 'bg-emerald-600 hover:bg-emerald-700'
+            : data === '대기'
+            ? 'bg-gray-600 hover:bg-gray-700'
+            : 'bg-red-800 hover:bg-red-900'
+        } 
+        text-white px-4 py-2 rounded ml-2
+    `}
             onClick={handleAdmit}
           >
             현재 {data} 상태
           </button>
         </div>
       </div>
-      <div className='lg:w-1/3'>
+      <div className="lg:w-1/3">
         <div className="flex justify-end w-full mt-3 lg:mt-0 lg:ml-3">
           {data === '반려' ? (
             <ReturnText

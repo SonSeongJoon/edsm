@@ -10,7 +10,7 @@ export const ItemModify = ({ item, idx, handleItemValue }) => {
   };
 
   return (
-    <table className="w-full border-collapse border border-gray-300 mt-2 text-center">
+    <table className="w-full border-collapse border border-gray-300 mt-2 text-center ">
       <thead>
         <tr>
           <th className="border border-gray-300 px-0.5 py-0.5">항 목</th>

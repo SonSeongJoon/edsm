@@ -22,7 +22,7 @@ function App() {
            <Header toggleSidebar={toggleSidebar} />
          </header>
          <div className="flex-grow flex relative"> {/* Added relative here for positioning context */}
-           <div className={`${isSidebarOpen ? '' : 'hidden'} sm:block absolute sm:static top-0 left-0 h-[calc(100vh - 4rem)] flex-shrink-0 flex-basis-1/6 bg-red-50 border-r border-r-gray-300 z-10`}>
+           <div className={`${isSidebarOpen ? '' : 'hidden'} sm:block absolute sm:static top-0 left-0 h-[calc(100vh - 4rem)] flex-shrink-0 flex-basis-1/6 bg-red-50 border-r border-r-gray-300`}>
              <Sidebar toggleSidebar={toggleSidebar} />
            </div>
            <QueryClientProvider client={queryClient}>
