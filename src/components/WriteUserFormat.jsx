@@ -66,12 +66,12 @@ export default function WriteUserFormat({
             >
               수정하기
             </button>
-            <button
-              className="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600"
-              onClick={handleDelete}
-            >
-              삭제하기
-            </button>
+            {/*<button*/}
+            {/*  className="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600"*/}
+            {/*  onClick={handleDelete}*/}
+            {/*>*/}
+            {/*  삭제하기*/}
+            {/*</button>*/}
           </div>
         </div>
         <div className="container mx-auto mt-10 flex w-full justify-end space-x-2 md:space-x-4 lg:space-x-8">
