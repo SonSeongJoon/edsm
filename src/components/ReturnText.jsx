@@ -86,7 +86,7 @@ export default function ReturnText({ product, onChildSubmit }) {
             className="mt-1 p-2 w-full border rounded-md"
           />
         ) : (
-          <p className="mt-1 p-2 w-full">{displayText}</p>
+          <p className="my-1 p-2 w-full">{displayText}</p>
         )}
       </div>
     </div>

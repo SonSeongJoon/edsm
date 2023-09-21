@@ -11,6 +11,7 @@ export const TableComponent = ({
   currentPage,
   handlePageClick,
   isAdmins,
+  isMst,
 }) => {
   const { data: allOneStates } = useQuery(['AllOneState'], () =>
     getAllOneState(),
@@ -52,6 +53,7 @@ export const TableComponent = ({
                 product={product}
                 isAdmins={isAdmins}
                 states={matchingStates}
+                isMst={isMst}
               />
             );
           })}

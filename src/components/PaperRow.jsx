@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { setState } from '../api/firebase';
 
-export default function PaperRow({ product, isAdmins, states }) {
+export default function PaperRow({ product, isAdmins, states, isMst }) {
   const { id, title, file, date, displayName, oneState } = product;
   const navigate = useNavigate();
   const location = useLocation();
   const basePath = location.pathname.split('/')[1];
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 640);
   const resultState = determineState(states);
+  useEffect(() => {
+    // 상태가 변경될 때만 데이터베이스를 업데이트합니다.
+    if (resultState !== oneState) {
+      setState(product.id, resultState).catch(console.error);
+    }
+  }, [oneState, product.id, resultState]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -24,7 +31,7 @@ export default function PaperRow({ product, isAdmins, states }) {
 
   const handleClick = () => {
     navigate(`/${basePath}/detail/${id}`, {
-      state: { product, oneState, resultState },
+      state: { product, isMst, oneState, resultState },
     });
   };
 

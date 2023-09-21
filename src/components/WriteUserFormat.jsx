@@ -2,7 +2,7 @@ import React from 'react';
 
 import { EditModal } from './EditModal';
 import ReasonText from './ReasonText';
-import ExpenditureShow from "./html/ExpenditureShow"; // 경로는 실제로 해당 컴포넌트가 위치한 곳으로 수정해야 합니다.
+import ExpenditureShow from './html/ExpenditureShow'; // 경로는 실제로 해당 컴포넌트가 위치한 곳으로 수정해야 합니다.
 
 export default function WriteUserFormat({
   showEditModal,
@@ -18,6 +18,7 @@ export default function WriteUserFormat({
   navigate,
   htmlToFile,
   oneState,
+  isMst,
 }) {
   return (
     <div className="w-full">
@@ -32,15 +33,17 @@ export default function WriteUserFormat({
       )}
       <div className="p-10">
         <div className="container mx-auto p-6 md:p-10 lg:p-16 shadow-lg rounded-lg bg-white border border-gray-200">
-          <p className='text-sm text-brand font-bold'>[{oneState}]</p>
-          <ExpenditureShow product={displayProduct}/>
+          <p className="text-sm text-brand font-bold">[{oneState}]</p>
+          <ExpenditureShow product={displayProduct} />
+          <div>수신자: </div>
           <div className="mt-3">
-            <button
-              className="bg-gray-500 text-white px-2 py-1 rounded text-sm mr-2 hover:bg-gray-600"
-              onClick={openEditModal}
+            {!isMst ? <button
+               className="bg-gray-500 text-white px-2 py-1 rounded text-sm mr-2 hover:bg-gray-600"
+               onClick={openEditModal}
             >
               수정하기
-            </button>
+            </button> : null}
+
             {/*<button*/}
             {/*  className="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600"*/}
             {/*  onClick={handleDelete}*/}
@@ -63,7 +66,7 @@ export default function WriteUserFormat({
             워드 다운로드
           </button>
         </div>
-        <div className="w-full border-b">
+        <div className="w-full">
           <ReasonText fileId={product.id} />
         </div>
       </div>

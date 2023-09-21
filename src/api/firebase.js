@@ -9,10 +9,8 @@ import {
 } from 'firebase/auth';
 import {
   child,
-  equalTo,
   get,
   getDatabase,
-  orderByChild,
   query,
   ref,
   remove,
@@ -46,27 +44,25 @@ export function logout() {
 
 export function onUserStateChange(callback) {
   onAuthStateChanged(auth, async (user) => {
-    const updateUser = user ? await adminUser(user) : null;
-    callback(updateUser);
+    const updatedUser = user ? await getUserDetails(user) : null;
+    callback(updatedUser);
   });
 }
 
-async function adminUser(user) {
-  const usersQuery = query(
-    child(dbRef, 'userdata'),
-    orderByChild('role'),
-    equalTo('부서장&대표'),
-  );
+async function getUserDetails(user) {
+  const usersQuery = query(child(dbRef, 'userdata'));
 
   return get(usersQuery).then((snapshot) => {
     if (snapshot.exists()) {
       const users = snapshot.val();
-      const isAdmin = Object.keys(users).includes(user.uid);
-      return { ...user, isAdmin };
+      const isAdmin = Object.keys(users).some(uid => users[uid].role === '부서장&대표' && uid === user.uid);
+      const isMst = Object.keys(users).some(uid => users[uid].department === '경영지원팀' && uid === user.uid);
+      return { ...user, isAdmin, isMst };
     }
     return user;
   });
 }
+
 
 export async function addNewProduct(product, userName) {
   const userId = auth.currentUser?.uid;
@@ -145,9 +141,40 @@ export async function getProduct(filterState) {
   });
 }
 
+export async function getReceive(adminId) {
+  return get(child(dbRef, `admins/${adminId}`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      const allEntries = snapshot.val();
+      const sortedEntries = Object.values(allEntries).sort((a, b) => {
+        if (a.date < b.date) return 1;
+        if (a.date > b.date) return -1;
+        return 0;
+      });
+      return sortedEntries;
+    }
+    return [];
+  });
+}
+
+export async function getAll() {
+  return get(child(dbRef, `products`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      const allEntries = snapshot.val();
+      const sortedEntries = Object.values(allEntries).sort((a, b) => {
+        if (a.date < b.date) return 1;
+        if (a.date > b.date) return -1;
+        return 0;
+      });
+      return sortedEntries;
+    }
+    return [];
+  });
+}
+
 export async function updateProduct(product, updatedProduct) {
-  return set(ref(db, `products/${product.id}`), updatedProduct)
-    .catch(console.error);
+  return set(ref(db, `products/${product.id}`), updatedProduct).catch(
+    console.error,
+  );
 }
 
 export async function deleteProduct(productId) {
@@ -184,20 +211,7 @@ export const signupEmail = async (formData) => {
   }
 };
 
-export async function getReceive(adminId) {
-  return get(child(dbRef, `admins/${adminId}`)).then((snapshot) => {
-    if (snapshot.exists()) {
-      const allEntries = snapshot.val();
-      const sortedEntries = Object.values(allEntries).sort((a, b) => {
-        if (a.date < b.date) return 1;
-        if (a.date > b.date) return -1;
-        return 0;
-      });
-      return sortedEntries;
-    }
-    return [];
-  });
-}
+
 
 // 승인버튼 클릭
 export async function setOneState(adminId, fileId) {
@@ -243,10 +257,7 @@ export async function setRejectReason(fileId, reasonText, userName, userId) {
 
   const secondPath = ref(db, `admins/${userId}/${fileId}/reason`);
 
-  await Promise.all([
-    set(firstPath, reasonText),
-    set(secondPath, reasonText)
-  ]);
+  await Promise.all([set(firstPath, reasonText), set(secondPath, reasonText)]);
 
   return true;
 }
@@ -257,10 +268,7 @@ export async function removeRejectReason(fileId, userName, userId) {
 
   const secondPath = ref(db, `admins/${userId}/${fileId}/reason`);
 
-  await Promise.all([
-     remove(firstPath),
-     remove(secondPath)
-  ]);
+  await Promise.all([remove(firstPath), remove(secondPath)]);
   return true;
 }
 
@@ -274,22 +282,22 @@ export async function getRejectReasonProduct(fileId) {
 }
 
 export async function getRejectReasonAdmin(userId, fileId) {
-  return get(child(dbRef, `admins/${userId}/${fileId}/reason`)).then((snapshot) => {
-    if (snapshot.exists()) {
-      return snapshot.val()
-    }
-    return null;
-  });
+  return get(child(dbRef, `admins/${userId}/${fileId}/reason`)).then(
+    (snapshot) => {
+      if (snapshot.exists()) {
+        return snapshot.val();
+      }
+      return null;
+    },
+  );
 }
 
 export async function setAdmit(fileId, userName) {
   return set(ref(db, `products/${fileId}/admitMember/${userName}`), true);
 }
 
-
-
 export async function removeAdmit(fileId, userName) {
-  return remove(ref(db, `products/${fileId}/admitMember/${userName}`))
+  return remove(ref(db, `products/${fileId}/admitMember/${userName}`));
 }
 
 export async function getAllOneState() {
@@ -308,10 +316,13 @@ export async function getAllOneState() {
     for (let file in data[userId]) {
       oneStates.push({
         id: data[userId][file].id,
-        state: data[userId][file].oneState
+        state: data[userId][file].oneState,
       });
     }
   }
   return oneStates;
 }
 
+export async function setState(filId, state) {
+  return set(ref(db, `products/${filId}/state`), state)
+}

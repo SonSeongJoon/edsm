@@ -1,11 +1,11 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {useLocation, useNavigate, useParams} from 'react-router-dom';  // Import useParams
-import {getProduct, getReceive} from '../api/firebase';
+import {getAll, getProduct, getReceive} from '../api/firebase';
 import {TableComponent} from "./TableComponent";
 
 
-export default function PaperList({ category, state , adminData}) {
+export default function PaperList({ category, state , adminData, MstData}) {
   const { pageId } = useParams();
   const currentPage = parseInt(pageId, 10) || 1;
   const itemsPerPage = 10;
@@ -16,13 +16,15 @@ export default function PaperList({ category, state , adminData}) {
 
   let queryKey;
   let queryFunction;
-
-  if (!adminData) {
+  if (!adminData && !MstData) {
     queryKey = [category, state];
     queryFunction = () => getProduct(state);
-  } else {
+  } else if (adminData && !MstData) {
     queryKey = [category, state];
     queryFunction = () => getReceive(state);
+  } else if (MstData){
+    queryKey = [category, state];
+    queryFunction = () => getAll();
   }
 
 
@@ -31,7 +33,7 @@ export default function PaperList({ category, state , adminData}) {
     error,
     data: products,
   } = useQuery(queryKey, queryFunction);
-
+  console.log(products)
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = products ? products.slice(indexOfFirstItem, indexOfLastItem) : [];
@@ -53,6 +55,7 @@ export default function PaperList({ category, state , adminData}) {
         currentPage={currentPage}
         handlePageClick={handlePageClick}
         isAdmins = {adminData}
+        isMst = {MstData}
      />
   );
 }

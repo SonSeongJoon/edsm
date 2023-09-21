@@ -1,10 +1,10 @@
 import React from 'react';
 import PeperList from "../components/PaperList";
 
-export default function Complete() {
+export default function Reject() {
 	return (
 		<div>
-			<PeperList category='승인' state='승인' adminData={false}/>
+			<PeperList category='반려' state='반려' adminData={false}/>
 		</div>
 	);
 }

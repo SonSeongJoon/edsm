@@ -14,6 +14,8 @@ import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Receive from './pages/Receive';
 import ProtectRoute from './components/ProtectRoute';
+import MstPage from "./pages/MstPage";
+import Reject from "./pages/Reject";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +43,15 @@ const router = createBrowserRouter([
         children: [{ path: 'page/:pageId', element: <Wait /> }],
       },
       {
+        path: 'reject',
+        element: (
+           <ProtectRoute>
+             <Reject />
+           </ProtectRoute>
+        ),
+        children: [{ path: 'page/:pageId', element: <Reject /> }],
+      },
+      {
         path: 'complete',
         element: (
           <ProtectRoute>
@@ -57,10 +68,21 @@ const router = createBrowserRouter([
           </ProtectRoute>
         ),
       },
+      {
+        path: 'mst',
+        element: (
+           <ProtectRoute requireAdmin={true}>
+             <MstPage />
+           </ProtectRoute>
+        ),
+        children: [{ path: 'page/:pageId', element: <MstPage /> }],
+      },
       { path: 'total/detail/:id', element: <Detail /> },
       { path: 'wait/detail/:id', element: <Detail /> },
+      { path: 'reject/detail/:id', element: <Detail /> },
       { path: 'complete/detail/:id', element: <Detail /> },
       { path: 'receive/detail/:id', element: <Detail /> },
+      { path: 'mst/detail/:id', element: <Detail /> },
       {
         path: 'write',
         element: (

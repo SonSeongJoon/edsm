@@ -9,7 +9,7 @@ import WriteAdminFormat from '../components/WriteAdminFormat';
 
 export default function Detail() {
   const {
-    state: { product, resultState },
+    state: { product, resultState, isMst},
   } = useLocation();
   const htmlString = expenditure(product);
   const navigate = useNavigate();
@@ -126,6 +126,7 @@ export default function Detail() {
             handleDelete={handleDelete}
             navigate={navigate}
             htmlToFile={htmlToFile}
+            isMst={isMst}
           />
         </>
       )}
