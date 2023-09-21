@@ -25,7 +25,9 @@ export default function Write() {
     deel: '',
     items: [{ title: '', amount: '', note: '' }],
     agree: [],
+    agreeName: [], // 추가된 부분
   };
+
 
   const user = useAuthContext();
   const userName = user.user.displayName;
@@ -41,19 +43,20 @@ export default function Write() {
   const handleAgreeChange = (e) => {
     const { name, checked } = e.target;
 
-    const emailOfApprover = approvers.find(
-      (approver) => approver.name === name,
-    ).email;
+    const approver = approvers.find(approver => approver.name === name);
+
     setProduct((prevProduct) => {
       if (checked) {
         return {
           ...prevProduct,
-          agree: [...prevProduct.agree, emailOfApprover],
+          agree: [...prevProduct.agree, approver.email],
+          agreeName: [...prevProduct.agreeName, approver.name] // 이름 추가
         };
       } else {
         return {
           ...prevProduct,
-          agree: prevProduct.agree.filter((email) => email !== emailOfApprover),
+          agree: prevProduct.agree.filter(email => email !== approver.email),
+          agreeName: prevProduct.agreeName.filter(approverName => approverName !== approver.name) // 이름 제거
         };
       }
     });

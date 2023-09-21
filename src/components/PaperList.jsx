@@ -33,7 +33,6 @@ export default function PaperList({ category, state , adminData, MstData}) {
     error,
     data: products,
   } = useQuery(queryKey, queryFunction);
-  console.log(products)
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = products ? products.slice(indexOfFirstItem, indexOfLastItem) : [];

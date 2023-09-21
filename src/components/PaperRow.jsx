@@ -31,7 +31,7 @@ export default function PaperRow({ product, isAdmins, states, isMst }) {
 
   const handleClick = () => {
     navigate(`/${basePath}/detail/${id}`, {
-      state: { product, isMst, oneState, resultState },
+      state: { product, isMst, states, oneState, resultState },
     });
   };
 

@@ -9,7 +9,7 @@ import WriteAdminFormat from '../components/WriteAdminFormat';
 
 export default function Detail() {
   const {
-    state: { product, resultState, isMst},
+    state: { product, resultState, isMst ,states},
   } = useLocation();
   const htmlString = expenditure(product);
   const navigate = useNavigate();
@@ -100,7 +100,6 @@ export default function Detail() {
   const displayProduct = updatedProduct || product;
   const isAdmin = user?.user?.isAdmin;
   const isReceivePath = currentPath.includes('/receive');
-  console.log(product)
 
   return (
     <div>
@@ -127,6 +126,7 @@ export default function Detail() {
             navigate={navigate}
             htmlToFile={htmlToFile}
             isMst={isMst}
+            states={states}
           />
         </>
       )}

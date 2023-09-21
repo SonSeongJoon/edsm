@@ -19,7 +19,9 @@ export default function WriteUserFormat({
   htmlToFile,
   oneState,
   isMst,
+  states,
 }) {
+  console.log(states);
   return (
     <div className="w-full">
       {showEditModal && (
@@ -35,15 +37,25 @@ export default function WriteUserFormat({
         <div className="container mx-auto p-6 md:p-10 lg:p-16 shadow-lg rounded-lg bg-white border border-gray-200">
           <p className="text-sm text-brand font-bold">[{oneState}]</p>
           <ExpenditureShow product={displayProduct} />
-          <div>수신자: </div>
-          <div className="mt-3">
-            {!isMst ? <button
-               className="bg-gray-500 text-white px-2 py-1 rounded text-sm mr-2 hover:bg-gray-600"
-               onClick={openEditModal}
-            >
-              수정하기
-            </button> : null}
+          <div className="mt-5 mb-3 text-sm">
+            <span className="font-bold">수신자:</span>
+            {displayProduct.agreeName.map((name, index) => (
+              <span key={index} className="ml-2">
+                {name} <span className="font-bold">({states[index]})</span>
+                {index !== displayProduct.agreeName.length - 1 && ','}
+              </span>
+            ))}
+          </div>
 
+          <div className="mt-3">
+            {!isMst ? (
+              <button
+                className="bg-gray-500 text-white px-2 py-1 rounded text-sm mr-2 hover:bg-gray-600"
+                onClick={openEditModal}
+              >
+                수정하기
+              </button>
+            ) : null}
             {/*<button*/}
             {/*  className="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600"*/}
             {/*  onClick={handleDelete}*/}
