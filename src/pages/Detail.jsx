@@ -100,6 +100,7 @@ export default function Detail() {
   const displayProduct = updatedProduct || product;
   const isAdmin = user?.user?.isAdmin;
   const isReceivePath = currentPath.includes('/receive');
+  console.log(product)
 
   return (
     <div>

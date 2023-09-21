@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
-import { ItemOutput } from './html/ItemOutput';
 import {
   getOneState,
   removeAdmit,
@@ -9,6 +7,7 @@ import {
 } from '../api/firebase';
 import { useAuthContext } from '../context/AuthContext';
 import ReturnText from './ReturnText';
+import ExpenditureShow from "./html/ExpenditureShow";
 
 export default function WriteAdminFormat({
   displayProduct,
@@ -70,29 +69,7 @@ export default function WriteAdminFormat({
             </span>
             &nbsp;하신 상태입니다!
           </p>
-          <div className="w-full flex justify-between items-center mb-3">
-            <div className="flex items-center space-x-2">
-              <h1 className="sm:text-2xl text-md font-bold">{displayProduct.title}</h1>
-              <p className="text-brand sm:text-2xl text-lg font-bold">|</p>
-              <p className="text-xm sm:text-lg text-gray-500 text-lg">{product.file}</p>
-            </div>
-            <h1 className="text-gray-600 text-xm sm:text-md">{product.date}</h1>
-          </div>
-          <div className="flex flex-col header space-y-4 md:space-y-6 lg:space-y-8">
-            <div className="flex items-center">
-              <h1 className="sm:text-md text-xm font-bold mr-2">부서명 : </h1>
-              <p className="text-gray-600 text-sm sm:text-md">{displayProduct.dept}</p>
-            </div>
-            <div className="flex items-center">
-              <h1 className="font-bold mr-2 sm:text-md text-xm">거래처 : </h1>
-              <p className="text-gray-600 text-sm sm:text-md">{displayProduct.deel}</p>
-            </div>
-            {displayProduct.items.map((item, idx) => (
-              <div key={idx} className="flex items-center">
-                <ItemOutput item={item} idx={idx + 1} />
-              </div>
-            ))}
-          </div>
+          <ExpenditureShow product={displayProduct} />
         </div>
         <div className="container mx-auto mt-10 flex w-full justify-end">
           <button

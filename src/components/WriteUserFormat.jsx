@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { EditModal } from './EditModal';
-import { ItemOutput } from './html/ItemOutput';
-import ReasonText from './ReasonText'; // 경로는 실제로 해당 컴포넌트가 위치한 곳으로 수정해야 합니다.
+import ReasonText from './ReasonText';
+import ExpenditureShow from "./html/ExpenditureShow"; // 경로는 실제로 해당 컴포넌트가 위치한 곳으로 수정해야 합니다.
 
 export default function WriteUserFormat({
   showEditModal,
@@ -33,32 +33,7 @@ export default function WriteUserFormat({
       <div className="p-10">
         <div className="container mx-auto p-6 md:p-10 lg:p-16 shadow-lg rounded-lg bg-white border border-gray-200">
           <p className='text-sm text-brand font-bold'>[{oneState}]</p>
-          <div className="w-full flex justify-between items-center mb-3">
-
-            <div className="flex items-center space-x-2">
-              <h1 className="sm:text-2xl font-bold text-md">
-                {displayProduct.title}
-              </h1>
-              <p className="text-brand sm:text-2xl font-bold text-lg">|</p>
-              <p className="text-gray-500 text-xm sm:text-lg">{product.file}</p>
-            </div>
-            <h1 className="text-gray-600 text-xm sm:text-md">{product.date}</h1>
-          </div>
-          <div className="flex flex-col header space-y-4 md:space-y-6 lg:space-y-8">
-            <div className="flex items-center">
-              <h1 className="font-bold mr-2 sm:text-md text-xm">부서명 : </h1>
-              <p className="text-gray-600">{displayProduct.dept}</p>
-            </div>
-            <div className="flex items-center">
-              <h1 className="font-bold mr-2 sm:text-md text-xm">거래처 : </h1>
-              <p className="text-gray-600">{displayProduct.deel}</p>
-            </div>
-            {displayProduct.items.map((item, idx) => (
-              <div key={idx} className="flex items-center">
-                <ItemOutput item={item} idx={idx + 1} />
-              </div>
-            ))}
-          </div>
+          <ExpenditureShow product={displayProduct}/>
           <div className="mt-3">
             <button
               className="bg-gray-500 text-white px-2 py-1 rounded text-sm mr-2 hover:bg-gray-600"

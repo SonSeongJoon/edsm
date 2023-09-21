@@ -3,8 +3,8 @@ import { expenditure } from '../components/html/Expenditure';
 import { addNewProduct } from '../api/firebase';
 import ExpendForm from '../components/ExpendForm';
 import VacationForm from '../components/VacationForm';
-import {useNavigate} from "react-router-dom";
-import {useAuthContext} from "../context/AuthContext";
+import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../context/AuthContext';
 
 const options = ['지출결의서', '휴가계'];
 const approvers = [
@@ -28,20 +28,22 @@ export default function Write() {
   };
 
   const user = useAuthContext();
-  const userName = user.user.displayName
+  const userName = user.user.displayName;
   const [product, setProduct] = useState(init);
   const handleSubmit = (e) => {
     addNewProduct(product, userName).then(() => {
       alert('등록 되었습니다.');
       setProduct(init);
-      navigator(`/wait`)
+      navigator(`/wait`);
     });
   };
 
   const handleAgreeChange = (e) => {
     const { name, checked } = e.target;
 
-    const emailOfApprover = approvers.find((approver) => approver.name === name).email;
+    const emailOfApprover = approvers.find(
+      (approver) => approver.name === name,
+    ).email;
     setProduct((prevProduct) => {
       if (checked) {
         return {
@@ -95,7 +97,8 @@ export default function Write() {
   function htmlToFile(fileExtension) {
     let source =
       fileExtension === 'doc'
-        ? 'data:application/msword;charset=utf-8,' + encodeURIComponent(htmlString)
+        ? 'data:application/msword;charset=utf-8,' +
+          encodeURIComponent(htmlString)
         : 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlString);
 
     let fileDownload = document.createElement('a');
@@ -108,10 +111,12 @@ export default function Write() {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row max-w-screen-2xl mx-auto ml-2 items-start mb-5">
+      <div className="flex flex-col xl:flex-row max-w-screen-2xl mx-auto ml-2 items-start mb-5">
         {/* Left Side */}
         <div className="flex-2 md:mr-10 mb-5 md:mb-0">
-          <div className="font-bold text-3xl mr-3 mt-5 text-brand">품위서 작성하기</div>
+          <div className="font-bold text-3xl mr-3 mt-5 text-brand">
+            품위서 작성하기
+          </div>
           <div className="flex items-center mt-3">
             <p className="text-lg mr-3">* 양식 선택</p>
             <select
@@ -119,8 +124,12 @@ export default function Write() {
               name="file"
               className="ml-3 border border-red-500 p-2 rounded focus:outline-none focus:border-brand"
               value={product.file}
-              onChange={handleChange}>
-              {options && options.map((option, index) => <option key={index}>{option}</option>)}
+              onChange={handleChange}
+            >
+              {options &&
+                options.map((option, index) => (
+                  <option key={index}>{option}</option>
+                ))}
             </select>
           </div>
 
@@ -139,12 +148,14 @@ export default function Write() {
           <div className="mt-5 flex flex-col md:flex-row w-full justify-center space-y-4 md:space-y-0 md:space-x-4">
             <button
               onClick={handleSubmit}
-              className="bg-brand text-white px-4 py-2 rounded hover:bg-brand-dark focus:outline-none focus:ring focus:ring-brand-lighter transition duration-150 ease-in-out shadow-md">
+              className="bg-brand text-white px-4 py-2 rounded hover:bg-brand-dark focus:outline-none focus:ring focus:ring-brand-lighter transition duration-150 ease-in-out shadow-md"
+            >
               등록하기
             </button>
             <button
               onClick={() => htmlToFile('doc')}
-              className="bg-blue-800 text-white px-4 py-2 rounded hover:bg-blue-900 focus:outline-none focus:ring focus:ring-blue-300 transition duration-150 ease-in-out shadow-md">
+              className="bg-blue-800 text-white px-4 py-2 rounded hover:bg-blue-900 focus:outline-none focus:ring focus:ring-blue-300 transition duration-150 ease-in-out shadow-md"
+            >
               워드 다운로드
             </button>
           </div>
@@ -155,7 +166,10 @@ export default function Write() {
           <div className="mt-5 mb-5">
             <div className="font-bold text-xl">결재 승인 요청</div>
             {approvers.map((approver) => (
-              <label key={approver.name} className="flex items-center space-x-2 mt-2">
+              <label
+                key={approver.name}
+                className="flex items-center space-x-2 mt-2"
+              >
                 <input
                   type="checkbox"
                   name={approver.name}
