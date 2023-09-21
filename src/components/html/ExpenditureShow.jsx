@@ -8,7 +8,7 @@ const ExpenditureShow = ({ product }) => {
     <div>
       <div className="w-full flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          <h1 className="sm:text-2xl text-lg font-bold">{title}</h1>
+          <h1 className="sm:text-2xl text-md font-bold">{title}</h1>
         </div>
       </div>
       <div className='flex items-center mb-3'>
