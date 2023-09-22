@@ -29,16 +29,6 @@ export default function PaperRow({ product, isAdmins, isMst }) {
     });
   };
 
-  function determineState(states) {
-    if (!states || states.length === 0) return '대기';
-
-    if (states.includes('대기')) return '대기';
-    if (states.includes('반려')) return '반려';
-    if (states.every((value) => value === '승인')) return '승인';
-
-    return '알 수 없음';
-  }
-
   return (
     <tr key={product.id} className="cursor-pointer hover:bg-gray-50">
       <td
