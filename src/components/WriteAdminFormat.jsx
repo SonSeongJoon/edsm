@@ -52,7 +52,7 @@ export default function WriteAdminFormat({
 
   return (
     <div className="w-full p-10 lg:flex">
-      <div className="lg:w-2/3">
+      <div className="w-full">
         <div className="container mx-auto p-6 md:p-10 lg:p-16 shadow-lg rounded-lg bg-white border border-gray-200">
           <p className="flex items-center mb-3 sm:text-md text-sm">
             현재 해당 결재를 &nbsp;
@@ -95,7 +95,7 @@ export default function WriteAdminFormat({
           </button>
         </div>
       </div>
-      <div className="lg:w-1/3">
+      <div className={`${data === '반려' ? 'lg:w-1/3' : null}`}>
         <div className="flex justify-end w-full mt-3 lg:mt-0 lg:ml-3">
           {data === '반려' ? (
             <ReturnText

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import { EditModal } from './EditModal';
 import ReasonText from './ReasonText';
-import ExpenditureShow from './html/ExpenditureShow'; // 경로는 실제로 해당 컴포넌트가 위치한 곳으로 수정해야 합니다.
+import ExpenditureShow from './html/ExpenditureShow';
+import {getRejectReasonProduct} from "../api/firebase"; // 경로는 실제로 해당 컴포넌트가 위치한 곳으로 수정해야 합니다.
 
 export default function WriteUserFormat({
   showEditModal,
@@ -21,7 +22,17 @@ export default function WriteUserFormat({
   isMst,
   states,
 }) {
-  console.log(states);
+  const [reasonText, setReasonText] = useState(null);
+
+  useEffect(() => {
+    const fetchReason = async () => {
+      const result = await getRejectReasonProduct(product.id);
+      setReasonText(result);
+    };
+
+    fetchReason();
+  }, [product.id]);
+
   return (
     <div className="w-full xl:flex">
       {showEditModal && (
@@ -33,7 +44,7 @@ export default function WriteUserFormat({
           closeEditModal={closeEditModal}
         />
       )}
-      <div className="py-3 px-3 w-full xl:w-4/6">
+      <div className={`py-3 px-3 ${reasonText ? 'xl:w-4/6' : 'w-full'}`}>
         <div className="container mx-auto p-6 md:p-10 lg:p-16 shadow-lg rounded-lg bg-white border border-gray-200">
           <p className="text-sm text-brand font-bold">[{oneState}]</p>
           <ExpenditureShow product={displayProduct} />
@@ -80,9 +91,10 @@ export default function WriteUserFormat({
         </div>
 
       </div>
-      <div className="xl:w-2/6 xl:py-3 xl:pr-3 xl:pl-0 px-3">
-        <ReasonText fileId={product.id} />
-      </div>
+      {reasonText ? <div className="xl:w-2/6 xl:py-3 xl:pr-3 xl:pl-0 px-3">
+        <ReasonText reasonText={reasonText} />
+      </div> : null}
+
     </div>
   );
 }
