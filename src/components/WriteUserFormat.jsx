@@ -50,9 +50,9 @@ export default function WriteUserFormat({
           <ExpenditureShow product={displayProduct} />
           <div className="mt-5 mb-3 text-sm">
             <span className="font-bold">수신자:</span>
-            {displayProduct.agreeName.map((name, index) => (
+            {displayProduct?.agreeName?.map((name, index) => (
               <span key={index} className="ml-2">
-                {name} <span className="font-bold">({states[index]})</span>
+                {name} <span className="font-bold">({states?.[index]})</span>
                 {index !== displayProduct.agreeName.length - 1 && ','}
               </span>
             ))}

@@ -9,7 +9,7 @@ import WriteAdminFormat from '../components/WriteAdminFormat';
 
 export default function Detail() {
   const {
-    state: { product, resultState, isMst ,states},
+    state: { product, state, isMst , states, },
   } = useLocation();
   const htmlString = expenditure(product);
   const navigate = useNavigate();
@@ -112,7 +112,7 @@ export default function Detail() {
       ) : (
         <>
           <WriteUserFormat
-            oneState={resultState}
+            oneState={state}
             showEditModal={showEditModal}
             modalProduct={modalProduct}
             handleEditChange={handleEditChange}
