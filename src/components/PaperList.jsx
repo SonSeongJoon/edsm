@@ -31,7 +31,9 @@ export default function PaperList({ category, state, adminData, MstData }) {
     isLoading,
     error,
     data: products,
-  } = useQuery(queryKey, queryFunction);
+  } = useQuery(queryKey, queryFunction, {
+    refetchInterval: 1000,
+  });
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
