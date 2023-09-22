@@ -1,7 +1,5 @@
 import React from 'react';
 import PaperRow from './PaperRow';
-import { useQuery } from '@tanstack/react-query';
-import { getAllOneState } from '../api/firebase';
 
 export const TableComponent = ({
   isLoading,
@@ -13,9 +11,6 @@ export const TableComponent = ({
   isAdmins,
   isMst,
 }) => {
-  const { data: allOneStates } = useQuery(['AllOneState'], () =>
-    getAllOneState(),
-  );
   return (
     <div className="w-full text-xm sm:text-md">
       {isLoading && <p>Loading...</p>}
@@ -44,15 +39,11 @@ export const TableComponent = ({
         </thead>
         <tbody className="bg-white divide-y divide-gray-300">
           {currentItems.map((product) => {
-            const matchingStates = allOneStates
-              .filter((stateItem) => stateItem.id === product.id)
-              .map((stateItem) => stateItem.state);
             return (
               <PaperRow
                 key={product.id}
                 product={product}
                 isAdmins={isAdmins}
-                states={matchingStates}
                 isMst={isMst}
               />
             );

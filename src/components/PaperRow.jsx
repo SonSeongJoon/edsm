@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { setState } from '../api/firebase';
 
-export default function PaperRow({ product, isAdmins, states, isMst }) {
-  const { id, title, file, date, displayName, oneState } = product;
+export default function PaperRow({ product, isAdmins, isMst }) {
+  const { id, title, file, date, displayName, oneState, state } = product;
+  console.log(state)
   const navigate = useNavigate();
   const location = useLocation();
   const basePath = location.pathname.split('/')[1];
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 640);
-  const resultState = determineState(states);
-  useEffect(() => {
-    if (resultState !== oneState) {
-      setState(product.id, resultState).catch(console.error);
-    }
-  }, [oneState, product.id, resultState]);
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,7 +25,7 @@ export default function PaperRow({ product, isAdmins, states, isMst }) {
 
   const handleClick = () => {
     navigate(`/${basePath}/detail/${id}`, {
-      state: { product, isMst, states, oneState, resultState },
+      state: { product, isMst, oneState},
     });
   };
 
@@ -59,7 +54,7 @@ export default function PaperRow({ product, isAdmins, states, isMst }) {
       ) : null}
 
       <td className="px-6 py-4 whitespace-nowrap">
-        {isAdmins ? oneState : resultState}
+        {isAdmins ? oneState : state}
       </td>
     </tr>
   );

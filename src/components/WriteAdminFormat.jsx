@@ -4,12 +4,11 @@ import {
   getOneState,
   removeAdmit,
   setAdmit,
-  setOneState,
-  setState,
+  setOneState, setState,
 } from '../api/firebase';
 import { useAuthContext } from '../context/AuthContext';
 import ReturnText from './ReturnText';
-import ExpenditureShow from './html/ExpenditureShow';
+import ExpenditureShow from "./html/ExpenditureShow";
 
 export default function WriteAdminFormat({
   displayProduct,
@@ -30,21 +29,8 @@ export default function WriteAdminFormat({
     fetchInitialState();
   }, [uid, product.id]);
 
-  function determineState(states) {
-    if (!states || states.length === 0) return '대기';
-
-    if (states.includes('대기')) return '대기';
-    if (states.includes('반려')) return '반려';
-    if (states.every((value) => value === '승인')) return '승인';
-
-    return '알 수 없음';
-  }
-
   async function handleAdmit() {
     const isData = Boolean(isChildSubmitted);
-    const allOneStates = getAllOneState();
-    const resultState = determineState(allOneStates);
-    await setState(product.id, resultState);
     const rejectState = data === '반려';
     if (isData && rejectState) {
       alert('사유를 먼저 삭제하세요');
@@ -59,6 +45,26 @@ export default function WriteAdminFormat({
     } else {
       await removeAdmit(product.id, user.user.displayName);
     }
+
+    const allState = await getAllOneState();
+    console.log(allState.state)
+    const matchingStates = allState
+    .filter((stateItem) => stateItem.id === product.id)
+    .map((stateItem) => stateItem.state);
+    const resultState = determineState(matchingStates);
+    console.log(resultState)
+    await setState(product.id, resultState)
+
+  }
+
+  function determineState(states) {
+    if (!states || states.length === 0) return '대기';
+
+    if (states.includes('대기')) return '대기';
+    if (states.includes('반려')) return '반려';
+    if (states.every((value) => value === '승인')) return '승인';
+
+    return '알 수 없음';
   }
 
   const handleChildSubmitState = (state) => {
