@@ -23,7 +23,7 @@ export default function WriteUserFormat({
 }) {
   console.log(states);
   return (
-    <div className="w-full">
+    <div className="w-full xl:flex">
       {showEditModal && (
         <EditModal
           modalProduct={modalProduct}
@@ -33,7 +33,7 @@ export default function WriteUserFormat({
           closeEditModal={closeEditModal}
         />
       )}
-      <div className="p-10">
+      <div className="py-3 px-3 w-full xl:w-4/6">
         <div className="container mx-auto p-6 md:p-10 lg:p-16 shadow-lg rounded-lg bg-white border border-gray-200">
           <p className="text-sm text-brand font-bold">[{oneState}]</p>
           <ExpenditureShow product={displayProduct} />
@@ -64,7 +64,7 @@ export default function WriteUserFormat({
             {/*</button>*/}
           </div>
         </div>
-        <div className="container mx-auto mt-10 flex w-full justify-end space-x-2 md:space-x-4 lg:space-x-8">
+        <div className="container mx-auto mt-5 flex w-full justify-end">
           <button
             onClick={() => navigate(-1)}
             className="px-4 py-2 rounded hover:bg-brand-dark border bg-gray-200 border-gray-300"
@@ -72,15 +72,16 @@ export default function WriteUserFormat({
             뒤로 가기
           </button>
           <button
-            className="bg-blue-800 text-white px-4 py-2 rounded hover:bg-blue-900"
+            className="bg-blue-800 text-white px-4 py-2 rounded hover:bg-blue-900 ml-3"
             onClick={() => htmlToFile('doc')}
           >
             워드 다운로드
           </button>
         </div>
-        <div className="w-full">
-          <ReasonText fileId={product.id} />
-        </div>
+
+      </div>
+      <div className="xl:w-2/6 xl:py-3 xl:pr-3 xl:pl-0 px-3">
+        <ReasonText fileId={product.id} />
       </div>
     </div>
   );
