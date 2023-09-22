@@ -10,7 +10,6 @@ export default function PaperRow({ product, isAdmins, states, isMst }) {
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 640);
   const resultState = determineState(states);
   useEffect(() => {
-    // 상태가 변경될 때만 데이터베이스를 업데이트합니다.
     if (resultState !== oneState) {
       setState(product.id, resultState).catch(console.error);
     }
