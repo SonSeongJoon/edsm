@@ -32,7 +32,7 @@ export default function PaperList({ category, state, adminData, MstData }) {
     error,
     data: products,
   } = useQuery(queryKey, queryFunction, {
-    refetchInterval: 5000,
+    refetchInterval: 1000,
     refetchIntervalInBackground: true,
   });
 
