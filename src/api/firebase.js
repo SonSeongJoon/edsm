@@ -67,8 +67,6 @@ async function getUserDetails(user) {
   });
 }
 
-
-
 export async function addNewProduct(product, userName, userDept) {
   const userId = auth.currentUser?.uid;
   if (!userId) {
@@ -331,4 +329,11 @@ export async function getAllOneState() {
 
 export async function setState(filId, state) {
   return set(ref(db, `products/${filId}/state`), state)
+}
+
+export async function getUsersData() {
+  return get(child(dbRef, `userdata`)).then(snapshot => {
+    const userData = snapshot.val();
+    return userData;
+  })
 }
