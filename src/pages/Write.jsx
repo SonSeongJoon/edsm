@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
-import { expenditure } from '../components/html/Expenditure';
-import { addNewProduct } from '../api/firebase';
-import ExpendForm from '../components/ExpendForm';
-import VacationForm from '../components/VacationForm';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
+import { addNewProduct } from '../api/firebase';
+import { expenditure } from '../components/html/Expenditure';
+import { ExpendForm, initExpendForm } from '../components/ExpendForm';
+import VacationForm, { initVacationForm } from '../components/VacationForm';
+import { htmlToFile } from '../js/convertToWord.js';
 
 const options = ['지출결의서', '휴가계'];
+const initForms = {
+  지출결의서: initExpendForm,
+  휴가계: initVacationForm,
+};
+const Forms = {
+  지출결의서: ExpendForm,
+  휴가계: VacationForm,
+};
 const approvers = [
   { name: '서민아 이사', email: 'minah_seo@seoulir.co.kr' },
   { name: '송원식 상무이사', email: 'wssong5790@seoulir.co.kr' },
@@ -18,66 +27,44 @@ const approvers = [
 ];
 export default function Write() {
   const navigator = useNavigate();
-  const init = {
-    file: '지출결의서',
-    title: '',
-    dept: '',
-    deel: '',
-    items: [{ title: '', amount: '', note: '' }],
-    agree: [],
-    agreeName: [], // 추가된 부분
-  };
-
-
   const user = useAuthContext();
   const userName = user.user.displayName;
-  const userDept = user.user.department;
-  const [product, setProduct] = useState(init);
-  const handleSubmit = (e) => {
+  const userDept = user.user.dept;
+  const [product, setProduct] = useState(initExpendForm);
+
+  useEffect(() => {
+    setProduct(initForms[product.file] || initExpendForm);
+  }, [product.file]);
+
+  const handleSubmit = () => {
     addNewProduct(product, userName, userDept).then(() => {
       alert('등록 되었습니다.');
-      setProduct(init);
+      setProduct(initForms[product.file] || initExpendForm);
       navigator(`/wait`);
     });
   };
 
   const handleAgreeChange = (e) => {
     const { name, checked } = e.target;
-
-    const approver = approvers.find(approver => approver.name === name);
+    const approver = approvers.find((approver) => approver.name === name);
 
     setProduct((prevProduct) => {
       if (checked) {
         return {
           ...prevProduct,
           agree: [...prevProduct.agree, approver.email],
-          agreeName: [...prevProduct.agreeName, approver.name] // 이름 추가
+          agreeName: [...prevProduct.agreeName, approver.name], // 이름 추가
         };
       } else {
         return {
           ...prevProduct,
-          agree: prevProduct.agree.filter(email => email !== approver.email),
-          agreeName: prevProduct.agreeName.filter(approverName => approverName !== approver.name) // 이름 제거
+          agree: prevProduct.agree.filter((email) => email !== approver.email),
+          agreeName: prevProduct.agreeName.filter(
+            (approverName) => approverName !== approver.name,
+          ),
         };
       }
     });
-  };
-
-  const addItem = () => {
-    if (product.items.length < 4) {
-      setProduct((prevProduct) => ({
-        ...prevProduct,
-        items: [...prevProduct.items, { title: '', amount: '', note: '' }],
-      }));
-    } else {
-      alert('최대 4개의 항목만 추가할 수 있습니다.');
-    }
-  };
-  const removeItem = (indexToRemove) => {
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      items: prevProduct.items.filter((_, idx) => idx !== indexToRemove),
-    }));
   };
 
   const handleChange = (e) => {
@@ -85,33 +72,20 @@ export default function Write() {
     setProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
   };
 
-  const updateItemValue = (idx, key, value) => {
-    setProduct((prevProduct) => {
-      const newItems = [...prevProduct.items];
-      newItems[idx][key] = value;
-      return {
-        ...prevProduct,
-        items: newItems,
-      };
-    });
-  };
-
+  const FormComponent = Forms[product.file] || ExpendForm;
   const htmlString = expenditure(product);
-
-  function htmlToFile(fileExtension) {
-    let source =
-      fileExtension === 'doc'
-        ? 'data:application/msword;charset=utf-8,' +
-          encodeURIComponent(htmlString)
-        : 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlString);
-
-    let fileDownload = document.createElement('a');
-    document.body.appendChild(fileDownload);
-    fileDownload.href = source;
-    fileDownload.download = 'downloadedFile.' + fileExtension;
-    fileDownload.click();
-    document.body.removeChild(fileDownload);
-  }
+  const buttons = [
+    {
+      onClick: handleSubmit,
+      text: '등록하기',
+      className: 'bg-brand hover:bg-brand-dark focus:ring-brand-lighter',
+    },
+    {
+      onClick: () => htmlToFile(htmlString, 'doc'),
+      text: '워드 다운로드',
+      className: 'bg-blue-800 hover:bg-blue-900 focus:ring-blue-300',
+    },
+  ];
 
   return (
     <>
@@ -136,35 +110,23 @@ export default function Write() {
                 ))}
             </select>
           </div>
-
-          {product.file === '지출결의서' ? (
-            <ExpendForm
-              product={product}
-              handleChange={handleChange}
-              addItem={addItem}
-              removeItem={removeItem}
-              updateItemValue={updateItemValue}
-            />
-          ) : (
-            <VacationForm />
-          )}
-
+          <FormComponent
+            product={product}
+            setProduct={setProduct}
+            handleChange={handleChange}
+          />
           <div className="mt-5 flex flex-col md:flex-row w-full justify-center space-y-4 md:space-y-0 md:space-x-4">
-            <button
-              onClick={handleSubmit}
-              className="bg-brand text-white px-4 py-2 rounded hover:bg-brand-dark focus:outline-none focus:ring focus:ring-brand-lighter transition duration-150 ease-in-out shadow-md"
-            >
-              등록하기
-            </button>
-            <button
-              onClick={() => htmlToFile('doc')}
-              className="bg-blue-800 text-white px-4 py-2 rounded hover:bg-blue-900 focus:outline-none focus:ring focus:ring-blue-300 transition duration-150 ease-in-out shadow-md"
-            >
-              워드 다운로드
-            </button>
+            {buttons.map((btn, idx) => (
+              <button
+                key={idx}
+                onClick={btn.onClick}
+                className={`${btn.className} text-white px-4 py-2 rounded focus:outline-none focus:ring transition duration-150 ease-in-out shadow-md`}
+              >
+                {btn.text}
+              </button>
+            ))}
           </div>
         </div>
-
         {/* Right Side */}
         <div className="flex-1">
           <div className="mt-5 mb-5">

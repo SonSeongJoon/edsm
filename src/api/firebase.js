@@ -57,11 +57,16 @@ async function getUserDetails(user) {
       const users = snapshot.val();
       const isAdmin = Object.keys(users).some(uid => users[uid].role === '부서장&대표' && uid === user.uid);
       const isMst = Object.keys(users).some(uid => users[uid].department === '경영지원팀' && uid === user.uid);
-      return { ...user, isAdmin, isMst };
+
+      // user의 uid에 해당하는 department 값을 찾기
+      const userDepartment = users[user.uid]?.department;
+
+      return { ...user, isAdmin, isMst, dept: userDepartment };
     }
     return user;
   });
 }
+
 
 
 export async function addNewProduct(product, userName, userDept) {
