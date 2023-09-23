@@ -18,7 +18,6 @@ export const TableComponent = ({
   const [currentDeptMembers, setCurrentDeptMembers] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [deptMembers, setDeptMembers] = useState({});
-  console.log(deptMembers)
 
   const transformData = async () => {
     const usersData = await getUsersData();
@@ -50,12 +49,19 @@ export const TableComponent = ({
     if (selectedDept !== '전체') {
       items = items.filter((item) => item.dept === selectedDept);
       setCurrentDeptMembers(deptMembers[selectedDept] || []);
+    } else {
+      // 전체 부서가 선택된 경우, 모든 부서의 모든 멤버를 추가
+      const allMembers = Object.values(deptMembers).flat();
+      setCurrentDeptMembers(allMembers);
     }
+
     if (selectedName !== '전체') {
       items = items.filter((item) => item.displayName === selectedName);
     }
+
     setFilteredItems(items);
-  }, [selectedName, selectedDept, currentItems, deptMembers]); // 여기에 deptMembers 추가
+  }, [selectedName, selectedDept, currentItems, deptMembers]);
+
 
   return (
     <div className="w-full text-xm sm:text-md">
@@ -64,7 +70,10 @@ export const TableComponent = ({
       {isMst && (
          <div className="flex mb-3 m-1">
            <select
-              onChange={(e) => setSelectedDept(e.target.value)}
+              onChange={(e) => {
+                setSelectedDept(e.target.value);
+                setSelectedName('전체'); // 부서명이 바뀔 때마다 이름을 '전체'로 설정
+              }}
               className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
            >
              <option value="전체">전체 부서</option>
@@ -84,7 +93,6 @@ export const TableComponent = ({
              ))}
            </select>
          </div>
-
       )}
       <table className="min-w-full bg-white border-t border-b border-gray-300 divide-y divide-gray-300 ">
         <thead>

@@ -333,7 +333,6 @@ export async function setState(filId, state) {
 
 export async function getUsersData() {
   return get(child(dbRef, `userdata`)).then(snapshot => {
-    const userData = snapshot.val();
-    return userData;
+    return snapshot.val();
   })
 }
