@@ -64,7 +64,7 @@ async function getUserDetails(user) {
 }
 
 
-export async function addNewProduct(product, userName) {
+export async function addNewProduct(product, userName, userDept) {
   const userId = auth.currentUser?.uid;
   if (!userId) {
     throw new Error('User is not authenticated');
@@ -80,6 +80,7 @@ export async function addNewProduct(product, userName) {
     date: dateTime,
     state: '대기',
     displayName: userName,
+    dept: userDept,
   });
   const emails = product.agree;
   const usersRef = ref(db, 'userdata');

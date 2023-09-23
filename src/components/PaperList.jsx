@@ -26,7 +26,6 @@ export default function PaperList({ category, state, adminData, MstData }) {
     queryFunction = () => getAll();
   }
 
-  // useQuery 사용하여 데이터 가져오기
   const {
     isLoading,
     error,

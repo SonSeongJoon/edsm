@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import {getAllOneState} from "../api/firebase";
 
 export default function PaperRow({ product, isAdmins, isMst }) {
-  const { id, title, file, date, displayName, oneState, state } = product;
+  const { id, title, file, date, displayName, oneState, state ,dept} = product;
   const navigate = useNavigate();
   const location = useLocation();
   const basePath = location.pathname.split('/')[1];
@@ -55,10 +55,12 @@ export default function PaperRow({ product, isAdmins, isMst }) {
       </td>
       <td className="px-6 py-4 whitespace-nowrap">{file}</td>
       <td className="px-6 py-4 whitespace-nowrap">{displayDate}</td>
-      {isAdmins ? (
-        <td className="px-6 py-4 whitespace-nowrap">{displayName}</td>
+      {isMst ? (
+        <td className="px-6 py-4 whitespace-nowrap">{dept}</td>
       ) : null}
-
+       {isAdmins || isMst? (
+          <td className="px-6 py-4 whitespace-nowrap">{displayName}</td>
+       ) : null}
       <td className="px-6 py-4 whitespace-nowrap">
         {isAdmins ? oneState : state}
       </td>

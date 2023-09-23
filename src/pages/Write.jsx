@@ -31,9 +31,10 @@ export default function Write() {
 
   const user = useAuthContext();
   const userName = user.user.displayName;
+  const userDept = user.user.department;
   const [product, setProduct] = useState(init);
   const handleSubmit = (e) => {
-    addNewProduct(product, userName).then(() => {
+    addNewProduct(product, userName, userDept).then(() => {
       alert('등록 되었습니다.');
       setProduct(init);
       navigator(`/wait`);
