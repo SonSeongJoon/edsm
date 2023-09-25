@@ -39,40 +39,31 @@ export function EditModal({
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center sm:text-md text-xm">
-      <div className="bg-white p-5 rounded shadow-lg w-[800px] border border-gray-500 max-h-[500px] overflow-y-auto">
-        <h1 className="text-3xl font-bold mb-5">수정하기</h1>
-        <div className="flex items-center mb-2">
-          <h1 className="font-bold mr-2 mb-1">
+    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center text-xs sm:text-sm">
+      <div className="bg-white p-2 sm:p-5 rounded shadow-lg w-[400px] sm:w-[800px] max-h-[80vh] sm:max-h-[500px] overflow-y-auto border border-gray-500">
+        <h1 className="text-xl sm:text-3xl font-bold mb-3">수정하기</h1>
+        <div className="flex items-center mb-1">
+          <h1 className="font-bold mr-1 mb-1">
             제&nbsp;&nbsp;&nbsp;&nbsp;목 :{' '}
           </h1>
           <input
             name="title"
-            value={modalProduct.title || ''} // undefined 또는 null인 경우 빈 문자열을 사용합니다.
+            value={modalProduct.title || ''}
             onChange={handleEditChange}
-            className="border border-gray-500 p-1 rounded-md shadow-md"
-          />
-        </div>
-        <div className="flex items-center mb-2">
-          <h1 className="font-bold mr-2 mb-1">부서명 : </h1>
-          <input
-            name="dept"
-            value={modalProduct.dept || ''} // undefined 또는 null인 경우 빈 문자열을 사용합니다.
-            onChange={handleEditChange}
-            className="border border-gray-500 p-1 rounded-md shadow-md"
+            className="border border-gray-500 p-1 rounded-md shadow-md w-1/2"
           />
         </div>
         <div className="flex items-center">
-          <h1 className="font-bold mr-2 mb-1">거래처 : </h1>
+          <h1 className="font-bold mr-1 mb-1">거래처 : </h1>
           <input
             name="deel"
-            value={modalProduct.deel || ''} // undefined 또는 null인 경우 빈 문자열을 사용합니다.
+            value={modalProduct.deel || ''}
             onChange={handleEditChange}
-            className="border border-gray-500 p-1 rounded-md shadow-md"
+            className="border border-gray-500 p-1 rounded-md shadow-md w-1/2"
           />
         </div>
         {localModalProduct.items.map((item, idx) => (
-          <div key={item.id || idx} className="flex items-center mt-5 z-100">
+          <div key={item.id || idx} className="flex items-center mt-3">
             <ItemModify
               item={item}
               idx={idx}
@@ -82,21 +73,21 @@ export function EditModal({
           </div>
         ))}
         <button
-          className="mt-3 bg-green-500 text-white px-2 py-1 rounded text-sm hover:bg-green-600"
+          className="mt-2 bg-blue-600 text-white px-2 py-1 rounded text-xs hover:bg-green-600"
           onClick={handleAddItem}
         >
           아이템 추가
         </button>
 
-        <div className="flex w-full justify-center mt-5">
+        <div className="flex w-full justify-center mt-3">
           <button
-            className="border px-2 py-1 rounded-md bg-gray-100 mr-2"
+            className="border px-1 py-1 rounded-md bg-gray-100 mr-1"
             onClick={handleSave}
           >
             저장
           </button>
           <button
-            className="border px-2 py-1 rounded-md bg-gray-100"
+            className="border px-1 py-1 rounded-md bg-gray-100"
             onClick={closeEditModal}
           >
             닫기
