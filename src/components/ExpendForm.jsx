@@ -12,7 +12,7 @@ const initExpendForm = {
 };
 
 
-const ExpendForm = ({ product, setProduct, handleChange }) => {
+const ExpendForm = ({ product, setProduct, handleChange}) => {
   const addItem = () => {
     if (product.items.length < 4) {
       setProduct((prevProduct) => ({
@@ -56,15 +56,6 @@ const ExpendForm = ({ product, setProduct, handleChange }) => {
           />
         </div>
         <div className="content p-2">
-          <div className="font-bold mt-5">부서명</div>
-          <input
-            type="text"
-            name="dept"
-            placeholder="부서명 입력"
-            value={product.dept}
-            className="border-b border-black w-full sm:w-3/4 md:w-1/2 lg:w-1/3"
-            onChange={handleChange}
-          />
           <div className="font-bold mt-5">거래처</div>
           <input
             type="text"

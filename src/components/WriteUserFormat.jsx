@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { EditModal } from './EditModal';
 import ReasonText from './ReasonText';
 import ExpenditureShow from './html/ExpenditureShow';
-import {getRejectReasonProduct} from "../api/firebase"; // 경로는 실제로 해당 컴포넌트가 위치한 곳으로 수정해야 합니다.
+import { getRejectReasonProduct } from '../api/firebase'; // 경로는 실제로 해당 컴포넌트가 위치한 곳으로 수정해야 합니다.
 
 export default function WriteUserFormat({
   showEditModal,
@@ -21,6 +21,7 @@ export default function WriteUserFormat({
   oneState,
   isMst,
   states,
+  setModalProduct,
 }) {
   const [reasonText, setReasonText] = useState(null);
 
@@ -42,10 +43,11 @@ export default function WriteUserFormat({
           handleItemValue={handleItemValue}
           handleSave={handleSave}
           closeEditModal={closeEditModal}
+          setModalProduct={setModalProduct}
         />
       )}
       <div className={`py-3 px-3 ${reasonText ? 'xl:w-4/6' : 'w-full'}`}>
-        <div className="container mx-auto p-6 md:p-10 lg:p-16 shadow-lg rounded-lg bg-white border border-gray-200">
+        <div className="container mx-auto p-5 md:p-5 lg:p-8 shadow-lg rounded-lg bg-white border border-gray-200">
           <p className="text-sm text-brand font-bold">[{oneState}]</p>
           <ExpenditureShow product={displayProduct} />
           <div className="mt-5 mb-3 text-sm">
@@ -89,12 +91,12 @@ export default function WriteUserFormat({
             워드 다운로드
           </button>
         </div>
-
       </div>
-      {reasonText ? <div className="xl:w-2/6 xl:py-3 xl:pr-3 xl:pl-0 px-3">
-        <ReasonText reasonText={reasonText} />
-      </div> : null}
-
+      {reasonText ? (
+        <div className="xl:w-2/6 xl:py-3 xl:pr-3 xl:pl-0 px-3">
+          <ReasonText reasonText={reasonText} />
+        </div>
+      ) : null}
     </div>
   );
 }

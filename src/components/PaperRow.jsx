@@ -23,9 +23,6 @@ export default function PaperRow({ product, isAdmins, isMst }) {
       fetchData();
    }, [product.id]);
 
-
-
-
   useEffect(() => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth < 640);

@@ -6,6 +6,7 @@ import { expenditure } from '../components/html/Expenditure';
 import { ExpendForm, initExpendForm } from '../components/ExpendForm';
 import VacationForm, { initVacationForm } from '../components/VacationForm';
 import { htmlToFile } from '../js/convertToWord.js';
+import moment from 'moment'; // moment 라이브러리 임포트
 
 const options = ['지출결의서', '휴가계'];
 const initForms = {
@@ -30,11 +31,24 @@ export default function Write() {
   const user = useAuthContext();
   const userName = user.user.displayName;
   const userDept = user.user.dept;
-  const [product, setProduct] = useState(initExpendForm);
+  const currentDate = moment().format('YYYY-MM-DD');
+
+  const [product, setProduct] = useState({
+    ...initExpendForm,
+    date: currentDate,
+    dept: userDept,
+    name: userName,
+  });
 
   useEffect(() => {
-    setProduct(initForms[product.file] || initExpendForm);
+    setProduct(prevProduct => ({
+      ...initForms[product.file] || initExpendForm,
+      date: prevProduct.date,
+      dept: prevProduct.dept,
+      name: prevProduct.name,
+    }));
   }, [product.file]);
+
 
   const handleSubmit = () => {
     addNewProduct(product, userName, userDept).then(() => {
@@ -114,6 +128,7 @@ export default function Write() {
             product={product}
             setProduct={setProduct}
             handleChange={handleChange}
+            userDept={userDept}
           />
           <div className="mt-5 flex flex-col md:flex-row w-full justify-center space-y-4 md:space-y-0 md:space-x-4">
             {buttons.map((btn, idx) => (

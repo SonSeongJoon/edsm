@@ -1,12 +1,16 @@
 import { useState } from 'react';
 // d
-export const ItemModify = ({ item, idx, handleItemValue }) => {
+export const ItemModify = ({ item, idx, handleItemValue, handleRemoveItem }) => {
   const [localItem, setLocalItem] = useState(item);
 
   const handleInputChange = (e, name) => {
     const updatedItem = { ...localItem, [name]: e.target.value };
     setLocalItem(updatedItem);
-    handleItemValue(idx, updatedItem); // 항목이 변경될 때 handleItemValue 호출
+    handleItemValue(idx, updatedItem);
+  };
+
+  const handleRemoveClick = () => {
+    handleRemoveItem(idx);
   };
 
   return (
@@ -21,11 +25,11 @@ export const ItemModify = ({ item, idx, handleItemValue }) => {
       </thead>
       <tbody>
         <tr>
-          <td className="border border-gray-300 px-0.5 py-0.5">{idx}항</td>
+          <td className="border border-gray-300 px-0.5 py-0.5">{idx+1}항</td>
           <td className="border border-gray-300 px-0.5 py-0.5">
             <input
               type="text"
-              value={localItem.title}
+              value={localItem.title || ''}
               onChange={(e) => handleInputChange(e, 'title')}
               className="border border-gray-500 p-0.5 rounded-md shadow-md"
             />
@@ -33,7 +37,7 @@ export const ItemModify = ({ item, idx, handleItemValue }) => {
           <td className="border border-gray-300 px-0.5 py-0.5">
             <input
               type="text"
-              value={localItem.amount}
+              value={localItem.amount || ''}
               onChange={(e) => handleInputChange(e, 'amount')}
               className="border border-gray-500 p-0.5 rounded-md shadow-md"
             />
@@ -41,10 +45,15 @@ export const ItemModify = ({ item, idx, handleItemValue }) => {
           <td className="border border-gray-300 px-0.5 py-0.5">
             <input
               type="text"
-              value={localItem.note}
+              value={localItem.note || ''}
               onChange={(e) => handleInputChange(e, 'note')}
               className="border border-gray-500 p-0.5 rounded-md shadow-md"
             />
+          </td>
+          <td>
+            <button onClick={handleRemoveClick}>
+              삭제
+            </button>
           </td>
         </tr>
       </tbody>

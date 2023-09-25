@@ -69,12 +69,15 @@ export default function Detail() {
   };
 
   const handleItemValue = (idx, updatedItem) => {
+    console.log('Before Update:', modalProduct);
     setModalProduct((prevProduct) => {
       const newItems = [...prevProduct.items];
       newItems[idx] = updatedItem;
       return { ...prevProduct, items: newItems };
     });
+    console.log('After Update:', modalProduct);
   };
+
 
   function handleSave() {
     updateProduct(product, modalProduct)
@@ -127,6 +130,7 @@ export default function Detail() {
             htmlToFile={htmlToFile}
             isMst={isMst}
             states={states}
+            setModalProduct={setModalProduct}
           />
         </>
       )}

@@ -12,7 +12,6 @@ export const TableComponent = ({
   isAdmins,
   isMst,
 }) => {
-  // 필터 상태 추가
   const [selectedDept, setSelectedDept] = useState('전체');
   const [selectedName, setSelectedName] = useState('전체');
   const [currentDeptMembers, setCurrentDeptMembers] = useState([]);
@@ -50,7 +49,7 @@ export const TableComponent = ({
       items = items.filter((item) => item.dept === selectedDept);
       setCurrentDeptMembers(deptMembers[selectedDept] || []);
     } else {
-      // 전체 부서가 선택된 경우, 모든 부서의 모든 멤버를 추가
+
       const allMembers = Object.values(deptMembers).flat();
       setCurrentDeptMembers(allMembers);
     }
@@ -68,31 +67,33 @@ export const TableComponent = ({
       {isLoading && <p>Loading...</p>}
       {error && <p>Error...</p>}
       {isMst && (
-         <div className="flex mb-3 m-1">
-           <select
-              onChange={(e) => {
-                setSelectedDept(e.target.value);
-                setSelectedName('전체'); // 부서명이 바뀔 때마다 이름을 '전체'로 설정
-              }}
-              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-           >
-             <option value="전체">전체 부서</option>
-             {Object.keys(deptMembers).map(dept => (
-                <option key={dept} value={dept}>{dept}</option>
-             ))}
-           </select>
-           <select
-              onChange={(e) => setSelectedName(e.target.value)}
-              className="border border-gray-500 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-           >
-             <option value="전체">전체 이름</option>
-             {currentDeptMembers.map((name) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
-             ))}
-           </select>
-         </div>
+        <div className="flex mb-3 m-1">
+          <select
+            onChange={(e) => {
+              setSelectedDept(e.target.value);
+              setSelectedName('전체');
+            }}
+            className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            <option value="전체">전체 부서</option>
+            {Object.keys(deptMembers).map((dept) => (
+              <option key={dept} value={dept}>
+                {dept}
+              </option>
+            ))}
+          </select>
+          <select
+            onChange={(e) => setSelectedName(e.target.value)}
+            className="border border-gray-500 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            <option value="전체">전체 이름</option>
+            {currentDeptMembers.map((name) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </div>
       )}
       <table className="min-w-full bg-white border-t border-b border-gray-300 divide-y divide-gray-300 ">
         <thead>

@@ -72,9 +72,9 @@ export default function WriteAdminFormat({
   };
 
   return (
-    <div className="w-full p-10 lg:flex">
+    <div className="w-full p-5 lg:flex">
       <div className="w-full">
-        <div className="container mx-auto p-6 md:p-10 lg:p-16 shadow-lg rounded-lg bg-white border border-gray-200">
+        <div className="container mx-auto p-5 md:p-5 lg:p-8 shadow-lg rounded-lg bg-white border border-gray-200">
           <p className="flex items-center mb-3 sm:text-md text-sm">
             현재 해당 결재를 &nbsp;
             <span
