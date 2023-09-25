@@ -40,11 +40,11 @@ export function EditModal({
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center text-xs sm:text-sm">
-      <div className="bg-white p-2 sm:p-5 rounded shadow-lg w-[400px] sm:w-[800px] max-h-[80vh] sm:max-h-[500px] overflow-y-auto border border-gray-500">
+      <div className="bg-white p-2 sm:p-5 rounded shadow-lg w-[360px] sm:w-[800px] max-h-[80vh] sm:max-h-[500px] overflow-y-auto border border-gray-500">
         <h1 className="text-xl sm:text-3xl font-bold mb-3">수정하기</h1>
         <div className="flex items-center mb-1">
           <h1 className="font-bold mr-1 mb-1">
-            제&nbsp;&nbsp;&nbsp;&nbsp;목 :{' '}
+            제&nbsp;&nbsp;&nbsp;&nbsp;목 : {' '}
           </h1>
           <input
             name="title"

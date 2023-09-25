@@ -39,7 +39,7 @@ export const ItemModify = ({
                 type="text"
                 value={localItem.title || ''}
                 onChange={(e) => handleInputChange(e, 'title')}
-                className="border border-gray-500 p-0.5 rounded-md shadow-md w-2/3"
+                className="border border-gray-500 p-0.5 rounded-md shadow-md w-full"
               />
             </td>
             <td className="border border-gray-300 px-0.5 py-0.5">
@@ -47,7 +47,7 @@ export const ItemModify = ({
                 type="text"
                 value={localItem.amount || ''}
                 onChange={(e) => handleInputChange(e, 'amount')}
-                className="border border-gray-500 p-0.5 rounded-md shadow-md w-2/3"
+                className="border border-gray-500 p-0.5 rounded-md shadow-md w-full"
               />
             </td>
             <td className="border border-gray-300 px-0.5 py-0.5">
@@ -55,7 +55,7 @@ export const ItemModify = ({
                 type="text"
                 value={localItem.note || ''}
                 onChange={(e) => handleInputChange(e, 'note')}
-                className="border border-gray-500 p-0.5 rounded-md shadow-md w-2/3"
+                className="border border-gray-500 p-0.5 rounded-md shadow-md w-full"
               />
             </td>
           </tr>
