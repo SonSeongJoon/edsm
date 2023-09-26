@@ -9,8 +9,9 @@ import {
 import { useAuthContext } from '../context/AuthContext';
 import ReturnText from './ReturnText';
 import ExpenditureShow from "./html/ExpenditureShow";
+import {VacationShow} from "./html/VacationShow";
 
-export default function WriteAdminFormat({
+export default function DetailAdminFormat({
   displayProduct,
   product,
   navigate,
@@ -90,7 +91,11 @@ export default function WriteAdminFormat({
             </span>
             &nbsp;하신 상태입니다!
           </p>
-          <ExpenditureShow product={displayProduct} />
+          {displayProduct.file === '지출결의서' ? (
+             <ExpenditureShow product={displayProduct} />
+          ) : displayProduct.file === '휴가계' ? (
+             <VacationShow product={displayProduct}/>
+          ) : null}
         </div>
         <div className="container mx-auto mt-10 flex w-full justify-end">
           <button

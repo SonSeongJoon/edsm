@@ -3,15 +3,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { expenditure } from '../components/html/Expenditure';
 import { deleteProduct, updateProduct } from '../api/firebase';
 import { getDatabase, ref, onValue, off } from 'firebase/database';
-import WriteUserFormat from '../components/WriteUserFormat';
+import DetailUserFormat from '../components/DetailUserFormat';
 import { useAuthContext } from '../context/AuthContext';
-import WriteAdminFormat from '../components/WriteAdminFormat';
+import DetailAdminFormat from '../components/DetailAdminFormat';
+import {vacationPlan} from "../components/html/VacationPlan";
 
 export default function Detail() {
   const {
     state: { product, state, isMst , states, },
   } = useLocation();
-  const htmlString = expenditure(product);
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -35,6 +35,11 @@ export default function Detail() {
       off(productRef, 'value', handleDataChange);
     };
   }, [product]);
+
+  const htmlString =
+     product.file === '지출결의서'
+        ? expenditure(product)
+        : vacationPlan(product);
 
   function htmlToFile(fileExtension) {
     const sourceMap = {
@@ -107,14 +112,14 @@ export default function Detail() {
   return (
     <div>
       {isAdmin && isReceivePath ? (
-        <WriteAdminFormat
+        <DetailAdminFormat
           displayProduct={displayProduct}
           product={product}
           navigate={navigate}
         />
       ) : (
         <>
-          <WriteUserFormat
+          <DetailUserFormat
             oneState={state}
             showEditModal={showEditModal}
             modalProduct={modalProduct}

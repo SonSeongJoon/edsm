@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { EditModal } from './EditModal';
 import ReasonText from './ReasonText';
 import ExpenditureShow from './html/ExpenditureShow';
-import { getRejectReasonProduct } from '../api/firebase'; // 경로는 실제로 해당 컴포넌트가 위치한 곳으로 수정해야 합니다.
+import { getRejectReasonProduct } from '../api/firebase';
+import {VacationShow} from "./html/VacationShow";
 
-export default function WriteUserFormat({
+export default function DetailUserFormat({
   showEditModal,
   modalProduct,
   handleEditChange,
@@ -15,7 +16,6 @@ export default function WriteUserFormat({
   displayProduct,
   product,
   openEditModal,
-  handleDelete,
   navigate,
   htmlToFile,
   oneState,
@@ -24,6 +24,7 @@ export default function WriteUserFormat({
   setModalProduct,
 }) {
   const [reasonText, setReasonText] = useState(null);
+  console.log(displayProduct)
 
   useEffect(() => {
     const fetchReason = async () => {
@@ -49,7 +50,11 @@ export default function WriteUserFormat({
       <div className={`py-3 px-3 ${reasonText ? 'xl:w-4/6' : 'w-full'}`}>
         <div className="container mx-auto p-5 md:p-5 lg:p-8 shadow-lg rounded-lg bg-white border border-gray-200">
           <p className="text-sm text-brand font-bold">[{oneState}]</p>
-          <ExpenditureShow product={displayProduct} />
+          {displayProduct.file === '지출결의서' ? (
+             <ExpenditureShow product={displayProduct} />
+          ) : displayProduct.file === '휴가계' ? (
+             <VacationShow product={displayProduct}/>
+          ) : null}
           <div className="mt-5 mb-3 text-sm">
             <span className="font-bold">수신자:</span>
             {displayProduct?.agreeName?.map((name, index) => (
@@ -69,12 +74,6 @@ export default function WriteUserFormat({
                 수정하기
               </button>
             ) : null}
-            {/*<button*/}
-            {/*  className="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600"*/}
-            {/*  onClick={handleDelete}*/}
-            {/*>*/}
-            {/*  삭제하기*/}
-            {/*</button>*/}
           </div>
         </div>
         <div className="container mx-auto mt-5 flex w-full justify-end">

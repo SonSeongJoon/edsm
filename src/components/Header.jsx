@@ -19,7 +19,6 @@ export default function Header({ toggleSidebar }) {
       }
    };
 
-
    return (
     <div className="flex p-3 border-b border-b-gray-300 justify-between items-center">
       <div className="flex">

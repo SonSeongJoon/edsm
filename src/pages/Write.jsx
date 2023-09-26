@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
 import { addNewProduct } from '../api/firebase';
 import { expenditure } from '../components/html/Expenditure';
+import { vacationPlan} from '../components/html/VacationPlan'
 import { ExpendForm, initExpendForm } from '../components/ExpendForm';
 import VacationForm, { initVacationForm } from '../components/VacationForm';
 import { htmlToFile } from '../js/convertToWord.js';
-import moment from 'moment'; // moment 라이브러리 임포트
+import moment from 'moment';
+
 
 const options = ['지출결의서', '휴가계'];
 const initForms = {
@@ -43,11 +45,13 @@ export default function Write() {
   useEffect(() => {
     setProduct(prevProduct => ({
       ...initForms[product.file] || initExpendForm,
+      items: initForms[product.file]?.items || [],
       date: prevProduct.date,
       dept: prevProduct.dept,
       name: prevProduct.name,
     }));
   }, [product.file]);
+
 
 
   const handleSubmit = () => {
@@ -87,7 +91,6 @@ export default function Write() {
   };
 
   const FormComponent = Forms[product.file] || ExpendForm;
-  const htmlString = expenditure(product);
   const buttons = [
     {
       onClick: handleSubmit,
@@ -95,11 +98,20 @@ export default function Write() {
       className: 'bg-brand hover:bg-brand-dark focus:ring-brand-lighter',
     },
     {
-      onClick: () => htmlToFile(htmlString, 'doc'),
+      onClick: () => {
+        if (product.file === '지출결의서') {
+          const htmlString = expenditure(product);
+          htmlToFile(htmlString, 'doc');
+        } else {
+          const htmlString = vacationPlan(product);
+          htmlToFile(htmlString, 'doc');
+        }
+      },
       text: '워드 다운로드',
       className: 'bg-blue-800 hover:bg-blue-900 focus:ring-blue-300',
     },
   ];
+
 
   return (
     <>
