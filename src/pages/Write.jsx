@@ -8,16 +8,20 @@ import { ExpendForm, initExpendForm } from '../components/ExpendForm';
 import VacationForm, { initVacationForm } from '../components/VacationForm';
 import { htmlToFile } from '../js/convertToWord.js';
 import moment from 'moment';
+import {ApprovalForm, initApprovalForm} from "../components/ApprovalForm";
+import {approvalDocument} from "../components/html/approval";
 
 
-const options = ['지출결의서', '휴가계'];
+const options = ['지출결의서', '휴가계', '품의서'];
 const initForms = {
   지출결의서: initExpendForm,
   휴가계: initVacationForm,
+  품의서: initApprovalForm,
 };
 const Forms = {
   지출결의서: ExpendForm,
   휴가계: VacationForm,
+  품의서: ApprovalForm,
 };
 const approvers = [
   { name: '서민아 이사', email: 'minah_seo@seoulir.co.kr' },
@@ -55,12 +59,18 @@ export default function Write() {
 
 
   const handleSubmit = () => {
+    if (product.agree.length === 0) {
+      alert('결재요청자를 선택하세요.');
+      return;
+    }
+
     addNewProduct(product, userName, userDept).then(() => {
       alert('등록 되었습니다.');
       setProduct(initForms[product.file] || initExpendForm);
       navigator(`/wait`);
     });
   };
+
 
   const handleAgreeChange = (e) => {
     const { name, checked } = e.target;
@@ -102,9 +112,12 @@ export default function Write() {
         if (product.file === '지출결의서') {
           const htmlString = expenditure(product);
           htmlToFile(htmlString, 'doc');
-        } else {
+        } else if (product.file === '휴가계'){
           const htmlString = vacationPlan(product);
           htmlToFile(htmlString, 'doc');
+        } else if (product.file === '품의서') {
+          const htmlString = approvalDocument(product);
+          htmlToFile(htmlString, 'doc')
         }
       },
       text: '워드 다운로드',

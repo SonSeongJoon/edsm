@@ -4,7 +4,8 @@ import { EditModal } from './EditModal';
 import ReasonText from './ReasonText';
 import ExpenditureShow from './html/ExpenditureShow';
 import { getRejectReasonProduct } from '../api/firebase';
-import {VacationShow} from "./html/VacationShow";
+import { VacationShow } from './html/VacationShow';
+import ApprovalShow from './html/approvalShow';
 
 export default function DetailUserFormat({
   showEditModal,
@@ -24,7 +25,7 @@ export default function DetailUserFormat({
   setModalProduct,
 }) {
   const [reasonText, setReasonText] = useState(null);
-  console.log(displayProduct)
+  console.log(displayProduct);
 
   useEffect(() => {
     const fetchReason = async () => {
@@ -51,9 +52,11 @@ export default function DetailUserFormat({
         <div className="container mx-auto p-5 md:p-5 lg:p-8 shadow-lg rounded-lg bg-white border border-gray-200">
           <p className="text-sm text-brand font-bold">[{oneState}]</p>
           {displayProduct.file === '지출결의서' ? (
-             <ExpenditureShow product={displayProduct} />
+            <ExpenditureShow product={displayProduct} />
           ) : displayProduct.file === '휴가계' ? (
-             <VacationShow product={displayProduct}/>
+            <VacationShow product={displayProduct} />
+          ) : displayProduct.file === '품의서' ? (
+            <ApprovalShow product={displayProduct} />
           ) : null}
           <div className="mt-5 mb-3 text-sm">
             <span className="font-bold">수신자:</span>

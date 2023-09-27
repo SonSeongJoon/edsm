@@ -26,7 +26,7 @@ const VacationForm = ({ product, handleChange }) => {
 
   return (
      <div className="max-w-screen-lg mx-auto p-5">
-       <div className="container bg-white p-6 rounded shadow-lg">
+       <div className="container bg-white p-5">
          <div className="mb-5">
            <label className="block sm:text-md text-sm font-bold mb-2" htmlFor="title">
              제목:

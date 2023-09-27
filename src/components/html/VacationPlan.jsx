@@ -1,14 +1,13 @@
 export const vacationPlan = ({
-	                             file,
-	                             AttributionYear,
-	                             TotalLeaveDays,
-	                             UsedDays,
-	                             RemainDays,
-	                             Period,
-	                             VacationReason
-                             }) => {
-
-	return `<!DOCTYPE html>
+  file,
+  AttributionYear,
+  TotalLeaveDays,
+  UsedDays,
+  RemainDays,
+  Period,
+  VacationReason,
+}) => {
+  return `<!DOCTYPE html>
     <html lang="ko">
     <head>
         <meta charset="UTF-8">

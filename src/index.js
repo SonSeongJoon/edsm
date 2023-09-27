@@ -14,8 +14,18 @@ import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Receive from './pages/Receive';
 import ProtectRoute from './components/ProtectRoute';
-import MstPage from "./pages/MstPage";
-import Reject from "./pages/Reject";
+import MstPage from './pages/MstPage';
+import Reject from './pages/Reject';
+
+const routes = [
+  { path: 'total', component: Total },
+  { path: 'wait', component: Wait },
+  { path: 'reject', component: Reject },
+  { path: 'complete', component: Complete },
+  { path: 'write', component: Write },
+  { path: 'receive', component: Receive, requireAdmin: true },
+  { path: 'mst', component: MstPage, requireAdmin: true },
+];
 
 const router = createBrowserRouter([
   {
@@ -24,73 +34,16 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { index: true, element: <Home /> },
-      {
-        path: 'total',
+      ...routes.map((route) => ({
+        path: route.path,
         element: (
-          <ProtectRoute>
-            <Total />
+          <ProtectRoute requireAdmin={route.requireAdmin}>
+            {React.createElement(route.component)}
           </ProtectRoute>
-        ),
-        children: [{ path: 'page/:pageId', element: <Total /> }],
-      },
-      {
-        path: 'wait',
-        element: (
-          <ProtectRoute>
-            <Wait />
-          </ProtectRoute>
-        ),
-        children: [{ path: 'page/:pageId', element: <Wait /> }],
-      },
-      {
-        path: 'reject',
-        element: (
-           <ProtectRoute>
-             <Reject />
-           </ProtectRoute>
-        ),
-        children: [{ path: 'page/:pageId', element: <Reject /> }],
-      },
-      {
-        path: 'complete',
-        element: (
-          <ProtectRoute>
-            <Complete />
-          </ProtectRoute>
-        ),
-        children: [{ path: 'page/:pageId', element: <Complete /> }],
-      },
-      {
-        path: 'receive',
-        element: (
-          <ProtectRoute requireAdmin={true}>
-            <Receive />
-          </ProtectRoute>
-        ),
-      },
-      {
-        path: 'mst',
-        element: (
-           <ProtectRoute requireAdmin={true}>
-             <MstPage />
-           </ProtectRoute>
         ),
         children: [{ path: 'page/:pageId', element: <MstPage /> }],
-      },
-      { path: 'total/detail/:id', element: <Detail /> },
-      { path: 'wait/detail/:id', element: <Detail /> },
-      { path: 'reject/detail/:id', element: <Detail /> },
-      { path: 'complete/detail/:id', element: <Detail /> },
-      { path: 'receive/detail/:id', element: <Detail /> },
-      { path: 'mst/detail/:id', element: <Detail /> },
-      {
-        path: 'write',
-        element: (
-          <ProtectRoute>
-            <Write />
-          </ProtectRoute>
-        ),
-      },
+      })),
+      { path: ':path/detail/:id', element: <Detail /> },
     ],
   },
   {

@@ -11,8 +11,7 @@ const initExpendForm = {
   agreeName: [],
 };
 
-
-const ExpendForm = ({ product, setProduct, handleChange}) => {
+const ExpendForm = ({ product, setProduct, handleChange }) => {
   const addItem = () => {
     if (product.items.length < 4) {
       setProduct((prevProduct) => ({
@@ -68,7 +67,10 @@ const ExpendForm = ({ product, setProduct, handleChange}) => {
           <div className="mt-5 items-center">
             <div className="font-bold">내역</div>
             {product.items.map((item, idx) => (
-              <div key={idx} className="flex flex-col sm:flex-row sm:items-center w-full">
+              <div
+                key={idx}
+                className="flex flex-col sm:flex-row sm:items-center w-full"
+              >
                 <ItemInput
                   item={item}
                   updateItemValue={updateItemValue}
@@ -76,21 +78,20 @@ const ExpendForm = ({ product, setProduct, handleChange}) => {
                 />
                 <div className="flex space-x-3 mt-5 ml-0 sm:ml-2 items-center">
                   <button
-                     className="bg-brand px-2 py-1 text-white text-sm rounded-md flex-shrink-0"
-                     onClick={() => addItem()}
+                    className="bg-brand px-2 py-1 text-white text-sm rounded-md flex-shrink-0"
+                    onClick={() => addItem()}
                   >
                     추가
                   </button>
                   {idx !== 0 && idx === product.items.length - 1 && (
-                     <button
-                        className="bg-brand px-2 py-1 text-white text-sm rounded-md flex-shrink-0"
-                        onClick={() => removeItem(idx)}
-                     >
-                       삭제
-                     </button>
+                    <button
+                      className="bg-brand px-2 py-1 text-white text-sm rounded-md flex-shrink-0"
+                      onClick={() => removeItem(idx)}
+                    >
+                      삭제
+                    </button>
                   )}
                 </div>
-
               </div>
             ))}
           </div>
