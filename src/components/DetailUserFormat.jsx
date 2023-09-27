@@ -59,24 +59,25 @@ export default function DetailUserFormat({
           ) : null}
           <div className="mt-5 mb-3 text-sm">
             <span className="font-bold">수신자:</span>
-            {displayProduct?.agreeName?.map((name, index) => (
-              <span key={index} className="ml-2">
-                {name}{' '}
-                <span
-                  className={`font-bold ${
-                    states?.[index] === '승인'
-                      ? 'text-green-600'
-                      : states?.[index] === '반려'
-                      ? 'text-red-600'
-                      : 'text-gray-600'
-                  }`}
-                >
-                  ({states?.[index]})
-                </span>
-                {index !== displayProduct.agreeName.length - 1 && ','}
-              </span>
+            {states?.map((stateItem, index) => (
+               <span key={index} className="ml-2">
+            {stateItem.name}{' '}
+                 <span
+                    className={`font-bold ${
+                       stateItem.state === '승인'
+                          ? 'text-green-600'
+                          : stateItem.state === '반려'
+                             ? 'text-red-600'
+                             : 'text-gray-600'
+                    }`}
+                 >
+                ({stateItem.state})
+            </span>
+                 {index !== states.length - 1 && ','}
+        </span>
             ))}
           </div>
+
           <div className="mt-3">
             {!isMst ? (
               <button

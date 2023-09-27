@@ -92,15 +92,18 @@ export async function addNewProduct(product, userName, userDept) {
     const usersData = snapshot.val();
 
     emails.map(async (email) => {
-      let matchedUserId;
+      let matchedUser;
       for (const [userId, userData] of Object.entries(usersData)) {
         if (userData.email === email) {
-          matchedUserId = userId;
+          matchedUser = {
+            matchedUserId: userId,
+            name: userData.name
+          };
           break;
         }
       }
-      if (matchedUserId) {
-        await set(ref(db, `admins/${matchedUserId}/${id}`), {
+      if (matchedUser.matchedUserId) {
+        await set(ref(db, `admins/${matchedUser.matchedUserId}/${id}`), {
           id,
           oneState: '대기',
           date: dateTime,
@@ -108,6 +111,7 @@ export async function addNewProduct(product, userName, userDept) {
           ...product,
           isAdmin: true,
           displayName: userName,
+          admitName: matchedUser.name,
         });
       } else {
         console.log('No matching user found for email:', email);
@@ -146,19 +150,32 @@ export async function getProduct(filterState) {
 }
 
 export async function getReceive(adminId) {
-  return get(child(dbRef, `admins/${adminId}`)).then((snapshot) => {
+  return get(child(dbRef, `admins/${adminId}`)).then(async (snapshot) => {
     if (snapshot.exists()) {
       const allEntries = snapshot.val();
-      const sortedEntries = Object.values(allEntries).sort((a, b) => {
+      const augmentedEntriesPromises = Object.values(allEntries).map(async (entry) => {
+        const { id } = entry;
+        const productSnapshot = await get(child(dbRef, `products/${id}`));
+        if (productSnapshot.exists()) {
+          const productData = productSnapshot.val();
+          return {
+            ...entry,
+            ...productData
+          };
+        }
+        return entry;
+      });
+      const augmentedEntries = await Promise.all(augmentedEntriesPromises);
+      return augmentedEntries.sort((a, b) => {
         if (a.date < b.date) return 1;
         if (a.date > b.date) return -1;
         return 0;
       });
-      return sortedEntries;
     }
     return [];
   });
 }
+
 
 export async function getAll() {
   return get(child(dbRef, `products`)).then((snapshot) => {
@@ -321,6 +338,7 @@ export async function getAllOneState() {
       oneStates.push({
         id: data[userId][file].id,
         state: data[userId][file].oneState,
+        name: data[userId][file].admitName,
       });
     }
   }

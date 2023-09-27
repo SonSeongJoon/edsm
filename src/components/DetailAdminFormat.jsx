@@ -4,17 +4,19 @@ import {
   getOneState,
   removeAdmit,
   setAdmit,
-  setOneState, setState,
+  setOneState,
+  setState,
 } from '../api/firebase';
 import { useAuthContext } from '../context/AuthContext';
 import ReturnText from './ReturnText';
-import ExpenditureShow from "./html/ExpenditureShow";
-import {VacationShow} from "./html/VacationShow";
+import ExpenditureShow from './html/ExpenditureShow';
+import { VacationShow } from './html/VacationShow';
 
 export default function DetailAdminFormat({
   displayProduct,
   product,
   navigate,
+  states,
 }) {
   const user = useAuthContext();
   const uid = user?.user?.uid;
@@ -48,14 +50,12 @@ export default function DetailAdminFormat({
     }
 
     const allState = await getAllOneState();
-    console.log(allState.state)
     const matchingStates = allState
-    .filter((stateItem) => stateItem.id === product.id)
-    .map((stateItem) => stateItem.state);
+      .filter((stateItem) => stateItem.id === product.id)
+      .map((stateItem) => stateItem.state);
     const resultState = determineState(matchingStates);
-    console.log(resultState)
-    await setState(product.id, resultState)
-
+    console.log(resultState);
+    await setState(product.id, resultState);
   }
 
   function determineState(states) {
@@ -92,11 +92,33 @@ export default function DetailAdminFormat({
             &nbsp;하신 상태입니다!
           </p>
           {displayProduct.file === '지출결의서' ? (
-             <ExpenditureShow product={displayProduct} />
+            <ExpenditureShow product={displayProduct} />
           ) : displayProduct.file === '휴가계' ? (
-             <VacationShow product={displayProduct}/>
+            <VacationShow product={displayProduct} />
           ) : null}
+
+          <div className="mt-5 mb-3 text-sm">
+            <span className="font-bold">수신자:</span>
+            {states?.map((stateItem, index) => (
+               <span key={index} className="ml-2">
+            {stateItem.name}{' '}
+                 <span
+                    className={`font-bold ${
+                       stateItem.state === '승인'
+                          ? 'text-green-600'
+                          : stateItem.state === '반려'
+                             ? 'text-red-600'
+                             : 'text-gray-600'
+                    }`}
+                 >
+                ({stateItem.state})
+            </span>
+                 {index !== states.length - 1 && ','}
+        </span>
+            ))}
+          </div>
         </div>
+
         <div className="container mx-auto mt-10 flex w-full justify-end">
           <button
             onClick={() => navigate(-1)}
@@ -120,6 +142,8 @@ export default function DetailAdminFormat({
             현재 {data} 상태
           </button>
         </div>
+
+
       </div>
       <div className={`${data === '반려' ? 'lg:w-1/3' : null}`}>
         <div className="flex justify-end w-full mt-3 lg:mt-0 lg:ml-3">

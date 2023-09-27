@@ -19,7 +19,7 @@ export default function Detail() {
   const [modalProduct, setModalProduct] = useState(product);
   const [updatedProduct, setUpdatedProduct] = useState(null);
   const user = useAuthContext();
-
+  console.log(states)
   useEffect(() => {
     const db = getDatabase();
     const productRef = ref(db, `products/${product.id}`);
@@ -116,6 +116,7 @@ export default function Detail() {
           displayProduct={displayProduct}
           product={product}
           navigate={navigate}
+          states={states}
         />
       ) : (
         <>
