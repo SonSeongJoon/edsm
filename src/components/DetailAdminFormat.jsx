@@ -22,6 +22,7 @@ export default function DetailAdminFormat({
   const uid = user?.user?.uid;
   const [data, setData] = useState('');
   const [isChildSubmitted, setIsChildSubmitted] = useState(false);
+  const [state, setStates] = useState(states); // state 상태 변수와 setStates 함수 정의
 
   useEffect(() => {
     async function fetchInitialState() {
@@ -49,21 +50,28 @@ export default function DetailAdminFormat({
       await removeAdmit(product.id, user.user.displayName);
     }
 
+    // Update the state value
     const allState = await getAllOneState();
-    const matchingStates = allState
+    const updatedStates = allState
       .filter((stateItem) => stateItem.id === product.id)
-      .map((stateItem) => stateItem.state);
-    const resultState = determineState(matchingStates);
-    console.log(resultState);
+      .map((stateItem) => ({
+        name: stateItem.name,
+        state: stateItem.state,
+      }));
+    setStates(updatedStates); // Update the state
+
+    const resultState = determineState(
+      updatedStates.map((stateItem) => stateItem.state),
+    );
     await setState(product.id, resultState);
   }
 
-  function determineState(states) {
-    if (!states || states.length === 0) return '대기';
+  function determineState(state) {
+    if (!state || state.length === 0) return '대기';
 
-    if (states.includes('대기')) return '대기';
-    if (states.includes('반려')) return '반려';
-    if (states.every((value) => value === '승인')) return '승인';
+    if (state.includes('대기')) return '대기';
+    if (state.includes('반려')) return '반려';
+    if (state.every((value) => value === '승인')) return '승인';
 
     return '알 수 없음';
   }
@@ -99,22 +107,22 @@ export default function DetailAdminFormat({
 
           <div className="mt-5 mb-3 text-sm">
             <span className="font-bold">수신자:</span>
-            {states?.map((stateItem, index) => (
-               <span key={index} className="ml-2">
-            {stateItem.name}{' '}
-                 <span
-                    className={`font-bold ${
-                       stateItem.state === '승인'
-                          ? 'text-green-600'
-                          : stateItem.state === '반려'
-                             ? 'text-red-600'
-                             : 'text-gray-600'
-                    }`}
-                 >
-                ({stateItem.state})
-            </span>
-                 {index !== states.length - 1 && ','}
-        </span>
+            {state?.map((stateItem, index) => (
+              <span key={index} className="ml-2">
+                {stateItem.name}{' '}
+                <span
+                  className={`font-bold ${
+                    stateItem.state === '승인'
+                      ? 'text-green-600'
+                      : stateItem.state === '반려'
+                      ? 'text-red-600'
+                      : 'text-gray-600'
+                  }`}
+                >
+                  ({stateItem.state})
+                </span>
+                {index !== state.length - 1 && ','}
+              </span>
             ))}
           </div>
         </div>
@@ -142,8 +150,6 @@ export default function DetailAdminFormat({
             현재 {data} 상태
           </button>
         </div>
-
-
       </div>
       <div className={`${data === '반려' ? 'lg:w-1/3' : null}`}>
         <div className="flex justify-end w-full mt-3 lg:mt-0 lg:ml-3">
