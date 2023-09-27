@@ -43,9 +43,9 @@ export default function PaperRow({ product, isAdmins, isMst }) {
   };
 
   return (
-    <tr key={product.id} className="cursor-pointer hover:bg-gray-50">
+    <tr key={product.id} className="hover:bg-gray-50">
       <td
-        className="px-6 py-4 whitespace-nowrap hover:underline"
+        className="px-6 py-4 whitespace-nowrap hover:underline cursor-pointer"
         onClick={handleClick}
       >
         {title}

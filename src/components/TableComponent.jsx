@@ -14,9 +14,13 @@ export const TableComponent = ({
 }) => {
   const [selectedDept, setSelectedDept] = useState('전체');
   const [selectedName, setSelectedName] = useState('전체');
+  const [selectedYear, setSelectedYear] = useState('전체');
+  const [selectedMonth, setSelectedMonth] = useState('전체');
   const [currentDeptMembers, setCurrentDeptMembers] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [deptMembers, setDeptMembers] = useState({});
+  const [uniqueYears, setUniqueYears] = useState([]);
+  const [uniqueMonths, setUniqueMonths] = useState([]);
 
   const transformData = async () => {
     const usersData = await getUsersData();
@@ -43,13 +47,33 @@ export const TableComponent = ({
   }, []);
 
   useEffect(() => {
+    if (currentItems.length > 0) {
+      const years = [
+        ...new Set(
+          currentItems.map(
+            (item) => item.date.split('|')[0].trim().split('.')[0],
+          ),
+        ),
+      ];
+      const months = [
+        ...new Set(
+          currentItems.map(
+            (item) => item.date.split('|')[0].trim().split('.')[1],
+          ),
+        ),
+      ];
+      setUniqueYears(['전체', ...years]);
+      setUniqueMonths(['전체', ...months]);
+    }
+  }, [currentItems]);
+
+  useEffect(() => {
     let items = [...currentItems];
 
     if (selectedDept !== '전체') {
       items = items.filter((item) => item.dept === selectedDept);
       setCurrentDeptMembers(deptMembers[selectedDept] || []);
     } else {
-
       const allMembers = Object.values(deptMembers).flat();
       setCurrentDeptMembers(allMembers);
     }
@@ -58,16 +82,35 @@ export const TableComponent = ({
       items = items.filter((item) => item.displayName === selectedName);
     }
 
-    setFilteredItems(items);
-  }, [selectedName, selectedDept, currentItems, deptMembers]);
+    if (selectedYear !== '전체') {
+      items = items.filter(
+        (item) => item.date.split('|')[0].trim().split('.')[0] === selectedYear,
+      );
+    }
 
+    if (selectedMonth !== '전체') {
+      items = items.filter(
+        (item) =>
+          item.date.split('|')[0].trim().split('.')[1] === selectedMonth,
+      );
+    }
+
+    setFilteredItems(items);
+  }, [
+    selectedName,
+    selectedDept,
+    selectedYear,
+    selectedMonth,
+    currentItems,
+    deptMembers,
+  ]);
 
   return (
     <div className="w-full text-xm sm:text-md">
       {isLoading && <p>Loading...</p>}
       {error && <p>Error...</p>}
       {isMst && (
-        <div className="flex mb-3 m-1">
+        <div className="flex mb-3 m-3">
           <select
             onChange={(e) => {
               setSelectedDept(e.target.value);
@@ -84,12 +127,32 @@ export const TableComponent = ({
           </select>
           <select
             onChange={(e) => setSelectedName(e.target.value)}
-            className="border border-gray-500 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
           >
             <option value="전체">전체 이름</option>
             {currentDeptMembers.map((name) => (
               <option key={name} value={name}>
                 {name}
+              </option>
+            ))}
+          </select>
+          <select
+            onChange={(e) => setSelectedYear(e.target.value)}
+            className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            {uniqueYears.map((year) => (
+              <option key={year} value={year}>
+                {year}년
+              </option>
+            ))}
+          </select>
+          <select
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className="border border-gray-500 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            {uniqueMonths.map((month) => (
+              <option key={month} value={month}>
+                {month}월
               </option>
             ))}
           </select>

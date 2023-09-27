@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ModalExpend from './html/ModalExpend';
 import ModalVacation from './html/Modalvacation';
-import Modalapproval from './html/Modalapproval';
+import ModalApproval from './html/Modalapproval';
 
 export function EditModal({
   modalProduct,
@@ -58,7 +58,7 @@ export function EditModal({
             handleEditChange={handleEditChange}
           />
         ) : modalProduct.file === '품의서' ? (
-          <Modalapproval
+          <ModalApproval
             modalProduct={modalProduct}
             handleEditChange={handleEditChange}
           />

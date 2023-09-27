@@ -25,7 +25,6 @@ export default function DetailUserFormat({
   setModalProduct,
 }) {
   const [reasonText, setReasonText] = useState(null);
-  console.log(displayProduct);
 
   useEffect(() => {
     const fetchReason = async () => {
@@ -62,12 +61,22 @@ export default function DetailUserFormat({
             <span className="font-bold">수신자:</span>
             {displayProduct?.agreeName?.map((name, index) => (
               <span key={index} className="ml-2">
-                {name} <span className="font-bold">({states?.[index]})</span>
+                {name}{' '}
+                <span
+                  className={`font-bold ${
+                    states?.[index] === '승인'
+                      ? 'text-green-600'
+                      : states?.[index] === '반려'
+                      ? 'text-red-600'
+                      : 'text-gray-600'
+                  }`}
+                >
+                  ({states?.[index]})
+                </span>
                 {index !== displayProduct.agreeName.length - 1 && ','}
               </span>
             ))}
           </div>
-
           <div className="mt-3">
             {!isMst ? (
               <button
