@@ -18,8 +18,8 @@ export default function PaperRow({ product, isAdmins, isMst }) {
       const filteredStates = allState
         .filter((stateItem) => stateItem.id === product.id)
         .map((stateItem) => ({
-          name: stateItem.name, // name 속성 추출
-          state: stateItem.state, // state 속성 추출
+          name: stateItem.name,
+          state: stateItem.state,
         }));
       setStates(filteredStates);
     };
