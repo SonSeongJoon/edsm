@@ -11,6 +11,7 @@ import { useAuthContext } from '../context/AuthContext';
 import ReturnText from './ReturnText';
 import ExpenditureShow from './html/ExpenditureShow';
 import { VacationShow } from './html/VacationShow';
+import ApprovalShow from "./html/approvalShow";
 
 export default function DetailAdminFormat({
   displayProduct,
@@ -100,9 +101,11 @@ export default function DetailAdminFormat({
             &nbsp;하신 상태입니다!
           </p>
           {displayProduct.file === '지출결의서' ? (
-            <ExpenditureShow product={displayProduct} />
+             <ExpenditureShow product={displayProduct} />
           ) : displayProduct.file === '휴가계' ? (
-            <VacationShow product={displayProduct} />
+             <VacationShow product={displayProduct} />
+          ) : displayProduct.file === '품의서' ? (
+             <ApprovalShow product={displayProduct} />
           ) : null}
 
           <div className="mt-5 mb-3 text-sm">

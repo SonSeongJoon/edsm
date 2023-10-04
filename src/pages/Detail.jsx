@@ -6,11 +6,11 @@ import { getDatabase, ref, onValue, off } from 'firebase/database';
 import DetailUserFormat from '../components/DetailUserFormat';
 import { useAuthContext } from '../context/AuthContext';
 import DetailAdminFormat from '../components/DetailAdminFormat';
-import {vacationPlan} from "../components/html/VacationPlan";
+import { vacationPlan } from '../components/html/VacationPlan';
 
 export default function Detail() {
   const {
-    state: { product, state, isMst , states, },
+    state: { product, state, isMst, states },
   } = useLocation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,7 +19,7 @@ export default function Detail() {
   const [modalProduct, setModalProduct] = useState(product);
   const [updatedProduct, setUpdatedProduct] = useState(null);
   const user = useAuthContext();
-  console.log(states)
+  console.log(states);
   useEffect(() => {
     const db = getDatabase();
     const productRef = ref(db, `products/${product.id}`);
@@ -37,9 +37,9 @@ export default function Detail() {
   }, [product]);
 
   const htmlString =
-     product.file === '지출결의서'
-        ? expenditure(product)
-        : vacationPlan(product);
+    product.file === '지출결의서'
+      ? expenditure(product)
+      : vacationPlan(product);
 
   function htmlToFile(fileExtension) {
     const sourceMap = {
@@ -83,7 +83,6 @@ export default function Detail() {
     console.log('After Update:', modalProduct);
   };
 
-
   function handleSave() {
     updateProduct(product, modalProduct)
       .then(() => {
@@ -110,7 +109,7 @@ export default function Detail() {
   const isReceivePath = currentPath.includes('/receive');
 
   return (
-    <div>
+    <div className="flex justify-center items-center h-full">
       {isAdmin && isReceivePath ? (
         <DetailAdminFormat
           displayProduct={displayProduct}
