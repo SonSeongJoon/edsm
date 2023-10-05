@@ -10,14 +10,14 @@ const ApprovalShow = ({ product }) => {
 					<h1 className="sm:text-2xl text-md font-bold">{title}</h1>
 				</div>
 			</div>
-			<div className="flex items-center mb-3 justify-between">
-				<div className='flex'>
-					<p className="text-xm sm:text-md text-gray-500  mr-2">{file}</p>
-					<h1 className="text-gray-600 text-xm sm:text-md">{date}</h1>
-				</div>
+			<div className="flex items-center mb-3 justify-between mt-2">
 				<div className="flex">
 					<h1 className="text-xm sm:text-md text-gray-500 mr-2">{dept}</h1>
 					<h1 className="text-xm sm:text-md text-gray-500">{name}</h1>
+				</div>
+				<div className='flex'>
+					<p className="text-xm sm:text-md text-gray-500  mr-2">{file}</p>
+					<h1 className="text-gray-600 text-xm sm:text-md">{date}</h1>
 				</div>
 			</div>
 			<div className="flex flex-col header space-y-4 md:space-y-6 lg:space-y-8">

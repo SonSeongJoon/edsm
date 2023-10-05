@@ -8,50 +8,77 @@ export const vacationPlan = ({
   VacationReason,
 }) => {
   return `<!DOCTYPE html>
-    <html lang="ko">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${file}</title>
-        <style>
-            table, th, td {
-                border: 1px solid black;
-                border-collapse: collapse;
-                padding: 8px;
-            }
-        </style>
-    </head>
-    <body>
-        <h1 style="text-align: center; margin-bottom: 20px;">${file}</h1>
-        <div style="margin-bottom: 70px;">
-        <table style="width: 100%; text-align: center;">
-                <tr>
-                    <th>귀속연도</th>
-                    <td>${AttributionYear}</td>
-                </tr>
-                <tr>
-                    <th>총 연차일수</th>
-                    <td>${TotalLeaveDays}</td>
-                </tr>
-                <tr>
-                    <th>기사용일수</th>
-                    <td>${UsedDays}</td>
-                </tr>
-                <tr>
-                    <th>잔여일수</th>
-                    <td>${RemainDays}</td>
-                </tr>
-                <tr>
-                    <th>휴가기간</th>
-                    <td>${Period}</td>
-                </tr>
-                <tr>
-                    <th>휴가사유</th>
-                    <td>${VacationReason}</td>
-                </tr>
-          </table>
-         </div>
-    </body>
-    </html>`;
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${file}</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 8px;
+        }
+        table {
+            table-layout: fixed;
+            width: 100%; /* If you want the table to take the full width of its container */
+        }
+    </style>
+</head>
+<body>
+    <div class="centered">
+        <table style="text-align: center;">
+            <tr>
+            <td rowspan="2" colspan="2">휴가계</td>
+            <td style="width: 20%;">본부장</td>
+            <td style="width: 20%;">대표이사</td>
+        </tr>
+            <tr>
+                <td style="height: 45px;"></td>
+                <td style="height: 45px;"></td>
+            </tr>
+            <tr>
+                <td style="width: 25%;">소속</td>
+                <td style="width: 25%;"></td>
+                <td style="width: 25%;">성명</td>
+                <td style="width: 25%;"></td>
+            </tr>
+            <tr>
+                <td style="width: 25%;">기사용일수</td>
+                <td style="width: 25%;"></td>
+                <td style="width: 25%;">잔여일수</td>
+                <td style="width: 25%;"></td>
+            </tr>
+            <tr>
+                <td>휴가기간</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr style="height: 400px;">
+                <th>휴가사유</th>
+                <td colspan="3">${VacationReason}</td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: left;">
+                    <p style="text-align: end;">위 신청인 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(인)</p>
+                    <br>
+                    <br>
+                    <p style="text-align: center;">서울아이알네트워크㈜  대표이사  귀하</p>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <p>* 휴가자는 사유가 있을시 이를 증명할 사본을 제출함. (예 : 예비군훈련 등..)</p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: left;">
+                    <p>※ 본부장까지 결재를 받은 후 제출하여 주십시오.(대표이사 제외)</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+`;
 };

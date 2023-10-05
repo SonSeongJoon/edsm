@@ -40,9 +40,9 @@ export const expenditure = ({ file, dept, deel, title, items, date, name}) => {
             <td style="height: 45px;"></td>
             <td style="height: 45px;"></td>
         </tr>
-        </div>
-        <!-- 추가 항목은 여기에 -->
     </table>
+        </div>
+
     <div style="margin-top: 15px; text-align: left;">날짜 : ${date}</div>
     <div style="margin-bottom: 70px;">
     <table style="width: 100%; text-align: center;">
@@ -77,36 +77,36 @@ export const expenditure = ({ file, dept, deel, title, items, date, name}) => {
             </tr>
             <tr>
                 <td style="width: 100px; height: 30px; font-size: 13px;">${
-	  items[1] ? items[1].title : ''
-  }</td>
+		items[1] ? items[1].title : ''
+	}</td>
                 <td class="amount" style="width: 100px; height: 30px; font-size: 13px;">${
-	  items[1] ? items[1].amount : ''
-  }</td>
+		items[1] ? items[1].amount : ''
+	}</td>
                 <td style="width: 100px; height: 30px; font-size: 13px;">${
-	  items[1] ? items[1].note : ''
-  }</td>
+		items[1] ? items[1].note : ''
+	}</td>
             </tr>
             <tr>
                 <td style="width: 100px; height: 30px; font-size: 13px;">${
-	  items[2] ? items[2].title : ''
-  }</td>
+		items[2] ? items[2].title : ''
+	}</td>
                 <td class="amount" style="width: 100px; height: 30px; font-size: 13px;">${
-	  items[2] ? items[2].amount : ''
-  }</td>
+		items[2] ? items[2].amount : ''
+	}</td>
                 <td style="width: 100px; height: 30px; font-size: 13px;">${
-	  items[2] ? items[2].note : ''
-  }</td>
+		items[2] ? items[2].note : ''
+	}</td>
             </tr>
             <tr>
                 <td style="width: 100px; height: 30px; font-size: 13px;">${
-	  items[3] ? items[3].title : ''
-  }</td>
+		items[3] ? items[3].title : ''
+	}</td>
                 <td class="amount" style="width: 100px; height: 30px; font-size: 13px;">${
-	  items[3] ? items[3].amount : ''
-  }</td>
+		items[3] ? items[3].amount : ''
+	}</td>
                 <td style="width: 100px; height: 30px; font-size: 13px;">${
-	  items[3] ? items[3].note : ''
-  }</td>
+		items[3] ? items[3].note : ''
+	}</td>
             </tr>
             <tr style="background-color: #E6EEF7;">
                 <td style="width: 100px; height: 30px; font-size: 13px;">계</td>
@@ -118,8 +118,8 @@ export const expenditure = ({ file, dept, deel, title, items, date, name}) => {
         <div style="text-align: center">
         <p style="text-align: center; font-size: 13px;">상기와 같이 경비지출을 의뢰하오니 결재를 바랍니다.</p>
         <img src="${
-	  window.location.origin
-  }/seoulir_html.png" alt="seoulir">
+		window.location.origin
+	}/seoulir_html.png" alt="seoulir">
     </div>
  
 </body>
