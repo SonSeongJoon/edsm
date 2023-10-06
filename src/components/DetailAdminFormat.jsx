@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   getAllOneState,
   getOneState,
@@ -11,7 +11,17 @@ import { useAuthContext } from '../context/AuthContext';
 import ReturnText from './ReturnText';
 import ExpenditureShow from './html/ExpenditureShow';
 import { VacationShow } from './html/VacationShow';
-import ApprovalShow from "./html/approvalShow";
+import ApprovalShow from './html/approvalShow';
+
+const STATE_APPROVED = '승인';
+const STATE_PENDING = '대기';
+const STATE_REJECTED = '반려';
+
+const COMPONENT_MAP = {
+  지출결의서: ExpenditureShow,
+  휴가계: VacationShow,
+  품의서: ApprovalShow,
+};
 
 export default function DetailAdminFormat({
   displayProduct,
@@ -23,63 +33,94 @@ export default function DetailAdminFormat({
   const uid = user?.user?.uid;
   const [data, setData] = useState('');
   const [isChildSubmitted, setIsChildSubmitted] = useState(false);
-  const [state, setStates] = useState(states); // state 상태 변수와 setStates 함수 정의
+  const [state, setStates] = useState(states);
 
-  useEffect(() => {
-    async function fetchInitialState() {
+  const fetchInitialState = useCallback(async () => {
+    try {
       const initialState = await getOneState(uid, product.id);
       setData(initialState);
+    } catch (error) {
+      console.error('Error fetching initial state: ', error);
     }
-
-    fetchInitialState();
   }, [uid, product.id]);
 
-  async function handleAdmit() {
-    const isData = Boolean(isChildSubmitted);
-    const rejectState = data === '반려';
-    if (isData && rejectState) {
-      alert('사유를 먼저 삭제하세요');
-      return 0;
-    }
+  useEffect(() => {
+    fetchInitialState();
+  }, [fetchInitialState]);
 
-    const updatedState = await setOneState(uid, product.id);
-    setData(updatedState);
-
-    if (updatedState === '승인') {
-      await setAdmit(product.id, user.user.displayName);
-    } else {
-      await removeAdmit(product.id, user.user.displayName);
-    }
-
-    // Update the state value
-    const allState = await getAllOneState();
-    const updatedStates = allState
-      .filter((stateItem) => stateItem.id === product.id)
-      .map((stateItem) => ({
-        name: stateItem.name,
-        state: stateItem.state,
-      }));
-    setStates(updatedStates); // Update the state
-
-    const resultState = determineState(
-      updatedStates.map((stateItem) => stateItem.state),
-    );
-    await setState(product.id, resultState);
-  }
-
-  function determineState(state) {
-    if (!state || state.length === 0) return '대기';
-
-    if (state.includes('대기')) return '대기';
-    if (state.includes('반려')) return '반려';
-    if (state.every((value) => value === '승인')) return '승인';
+  const determineState = useCallback((state) => {
+    if (!state || state.length === 0) return STATE_PENDING;
+    if (state.includes(STATE_PENDING)) return STATE_PENDING;
+    if (state.includes(STATE_REJECTED)) return STATE_REJECTED;
+    if (state.every((value) => value === STATE_APPROVED)) return STATE_APPROVED;
 
     return '알 수 없음';
-  }
+  }, []);
 
-  const handleChildSubmitState = (state) => {
-    setIsChildSubmitted(state);
-  };
+  const handleAdmit = useCallback(async () => {
+    try {
+      const isData = Boolean(isChildSubmitted);
+      const rejectState = data === STATE_REJECTED;
+      if (isData && rejectState) {
+        alert('사유를 먼저 삭제하세요');
+        return;
+      }
+
+      const updatedState = await setOneState(uid, product.id);
+      setData(updatedState);
+
+      if (updatedState === STATE_APPROVED) {
+        await setAdmit(product.id, user.user.displayName);
+      } else {
+        await removeAdmit(product.id, user.user.displayName);
+      }
+
+      const allState = await getAllOneState();
+      const updatedStates = allState
+        .filter((stateItem) => stateItem.id === product.id)
+        .map((stateItem) => ({
+          name: stateItem.name,
+          state: stateItem.state,
+        }));
+      setStates(updatedStates);
+
+      const resultState = determineState(
+        updatedStates.map((stateItem) => stateItem.state),
+      );
+      await setState(product.id, resultState);
+    } catch (error) {
+      console.error('Error handling admit: ', error);
+    }
+  }, [
+    uid,
+    product.id,
+    data,
+    isChildSubmitted,
+    user.user.displayName,
+    determineState,
+  ]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const allStateData = await getAllOneState();
+        const updatedStates = allStateData
+          .filter((stateItem) => stateItem.id === product.id)
+          .map((stateItem) => ({
+            name: stateItem.name,
+            state: stateItem.state,
+          }));
+        setStates(updatedStates);
+      } catch (error) {
+        console.error('Error fetching data: ', error);
+      }
+    };
+
+    fetchData();
+  }, [product.id]);
+
+  // 조건부 렌더링 컴포넌트 선택
+  const SpecificComponent = COMPONENT_MAP[displayProduct.file] || (() => null);
 
   return (
     <div className="w-full p-5 lg:flex">
@@ -89,9 +130,9 @@ export default function DetailAdminFormat({
             현재 해당 결재를 &nbsp;
             <span
               className={` text-white py-1 px-1.5 rounded-md ${
-                data === '승인'
+                data === STATE_APPROVED
                   ? 'bg-emerald-600'
-                  : data === '대기'
+                  : data === STATE_PENDING
                   ? 'bg-gray-600'
                   : 'bg-red-800'
               }`}
@@ -100,24 +141,17 @@ export default function DetailAdminFormat({
             </span>
             &nbsp;하신 상태입니다!
           </p>
-          {displayProduct.file === '지출결의서' ? (
-             <ExpenditureShow product={displayProduct} />
-          ) : displayProduct.file === '휴가계' ? (
-             <VacationShow product={displayProduct} />
-          ) : displayProduct.file === '품의서' ? (
-             <ApprovalShow product={displayProduct} />
-          ) : null}
-
+          <SpecificComponent product={displayProduct} />
           <div className="mt-5 mb-3 text-sm">
             <span className="font-bold">수신자:</span>
             {state?.map((stateItem, index) => (
-              <span key={index} className="ml-2">
+              <span key={stateItem.name} className="ml-2">
                 {stateItem.name}{' '}
                 <span
                   className={`font-bold ${
-                    stateItem.state === '승인'
+                    stateItem.state === STATE_APPROVED
                       ? 'text-green-600'
-                      : stateItem.state === '반려'
+                      : stateItem.state === STATE_REJECTED
                       ? 'text-red-600'
                       : 'text-gray-600'
                   }`}
@@ -139,28 +173,28 @@ export default function DetailAdminFormat({
           </button>
           <button
             className={`
-        ${
-          data === '승인'
-            ? 'bg-emerald-600 hover:bg-emerald-700'
-            : data === '대기'
-            ? 'bg-gray-600 hover:bg-gray-700'
-            : 'bg-red-800 hover:bg-red-900'
-        } 
-        text-white px-4 py-2 rounded ml-2
-    `}
+              ${
+                data === STATE_APPROVED
+                  ? 'bg-emerald-600 hover:bg-emerald-700'
+                  : data === STATE_PENDING
+                  ? 'bg-gray-600 hover:bg-gray-700'
+                  : 'bg-red-800 hover:bg-red-900'
+              } 
+              text-white px-4 py-2 rounded ml-2
+            `}
             onClick={handleAdmit}
           >
             현재 {data} 상태
           </button>
         </div>
       </div>
-      <div className={`${data === '반려' ? 'lg:w-1/3' : null}`}>
+      <div className={`${data === STATE_REJECTED ? 'lg:w-1/3' : null}`}>
         <div className="flex justify-end w-full mt-3 lg:mt-0 lg:ml-3">
-          {data === '반려' ? (
+          {data === STATE_REJECTED ? (
             <ReturnText
               product={product}
-              onAmit={handleAdmit}
-              onChildSubmit={handleChildSubmitState}
+              onAdmit={handleAdmit}
+              onChildSubmit={setIsChildSubmitted}
             />
           ) : null}
         </div>
