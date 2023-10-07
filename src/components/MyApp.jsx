@@ -5,7 +5,6 @@ export default function MyApp() {
 	const sendKakaoTalk = async () => {
 		const url = "http://localhost:5000/send-kakao-message";
 
-		// 보내고자 하는 메시지와 사용자 정보
 		const messageData = {
 			username: "seoulir07",
 			key: "JAiY0S3262X8W94",
@@ -29,7 +28,6 @@ export default function MyApp() {
 			console.log("응답 코드:", response.status);
 			console.log("응답 데이터:", response.data);
 
-			// 응답 처리 로직
 		} catch (error) {
 			console.log("오류 발생:", error);
 		}
