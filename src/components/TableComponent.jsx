@@ -16,11 +16,16 @@ export const TableComponent = ({
   const [selectedName, setSelectedName] = useState('전체');
   const [selectedYear, setSelectedYear] = useState('전체');
   const [selectedMonth, setSelectedMonth] = useState('전체');
+  const [selectFilename, setSelectFilename] = useState('전체 구분');
+  const [selectState, setSelectState] = useState('전체 상태');
+
   const [currentDeptMembers, setCurrentDeptMembers] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [deptMembers, setDeptMembers] = useState({});
   const [uniqueYears, setUniqueYears] = useState([]);
   const [uniqueMonths, setUniqueMonths] = useState([]);
+  const [uniqueFiles, setUniqueFiles] = useState([]);
+  const [uniqueState, setUniqueState] = useState([]);
 
   const transformData = async () => {
     const usersData = await getUsersData();
@@ -62,8 +67,13 @@ export const TableComponent = ({
           ),
         ),
       ];
+
+      const files = [...new Set(currentItems.map((item) => item.file))];
+      const states = [...new Set(currentItems.map((item) => item.state))];
       setUniqueYears(['전체', ...years]);
       setUniqueMonths(['전체', ...months]);
+      setUniqueFiles(['전체 구분', ...files]);
+      setUniqueState(['전체 상태', ...states]);
     }
   }, [currentItems]);
 
@@ -95,6 +105,13 @@ export const TableComponent = ({
       );
     }
 
+    if (selectFilename !== '전체 구분') {
+      items = items.filter((item) => item.file === selectFilename);
+    }
+    if (selectState !== '전체 상태') {
+      items = items.filter((item) => item.state === selectState);
+    }
+
     setFilteredItems(items);
   }, [
     selectedName,
@@ -103,61 +120,63 @@ export const TableComponent = ({
     selectedMonth,
     currentItems,
     deptMembers,
+    selectFilename,
+    selectState,
   ]);
 
   return (
     <div className="w-full text-xm sm:text-md">
       {isLoading && <p>Loading...</p>}
       {error && <p>Error...</p>}
-      {isMst && (
-        <div className="flex mb-3 m-3">
-          <select
-            onChange={(e) => {
-              setSelectedDept(e.target.value);
-              setSelectedName('전체');
-            }}
-            className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          >
-            <option value="전체">전체 부서</option>
-            {Object.keys(deptMembers).map((dept) => (
-              <option key={dept} value={dept}>
-                {dept}
-              </option>
-            ))}
-          </select>
-          <select
-            onChange={(e) => setSelectedName(e.target.value)}
-            className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          >
-            <option value="전체">전체 이름</option>
-            {currentDeptMembers.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-          <select
-            onChange={(e) => setSelectedYear(e.target.value)}
-            className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          >
-            {uniqueYears.map((year) => (
-              <option key={year} value={year}>
-                {year}년
-              </option>
-            ))}
-          </select>
-          <select
-            onChange={(e) => setSelectedMonth(e.target.value)}
-            className="border border-gray-500 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          >
-            {uniqueMonths.map((month) => (
-              <option key={month} value={month}>
-                {month}월
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+        {isMst && (
+          <div className="flex mb-3 m-3">
+            <select
+              onChange={(e) => {
+                setSelectedDept(e.target.value);
+                setSelectedName('전체');
+              }}
+              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            >
+              <option value="전체">전체 부서</option>
+              {Object.keys(deptMembers).map((dept) => (
+                <option key={dept} value={dept}>
+                  {dept}
+                </option>
+              ))}
+            </select>
+            <select
+              onChange={(e) => setSelectedName(e.target.value)}
+              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            >
+              <option value="전체">전체 이름</option>
+              {currentDeptMembers.map((name) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))}
+            </select>
+            <select
+              onChange={(e) => setSelectedYear(e.target.value)}
+              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            >
+              {uniqueYears.map((year) => (
+                <option key={year} value={year}>
+                  {year}년
+                </option>
+              ))}
+            </select>
+            <select
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            >
+              {uniqueMonths.map((month) => (
+                <option key={month} value={month}>
+                  {month}월
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       <table className="min-w-full bg-white border-t border-b border-gray-300 divide-y divide-gray-300 ">
         <thead>
           <tr>
@@ -165,7 +184,17 @@ export const TableComponent = ({
               제목
             </th>
             <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              구분
+              <select
+                 onChange={(e) => setSelectFilename(e.target.value)}
+                 className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400"
+
+              >
+                {uniqueFiles.map((file) => (
+                   <option key={file} value={file}>
+                     {file}
+                   </option>
+                ))}
+              </select>
             </th>
             <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               날짜
@@ -181,7 +210,20 @@ export const TableComponent = ({
               </th>
             ) : null}
             <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              {isAdmins || !isMst ? '읽음표시' : '상태'}
+              {isAdmins || !isMst ? (
+                 '읽음표시'
+              ) : (
+                 <select
+                    onChange={(e) => setSelectState(e.target.value)}
+                    className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                 >
+                   {uniqueState.map((state) => (
+                      <option key={state} value={state}>
+                        {state}
+                      </option>
+                   ))}
+                 </select>
+              )}
             </th>
           </tr>
         </thead>
