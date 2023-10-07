@@ -4,7 +4,9 @@ const cors = require('cors');
 const app = express();
 const PORT = 5000;
 
-app.use(cors());
+app.use(cors({
+	origin: 'https://develop--seouliredsm.netlify.app'
+}));
 app.use(express.json());
 
 app.post('/send-kakao-message', async (req, res) => {
