@@ -52,6 +52,5 @@
   "devDependencies": {
     "prettier": "3.0.3",
     "tailwindcss": "^3.3.3"
-  },
-  "proxy": "https://port-0-kakaoapi-euegqv2blnfy3ekc.sel5.cloudtype.app"
+  }
 }

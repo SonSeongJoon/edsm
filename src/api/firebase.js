@@ -115,7 +115,7 @@ export async function addNewProduct(product, userName, userDept) {
           displayName: userName,
           admitName: matchedUser.name,
         });
-        const link = `https://seouliredsm.netlify.app/receive/detail/${id}`
+        const link = `https://seouliredsm.netlify.app/receive`
         const encodeLink = encodeURIComponent(link)
         const kakaoData = {
           name : userName,
