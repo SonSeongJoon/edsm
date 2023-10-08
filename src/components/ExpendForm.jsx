@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { ItemInput } from './html/ItemInput';
 
 const initExpendForm = {
@@ -12,6 +12,13 @@ const initExpendForm = {
 };
 
 const ExpendForm = ({ product, setProduct, handleChange }) => {
+  useEffect(() => {
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      items: [{ title: '', amount: '', note: '' }],
+    }));
+  }, [product.file, setProduct]); 
+
   const addItem = () => {
     if (product.items.length < 4) {
       setProduct((prevProduct) => ({
@@ -32,13 +39,14 @@ const ExpendForm = ({ product, setProduct, handleChange }) => {
   const updateItemValue = (idx, key, value) => {
     setProduct((prevProduct) => {
       const newItems = [...prevProduct.items];
-      newItems[idx][key] = value;
+      newItems[idx] = { ...newItems[idx], [key]: value };
       return {
         ...prevProduct,
         items: newItems,
       };
     });
   };
+
 
   return (
     <div className="max-w-screen-2xl mx-auto p-5">

@@ -18,6 +18,7 @@ import {
 } from 'firebase/database';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
+import {sendKakaoNotification} from "./kakao";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_KEY,
@@ -97,7 +98,8 @@ export async function addNewProduct(product, userName, userDept) {
         if (userData.email === email) {
           matchedUser = {
             matchedUserId: userId,
-            name: userData.name
+            name: userData.name,
+            phoneNum: userData.phoneNum,
           };
           break;
         }
@@ -113,6 +115,16 @@ export async function addNewProduct(product, userName, userDept) {
           displayName: userName,
           admitName: matchedUser.name,
         });
+        const link = `https://seouliredsm.netlify.app/receive/detail/${id}`
+        const encodeLink = encodeURIComponent(link)
+        const kakaoData = {
+          name : userName,
+          phoneNum : '01028184783',
+          file : product.file,
+          link : encodeLink,
+        };
+
+        await sendKakaoNotification(kakaoData);
       } else {
         console.log('No matching user found for email:', email);
       }
@@ -219,8 +231,10 @@ export const signupEmail = async (formData) => {
     await set(userRef, {
       name: formData.name,
       email: formData.email,
+      phoneNum: formData.phoneNum,
       department: formData.department,
       role: formData.role,
+      corporation: formData.corporation,
     });
   } catch (error) {
     console.error('Error signing up with email and password:', error);
@@ -353,4 +367,22 @@ export async function getUsersData() {
   return get(child(dbRef, `userdata`)).then(snapshot => {
     return snapshot.val();
   })
+}
+
+export async function getData(id) {
+  const db = getDatabase();
+  const productRef = ref(db, `products/${id}`);
+
+  try {
+    const snapshot = await get(productRef);
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      console.log(`No data found for product id: ${id}`);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;  // 다른 곳에서 에러를 핸들링할 수 있도록 에러를 던집니다.
+  }
 }

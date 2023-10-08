@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
 import { addNewProduct } from '../api/firebase';
@@ -95,10 +95,10 @@ export default function Write() {
     });
   };
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
-  };
+  }, []);
 
   const FormComponent = Forms[product.file] || ExpendForm;
   const buttons = [
