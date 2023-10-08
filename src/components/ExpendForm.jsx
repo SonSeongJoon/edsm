@@ -39,13 +39,14 @@ const ExpendForm = ({ product, setProduct, handleChange }) => {
   const updateItemValue = (idx, key, value) => {
     setProduct((prevProduct) => {
       const newItems = [...prevProduct.items];
-      newItems[idx][key] = value;
+      newItems[idx] = { ...newItems[idx], [key]: value };
       return {
         ...prevProduct,
         items: newItems,
       };
     });
   };
+
 
   return (
     <div className="max-w-screen-2xl mx-auto p-5">

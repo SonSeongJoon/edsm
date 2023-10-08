@@ -1,40 +1,76 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { expenditure } from '../components/html/Expenditure';
-import { deleteProduct, updateProduct } from '../api/firebase';
+import {deleteProduct, getAllOneState, getData, updateProduct} from '../api/firebase';
 import { getDatabase, ref, onValue, off } from 'firebase/database';
 import DetailUserFormat from '../components/DetailUserFormat';
 import { useAuthContext } from '../context/AuthContext';
 import DetailAdminFormat from '../components/DetailAdminFormat';
 import { vacationPlan } from '../components/html/VacationPlan';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Detail() {
-  const {
-    state: { product, state, isMst, states },
-  } = useLocation();
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
+  const isMst = queryParams.get('isMst');
+  const state = queryParams.get('state');
   const navigate = useNavigate();
   const location = useLocation();
+  const { id } = useParams();
+  const [states, setStates] = useState([]);
+
   const currentPath = location.pathname;
   const [showEditModal, setShowEditModal] = useState(false);
-  const [modalProduct, setModalProduct] = useState(product);
+  const [modalProduct, setModalProduct] = useState(null);
   const [updatedProduct, setUpdatedProduct] = useState(null);
   const user = useAuthContext();
-  console.log(states);
+
+  const { data: allState, isLoading: isLoadingAllState } = useQuery(
+     ["allState"],
+     getAllOneState
+  );
+
+
+  const { data: product, isLoading: isLoadingProduct } = useQuery(
+     ["product", id],
+     () => getData(id),
+  );
+
+
   useEffect(() => {
-    const db = getDatabase();
-    const productRef = ref(db, `products/${product.id}`);
+    if (product) {
+      const db = getDatabase();
+      const productRef = ref(db, `products/${product.id}`);
 
-    const handleDataChange = (snapshot) => {
-      const updatedData = snapshot.val();
-      setUpdatedProduct(updatedData);
-    };
+      const handleDataChange = (snapshot) => {
+        const updatedData = snapshot.val();
+        setUpdatedProduct(updatedData);
+      };
 
-    onValue(productRef, handleDataChange);
+      onValue(productRef, handleDataChange);
 
-    return () => {
-      off(productRef, 'value', handleDataChange);
-    };
+      return () => {
+        off(productRef, 'value', handleDataChange);
+      };
+    }
   }, [product]);
+
+  useEffect(() => {
+    if (allState && product) {
+      const filteredStates = allState
+      .filter((stateItem) => stateItem.id === product.id)
+      .map((stateItem) => ({
+        name: stateItem.name,
+        state: stateItem.state,
+      }));
+      setStates(filteredStates);
+    }
+  }, [allState, product]);
+
+
+  if (isLoadingAllState || isLoadingProduct) {
+    return <p>Loading...</p>;
+  }
 
   const htmlString =
     product.file === '지출결의서'
@@ -107,18 +143,17 @@ export default function Detail() {
   const displayProduct = updatedProduct || product;
   const isAdmin = user?.user?.isAdmin;
   const isReceivePath = currentPath.includes('/receive');
-
   return (
     <div className="flex justify-center items-center h-full">
-      {isAdmin && isReceivePath ? (
-        <DetailAdminFormat
-          displayProduct={displayProduct}
-          product={product}
-          navigate={navigate}
-          states={states}
-        />
-      ) : (
-        <>
+      {product ? (
+        isAdmin && isReceivePath ? (
+          <DetailAdminFormat
+            displayProduct={displayProduct}
+            product={product}
+            navigate={navigate}
+            states={states}
+          />
+        ) : (
           <DetailUserFormat
             oneState={state}
             showEditModal={showEditModal}
@@ -137,7 +172,9 @@ export default function Detail() {
             states={states}
             setModalProduct={setModalProduct}
           />
-        </>
+        )
+      ) : (
+        <p>Loading...</p> // or a loading spinner
       )}
     </div>
   );

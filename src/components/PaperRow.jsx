@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getAllOneState } from '../api/firebase';
 
 export default function PaperRow({ product, isAdmins, isMst }) {
   const { id, title, file, date, displayName, oneState, state, dept } = product;
@@ -8,23 +7,6 @@ export default function PaperRow({ product, isAdmins, isMst }) {
   const location = useLocation();
   const basePath = location.pathname.split('/')[1];
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 640);
-
-  const [states, setStates] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const allState = await getAllOneState();
-      console.log(allState);
-      const filteredStates = allState
-        .filter((stateItem) => stateItem.id === product.id)
-        .map((stateItem) => ({
-          name: stateItem.name,
-          state: stateItem.state,
-        }));
-      setStates(filteredStates);
-    };
-    fetchData();
-  }, [product.id]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -40,10 +22,9 @@ export default function PaperRow({ product, isAdmins, isMst }) {
   const displayDate = isSmallScreen ? date.split(' | ')[0] : date;
 
   const handleClick = () => {
-    navigate(`/${basePath}/detail/${id}`, {
-      state: { product, isMst, oneState, state, states },
-    });
+    navigate(`/${basePath}/detail/${id}?isMst=${isMst}&state=${state}`);
   };
+
 
   return (
     <tr key={product.id} className="hover:bg-gray-50">
