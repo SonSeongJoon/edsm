@@ -19,7 +19,6 @@ export default function Sidebar({ toggleSidebar }) {
           }}
         />
       </div>
-       <MyApp/>
       <div className="w-full flex mt-5 justify-center">
         <Toggle toggleSidebar={toggleSidebar} />
       </div>

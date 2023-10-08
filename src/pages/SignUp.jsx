@@ -15,14 +15,17 @@ const departments = [
   '알바',
 ];
 const roles = ['일반사원', '부서장&대표'];
+const corporations = ['서울IR네트워크', '서울IR인베스트먼트', '서울IR파트너스'];
 
 export default function SignUp() {
   const initialFormData = {
     name: '',
     email: '',
+    phoneNum: '',
     password: '',
     department: 'IR 1본부',
     role: '일반사원',
+    corporation: '서울IR네트워크',
   };
   const [formData, setFormData] = useState(initialFormData);
   const navigate = useNavigate();
@@ -53,7 +56,9 @@ export default function SignUp() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">회원가입</h2>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            회원가입
+          </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
@@ -89,6 +94,21 @@ export default function SignUp() {
               />
             </div>
             <div>
+              <label htmlFor="phoneNum" className="sr-only">
+                핸드폰 번호
+              </label>
+              <input
+                id="phoneNum"
+                name="phoneNum"
+                type="tel"
+                required
+                className="mt-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="핸드폰 번호"
+                value={formData.phoneNum}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
               <label htmlFor="password" className="sr-only">
                 비밀번호
               </label>
@@ -105,7 +125,10 @@ export default function SignUp() {
               />
             </div>
             <div>
-              <label htmlFor="department" className="mt-5 block text-md font-medium text-gray-700">
+              <label
+                htmlFor="department"
+                className="mt-5 block text-md font-medium text-gray-700"
+              >
                 부서명 선택
               </label>
               <select
@@ -123,7 +146,10 @@ export default function SignUp() {
               </select>
             </div>
             <div>
-              <label htmlFor="role" className="mt-5 block text-md font-medium text-gray-700">
+              <label
+                htmlFor="role"
+                className="mt-5 block text-md font-medium text-gray-700"
+              >
                 권한 선택
               </label>
               <select
@@ -134,6 +160,27 @@ export default function SignUp() {
                 onChange={handleChange}
               >
                 {roles.map((role, idx) => (
+                  <option key={idx} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label
+                htmlFor="role"
+                className="mt-5 block text-md font-medium text-gray-700"
+              >
+                법인 선택
+              </label>
+              <select
+                id="corporation"
+                name="corporation"
+                className="mt-1 block w-full pl-3 pr-10 py-2 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                value={formData.corporation}
+                onChange={handleChange}
+              >
+                {corporations.map((role, idx) => (
                   <option key={idx} value={role}>
                     {role}
                   </option>

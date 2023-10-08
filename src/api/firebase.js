@@ -219,8 +219,10 @@ export const signupEmail = async (formData) => {
     await set(userRef, {
       name: formData.name,
       email: formData.email,
+      phoneNum: formData.phoneNum,
       department: formData.department,
       role: formData.role,
+      corporation: formData.corporation,
     });
   } catch (error) {
     console.error('Error signing up with email and password:', error);
