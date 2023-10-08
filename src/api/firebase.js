@@ -18,6 +18,7 @@ import {
 } from 'firebase/database';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
+import {sendKakaoNotification} from "./kakao";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_KEY,
@@ -97,7 +98,8 @@ export async function addNewProduct(product, userName, userDept) {
         if (userData.email === email) {
           matchedUser = {
             matchedUserId: userId,
-            name: userData.name
+            name: userData.name,
+            phoneNum: userData.phoneNum,
           };
           break;
         }
@@ -113,6 +115,13 @@ export async function addNewProduct(product, userName, userDept) {
           displayName: userName,
           admitName: matchedUser.name,
         });
+        // const kakaoData = {
+        //   phoneNum : matchedUser.phoneNum,
+        //   adminName: matchedUser.name,
+        //   file : product.file
+        // };
+
+        await sendKakaoNotification();
       } else {
         console.log('No matching user found for email:', email);
       }

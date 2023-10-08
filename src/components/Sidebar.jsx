@@ -2,7 +2,6 @@ import React from 'react';
 import MainButton from './MainButton';
 import Toggle from './Toggle';
 import { useNavigate } from 'react-router-dom';
-import MyApp from "./MyApp";
 
 export default function Sidebar({ toggleSidebar }) {
   const navigate = useNavigate();

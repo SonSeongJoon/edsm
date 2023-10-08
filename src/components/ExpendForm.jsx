@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { ItemInput } from './html/ItemInput';
 
 const initExpendForm = {
@@ -12,6 +12,13 @@ const initExpendForm = {
 };
 
 const ExpendForm = ({ product, setProduct, handleChange }) => {
+  useEffect(() => {
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      items: [{ title: '', amount: '', note: '' }],
+    }));
+  }, [product.file, setProduct]); 
+
   const addItem = () => {
     if (product.items.length < 4) {
       setProduct((prevProduct) => ({

@@ -1,35 +1,13 @@
-const express = require('express');
-const axios = require('axios');
-const cors = require('cors');
-const app = express();
-const PORT = 5000;
+// apiRequests.js
+import axios from 'axios';
 
-app.use(cors({
-	origin: 'https://develop--seouliredsm.netlify.app'
-}));
-app.use(express.json());
-
-app.post('/send-kakao-message', async (req, res) => {
+export const sendKakaoNotification = async () => {
 	try {
-		const { username, key, kakaoPlusId, userTemplateNo, receiver } = req.body;
-		const apiUrl = 'https://directsend.co.kr/index.php/api_v2/kakao_notice';
-
-		const response = await axios.post(apiUrl, {
-			username,
-			key,
-			type: 'node',
-			kakao_plus_id: kakaoPlusId,
-			user_template_no: userTemplateNo,
-			receiver
-		});
-
-		res.json(response.data);
+		const response = await axios.get(
+			'/send_kakao',
+		);
+		console.log('Kakao notification sent successfully:', response.data);
 	} catch (error) {
-		console.error('Error:', error);
-		res.status(500).send('Internal Server Error');
+		console.error('Error sending Kakao notification:', error);
 	}
-});
-
-app.listen(PORT, () => {
-	console.log(`Server is running on http://localhost:${PORT}`);
-});
+};

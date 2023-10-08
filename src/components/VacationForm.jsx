@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 
 const initVacationForm = {
   file: '휴가계',
@@ -14,6 +14,8 @@ const initVacationForm = {
 };
 
 const VacationForm = ({ product, handleChange }) => {
+  
+
   useEffect(() => {
     const totalLeaveDays = parseInt(product.TotalLeaveDays) || 0;
     const usedDays = parseInt(product.UsedDays) || 0;
@@ -22,7 +24,9 @@ const VacationForm = ({ product, handleChange }) => {
     handleChange({
       target: { name: 'RemainDays', value: remainDays.toString() },
     });
-  }, [product.TotalLeaveDays, product.UsedDays, handleChange]);
+  }, [handleChange, product.TotalLeaveDays, product.UsedDays]);
+
+
 
   return (
      <div className="max-w-screen-lg mx-auto p-5">
@@ -93,6 +97,7 @@ const VacationForm = ({ product, handleChange }) => {
                   name="RemainDays"
                   id="RemainDays"
                   value={product.RemainDays}
+                  readOnly={true}
                   className="w-20 px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                   onChange={handleChange}
                />
