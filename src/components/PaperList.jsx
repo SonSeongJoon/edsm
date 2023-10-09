@@ -7,7 +7,7 @@ import { TableComponent } from './TableComponent';
 export default function PaperList({ category, state, adminData, MstData }) {
   const { pageId } = useParams();
   const currentPage = parseInt(pageId, 10) || 1;
-  const itemsPerPage = 10;
+  const itemsPerPage = 9;
   const navigate = useNavigate();
   const location = useLocation();
   const basePath = location.pathname.split('/')[1];
