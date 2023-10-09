@@ -124,7 +124,7 @@ export async function addNewProduct(product, userName, userDept) {
           link : encodeLink,
         };
 
-        await sendKakaoNotification(kakaoData);
+        // await sendKakaoNotification(kakaoData);
       } else {
         console.log('No matching user found for email:', email);
       }
