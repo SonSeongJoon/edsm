@@ -26,9 +26,10 @@ export default function Detail() {
   const user = useAuthContext();
 
   const { data: allState, isLoading: isLoadingAllState } = useQuery(
-     ["allState"],
-     getAllOneState
+     ["allState", id],
+     () => getAllOneState(id)
   );
+
 
 
   const { data: product, isLoading: isLoadingProduct } = useQuery(

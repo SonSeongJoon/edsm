@@ -34,6 +34,7 @@ export default function DetailAdminFormat({
   const [data, setData] = useState('');
   const [isChildSubmitted, setIsChildSubmitted] = useState(false);
   const [state, setStates] = useState(states);
+  console.log(isChildSubmitted)
 
   const fetchInitialState = useCallback(async () => {
     try {
@@ -75,7 +76,7 @@ export default function DetailAdminFormat({
         await removeAdmit(product.id, user.user.displayName);
       }
 
-      const allState = await getAllOneState();
+      const allState = await getAllOneState(product.id);
       const updatedStates = allState
         .filter((stateItem) => stateItem.id === product.id)
         .map((stateItem) => ({
@@ -103,7 +104,7 @@ export default function DetailAdminFormat({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const allStateData = await getAllOneState();
+        const allStateData = await getAllOneState(product.id);
         const updatedStates = allStateData
           .filter((stateItem) => stateItem.id === product.id)
           .map((stateItem) => ({
@@ -119,7 +120,7 @@ export default function DetailAdminFormat({
     fetchData();
   }, [product.id]);
 
-  // 조건부 렌더링 컴포넌트 선택
+
   const SpecificComponent = COMPONENT_MAP[displayProduct.file] || (() => null);
 
   return (
