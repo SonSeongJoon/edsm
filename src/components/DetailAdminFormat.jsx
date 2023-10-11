@@ -51,12 +51,13 @@ export default function DetailAdminFormat({
 
   const determineState = useCallback((state) => {
     if (!state || state.length === 0) return STATE_PENDING;
-    if (state.includes(STATE_PENDING)) return STATE_PENDING;
     if (state.includes(STATE_REJECTED)) return STATE_REJECTED;
+    if (state.includes(STATE_PENDING)) return STATE_PENDING;
     if (state.every((value) => value === STATE_APPROVED)) return STATE_APPROVED;
 
     return '알 수 없음';
   }, []);
+
 
   const handleAdmit = useCallback(async () => {
     try {
