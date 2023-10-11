@@ -18,6 +18,7 @@ import {
 } from 'firebase/database';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
+import {sendKakaoCreateProduct} from "./kakao";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_KEY,
@@ -60,14 +61,15 @@ async function getUserDetails(user) {
 
       // user의 uid에 해당하는 department 값을 찾기
       const userDepartment = users[user.uid]?.department;
+      const userPhoneNum = users[user.uid]?.phoneNum;
 
-      return { ...user, isAdmin, isMst, dept: userDepartment };
+      return { ...user, isAdmin, isMst, dept: userDepartment, phoneNum: userPhoneNum };
     }
     return user;
   });
 }
 
-export async function addNewProduct(product, userName, userDept) {
+export async function addNewProduct(product, userName, userDept, userPhoneNum) {
   const userId = auth.currentUser?.uid;
   if (!userId) {
     throw new Error('User is not authenticated');
@@ -84,6 +86,7 @@ export async function addNewProduct(product, userName, userDept) {
     state: '대기',
     displayName: userName,
     dept: userDept,
+    writerPhonNum: userPhoneNum,
   });
   const emails = product.agree;
   const usersRef = ref(db, 'userdata');
@@ -114,16 +117,16 @@ export async function addNewProduct(product, userName, userDept) {
           displayName: userName,
           admitName: matchedUser.name,
         });
-        // const link = `https://seouliredsm.netlify.app/receive`
-        // const encodeLink = encodeURIComponent(link)
-        // const kakaoData = {
-        //   name : userName,
-        //   phoneNum : '01028184783',
-        //   file : product.file,
-        //   link : encodeLink,
-        // };
+        const link = `https://seouliredsm.netlify.app/receive`
+        const encodeLink = encodeURIComponent(link)
+        const kakaoData = {
+          name : userName,
+          phoneNum : matchedUser.phoneNum,
+          file : product.file,
+          link : encodeLink,
+        };
 
-        // await sendKakaoNotification(kakaoData);
+        await sendKakaoCreateProduct(kakaoData);
       } else {
         console.log('No matching user found for email:', email);
       }

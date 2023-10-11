@@ -37,6 +37,7 @@ export default function Write() {
   const user = useAuthContext();
   const userName = user.user.displayName;
   const userDept = user.user.dept;
+  const userPhoneNum = user.user.phoneNum;
   const currentDate = moment().format('YYYY-MM-DD');
 
   const [product, setProduct] = useState({
@@ -44,6 +45,7 @@ export default function Write() {
     date: currentDate,
     dept: userDept,
     name: userName,
+    phoneNum : userPhoneNum
   });
 
   useEffect(() => {
@@ -53,6 +55,7 @@ export default function Write() {
       date: prevProduct.date,
       dept: prevProduct.dept,
       name: prevProduct.name,
+      phoneNum: prevProduct.phoneNum,
     }));
   }, [product.file]);
 
@@ -64,7 +67,7 @@ export default function Write() {
       return;
     }
 
-    addNewProduct(product, userName, userDept).then(() => {
+    addNewProduct(product, userName, userDept, userPhoneNum).then(() => {
       alert('등록 되었습니다.');
       setProduct(initForms[product.file] || initExpendForm);
       navigator(`/wait`);
