@@ -398,6 +398,6 @@ export async function getData(id) {
     }
   } catch (error) {
     console.error('Error fetching data:', error);
-    throw error;  // 다른 곳에서 에러를 핸들링할 수 있도록 에러를 던집니다.
+    throw error;
   }
 }
