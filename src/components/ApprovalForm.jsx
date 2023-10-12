@@ -3,13 +3,10 @@ import React from 'react';
 const initApprovalForm = {
   file: '품의서',
   title: '',
-  detail: `1. 항 목  :  체온계 2개 (기업행사용)
-
-2. 인 원 :  -
-
-3. 금 액  : 260,000원 (각 130,000원) 
-
-4. 비 고  : 법인카드 사용`,
+  content: '',
+  period: '2023-00-00 ~ 2023-00-00 (00일간)',
+  price: '',
+  note: '',
   agree: [],
   agreeName: [],
 };
@@ -29,15 +26,58 @@ const ApprovalForm = ({ product, handleChange }) => {
             onChange={handleChange}
           />
         </div>
-        <div className="content p-2">
-          <div className="font-bold mt-5">상세 내용</div>
-          <textarea
-            name="detail"
-            value={product.detail}
-            placeholder="상세 내용을 입력하세요."
-            className="w-[400px] h-[200px] px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-            onChange={handleChange}
-          />
+        {/* Additional Info Section */}
+        <div className="additional-info mt-5 p-2">
+          <div className="font-bold mb-3">추가 정보</div>
+
+          {/* Content Section */}
+          <div className="mb-3">
+            <div className="font-bold">항목</div>
+            <input
+               type="text"
+               name="content"
+               placeholder="예시) 체온계 2개 (기업행사용)"
+               value={product.content}
+               className="w-full px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+               onChange={handleChange}
+            />
+          </div>
+
+          {/* Period Section */}
+          <div className="mb-3">
+            <div className="font-bold">기간</div>
+            <input
+               name="period"
+               value={product.period}
+               className="w-[400px] px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+               onChange={handleChange}
+            />
+          </div>
+
+          {/* Price Section */}
+          <div className="mb-3">
+            <div className="font-bold">금액</div>
+            <input
+               name="price"
+               type="text"
+               placeholder='260,000원 (각 130,000원)'
+               value={product.price}
+               className="w-[300px] px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+               onChange={handleChange}
+            />
+          </div>
+
+          {/* Note Section */}
+          <div>
+            <div className="font-bold">비고</div>
+            <input
+               name="note"
+               value={product.note}
+               placeholder='예시) 법인카드 사용'
+               className="w-[200px] px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+               onChange={handleChange}
+            />
+          </div>
         </div>
       </div>
     </div>

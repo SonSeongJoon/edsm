@@ -35,7 +35,6 @@ const approvers = [
 export default function Write() {
   const navigator = useNavigate();
   const user = useAuthContext();
-  console.log(user)
   const userName = user.user.displayName;
   const userDept = user.user.dept;
   const userPhoneNum = user.user.phoneNum;
@@ -74,6 +73,7 @@ export default function Write() {
       navigator(`/wait`);
     });
   };
+  console.log(product)
 
 
   const handleAgreeChange = (e) => {
@@ -85,7 +85,7 @@ export default function Write() {
         return {
           ...prevProduct,
           agree: [...prevProduct.agree, approver.email],
-          agreeName: [...prevProduct.agreeName, approver.name], // 이름 추가
+          agreeName: [...prevProduct.agreeName, approver.name],
         };
       } else {
         return {
