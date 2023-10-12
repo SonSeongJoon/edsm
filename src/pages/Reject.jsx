@@ -18,6 +18,7 @@ export default function Reject() {
         state="반려"
         adminData={false}
         setStateFromChild={setStateFromChild}
+        MstData={false}
       />
     </div>
   );

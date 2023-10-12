@@ -17,6 +17,7 @@ export default function Wait() {
         state="대기"
         adminData={false}
         setStateFromChild={setStateFromChild}
+        MstData={false}
       />
     </div>
   );

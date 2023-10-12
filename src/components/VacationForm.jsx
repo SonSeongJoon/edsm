@@ -29,7 +29,7 @@ const VacationForm = ({ product, handleChange }) => {
       <div className="container bg-white p-5">
         <div className="mb-5">
           <label
-            className="block sm:text-md text-sm font-bold mb-2"
+            className="block sm:text-md text-xm font-bold mb-2"
             htmlFor="title"
           >
             제목:
@@ -40,14 +40,14 @@ const VacationForm = ({ product, handleChange }) => {
             id="title"
             placeholder="제목 입력"
             value={product.title || ''}
-            className="w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+            className="w-[250px] px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
             onChange={handleChange}
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-5">
           <div>
             <label
-              className="block sm:text-md text-sm font-bold mb-2"
+              className="block sm:text-md text-xm font-bold mb-2"
               htmlFor="AttributionYear"
             >
               귀속연도:
@@ -58,7 +58,7 @@ const VacationForm = ({ product, handleChange }) => {
               id="AttributionYear"
               placeholder="귀속연도 입력"
               value={product.AttributionYear || ''}
-              className="w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+              className="w-[250px] px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
               onChange={handleChange}
             />
           </div>
@@ -66,7 +66,7 @@ const VacationForm = ({ product, handleChange }) => {
         <div className="flex space-x-6">
           <div className="flex items-center">
             <label
-              className="font-bold sm:text-md text-sm mr-2"
+              className="font-bold sm:text-md text-xxm mr-2"
               htmlFor="TotalLeaveDays"
             >
               총 연차일수:
@@ -82,7 +82,7 @@ const VacationForm = ({ product, handleChange }) => {
           </div>
           <div className="flex items-center">
             <label
-              className="font-bold sm:text-md text-sm mr-2"
+              className="font-bold sm:text-md text-xxm mr-2"
               htmlFor="UsedDays"
             >
               기사용일수:
@@ -98,7 +98,7 @@ const VacationForm = ({ product, handleChange }) => {
           </div>
           <div className="flex items-center">
             <label
-              className="font-bold sm:text-md text-sm mr-2"
+              className="font-bold sm:text-md text-xxm mr-2"
               htmlFor="RemainDays"
             >
               잔여일수:
@@ -118,7 +118,7 @@ const VacationForm = ({ product, handleChange }) => {
         <div className="mt-5">
           <div className="flex items-center">
             <label
-              className="font-bold sm:text-md text-sm mr-2"
+              className="font-bold sm:text-md text-xm mr-2"
               htmlFor='Period'
             >
               휴가 기간:
@@ -135,7 +135,7 @@ const VacationForm = ({ product, handleChange }) => {
           </div>
           <div className='mt-2'>
             <label
-              className="block sm:text-md text-sm font-bold mb-2"
+              className="block sm:text-md text-xm font-bold mb-2"
               htmlFor="VacationReason"
             >
               휴가사유:

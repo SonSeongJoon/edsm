@@ -25,7 +25,6 @@ export default function DetailUserFormat({
   setModalProduct,
 }) {
   const [reasonText, setReasonText] = useState(null);
-  console.log(product)
 
   useEffect(() => {
     const fetchReason = async () => {
@@ -82,7 +81,7 @@ export default function DetailUserFormat({
           </div>
 
           <div className="mt-3">
-	          {!isMst && !allApproved ? (
+	          {(!isMst && !allApproved) ? (
 		          <button
 			          className="bg-gray-500 text-white px-2 py-1 rounded text-sm mr-2 hover:bg-gray-600"
 			          onClick={openEditModal}
@@ -109,7 +108,7 @@ export default function DetailUserFormat({
       </div>
       {reasonText ? (
         <div className="xl:w-2/6 xl:py-3 xl:pr-3 xl:pl-0 px-3">
-          <ReasonText reasonText={reasonText} />
+          <ReasonText reasonText={reasonText}/>
         </div>
       ) : null}
     </div>

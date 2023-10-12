@@ -51,7 +51,7 @@ export default function DetailAdminFormat({
   const determineState = useCallback((state) => {
     if (!state || state.length === 0) return STATE_PENDING;
     if (state.includes(STATE_REJECTED)) {
-      sendKakaoAgreeProduct(product, state='반려');
+      // sendKakaoAgreeProduct(product, state='반려');
       return STATE_REJECTED;
     }
     if (state.includes(STATE_PENDING)) return STATE_PENDING;
