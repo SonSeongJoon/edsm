@@ -49,7 +49,7 @@ const ApprovalForm = ({ product, handleChange }) => {
             <input
                name="period"
                value={product.period}
-               className="w-[400px] px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+               className="w-[300px] px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                onChange={handleChange}
             />
           </div>
@@ -62,7 +62,7 @@ const ApprovalForm = ({ product, handleChange }) => {
                type="text"
                placeholder='260,000원 (각 130,000원)'
                value={product.price}
-               className="w-[300px] px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+               className="w-[230px] px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                onChange={handleChange}
             />
           </div>
