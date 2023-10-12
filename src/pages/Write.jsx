@@ -9,7 +9,7 @@ import VacationForm, { initVacationForm } from '../components/VacationForm';
 import { htmlToFile } from '../js/convertToWord.js';
 import moment from 'moment';
 import {ApprovalForm, initApprovalForm} from "../components/ApprovalForm";
-import {approvalDocument} from "../components/html/approval";
+import {approvalDocument} from "../components/html/approvalDocument";
 
 
 const options = ['지출결의서', '휴가계', '품의서'];
@@ -35,6 +35,7 @@ const approvers = [
 export default function Write() {
   const navigator = useNavigate();
   const user = useAuthContext();
+  console.log(user)
   const userName = user.user.displayName;
   const userDept = user.user.dept;
   const userPhoneNum = user.user.phoneNum;

@@ -118,15 +118,15 @@ export async function addNewProduct(product, userName, userDept, userPhoneNum) {
           admitName: matchedUser.name,
         });
         const link = `https://seouliredsm.netlify.app/receive`
-        const encodeLink = encodeURIComponent(link)
-        const kakaoData = {
-          name : userName,
-          phoneNum : matchedUser.phoneNum,
-          file : product.file,
-          link : encodeLink,
-        };
+        // const encodeLink = encodeURIComponent(link)
+        // const kakaoData = {
+        //   name : userName,
+        //   phoneNum : matchedUser.phoneNum,
+        //   file : product.file,
+        //   link : encodeLink,
+        // };
 
-        await sendKakaoCreateProduct(kakaoData);
+        // await sendKakaoCreateProduct(kakaoData);
       } else {
         console.log('No matching user found for email:', email);
       }

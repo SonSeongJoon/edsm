@@ -22,10 +22,10 @@ export const sendKakaoModifyProduct = async (data) => {
 	}
 };
 
-export const sendKakaoAgreeProduct = async (data) => {
+export const sendKakaoAgreeProduct = async (data, state) => {
 	try {
 		const response = await axios.get(
-			`https://port-0-kakaoapi-euegqv2blnfy3ekc.sel5.cloudtype.app/send_kakao_agree/name/${data.name}/phoneNum/${data.writerPhonNum}/title/${data.title}/state/${data.state}`,
+			`https://port-0-kakaoapi-euegqv2blnfy3ekc.sel5.cloudtype.app/send_kakao_agree/name/${data.name}/phoneNum/${data.writerPhonNum}/title/${data.title}/state/${state}`,
 		);
 		console.log('Kakao notification sent successfully:', response.data);
 	} catch (error) {

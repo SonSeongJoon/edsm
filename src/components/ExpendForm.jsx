@@ -57,7 +57,7 @@ const ExpendForm = ({ product, setProduct, handleChange }) => {
             type="text"
             name="title"
             placeholder="제목입력"
-            value={product.title}
+            value={product.title || ''}
             className="w-full px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
             onChange={handleChange}
           />
@@ -67,7 +67,7 @@ const ExpendForm = ({ product, setProduct, handleChange }) => {
           <input
             type="text"
             name="deel"
-            value={product.deel}
+            value={product.deel || ''}
             placeholder="거래처 입력"
             className="w-full px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
             onChange={handleChange}

@@ -50,11 +50,14 @@ export default function DetailAdminFormat({
 
   const determineState = useCallback((state) => {
     if (!state || state.length === 0) return STATE_PENDING;
-    if (state.includes(STATE_REJECTED)) return STATE_REJECTED;
+    if (state.includes(STATE_REJECTED)) {
+      sendKakaoAgreeProduct(product, state='반려');
+      return STATE_REJECTED;
+    }
     if (state.includes(STATE_PENDING)) return STATE_PENDING;
 
     if (state.every((value) => value === STATE_APPROVED)) {
-      sendKakaoAgreeProduct(product);
+      sendKakaoAgreeProduct(product, state='승인');
       return STATE_APPROVED;
     }
 

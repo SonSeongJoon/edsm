@@ -7,7 +7,7 @@ export const ItemInput = ({ item, updateItemValue, idx }) => {
           type="text"
           placeholder=" 내역 입력"
           className="w-full px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-          value={item.title}
+          value={item.title || ''}
           onChange={(e) => updateItemValue(idx, 'title', e.target.value)}
         />
       </div>
@@ -17,7 +17,7 @@ export const ItemInput = ({ item, updateItemValue, idx }) => {
           type="text"
           placeholder=" 금액 입력"
           className="w-full px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-          value={item.amount}
+          value={item.amount || ''}
           onChange={(e) => updateItemValue(idx, 'amount', e.target.value)}
 
         />
@@ -28,7 +28,7 @@ export const ItemInput = ({ item, updateItemValue, idx }) => {
           type="text"
           placeholder=" 비고 입력"
           className="w-full px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-          value={item.note}
+          value={item.note || ''}
           onChange={(e) => updateItemValue(idx, 'note', e.target.value)}
         />
       </div>

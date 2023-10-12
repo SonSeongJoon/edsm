@@ -8,6 +8,7 @@ import { useAuthContext } from '../context/AuthContext';
 import DetailAdminFormat from '../components/DetailAdminFormat';
 import { vacationPlan } from '../components/html/VacationPlan';
 import { useQuery } from '@tanstack/react-query';
+import {approvalDocument} from "../components/html/approvalDocument";
 
 export default function Detail() {
   const { search } = useLocation();
@@ -73,10 +74,15 @@ export default function Detail() {
     return <p>Loading...</p>;
   }
 
-  const htmlString =
-    product.file === '지출결의서'
-      ? expenditure(product)
-      : vacationPlan(product);
+  const fileFunctionMap = {
+    '지출결의서': expenditure,
+    '휴가계': vacationPlan,
+    '품의서': approvalDocument,
+  };
+
+  const htmlString = fileFunctionMap[product.file]
+     ? fileFunctionMap[product.file](product)
+     : null;
 
   function htmlToFile(fileExtension) {
     const sourceMap = {
