@@ -21,6 +21,7 @@ export default function Receive() {
         state={uid}
         adminData={true}
         setStateFromChild={setStateFromChild}
+        MstData={false}
       />
     </div>
   );

@@ -11,12 +11,9 @@ import { useQuery } from '@tanstack/react-query';
 import {approvalDocument} from "../components/html/approvalDocument";
 
 export default function Detail() {
-  const { search } = useLocation();
-  const queryParams = new URLSearchParams(search);
-  const isMst = queryParams.get('isMst');
-  const state = queryParams.get('state');
-  const navigate = useNavigate();
   const location = useLocation();
+  const { isMst, state } = location.state || {};
+  const navigate = useNavigate();
   const { id } = useParams();
   const [states, setStates] = useState([]);
 
@@ -159,6 +156,7 @@ export default function Detail() {
             product={product}
             navigate={navigate}
             states={states}
+
           />
         ) : (
           <DetailUserFormat

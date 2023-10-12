@@ -83,5 +83,4 @@ const ApprovalForm = ({ product, handleChange }) => {
     </div>
   );
 };
-
 export {ApprovalForm, initApprovalForm};

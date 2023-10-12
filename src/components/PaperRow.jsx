@@ -21,12 +21,15 @@ export default function PaperRow({ product, isAdmins, isMst }) {
   }, []);
   const displayDate = isSmallScreen ? date.split(' | ')[0] : date;
 
-  const handleClick = () => {
-    navigate(`/${basePath}/detail/${id}?isMst=${isMst}&state=${state}`);
-  };
+   const handleClick = () => {
+      navigate(`/${basePath}/detail/${id}`, {
+         state: { isMst, state}
+      });
+   };
 
 
-  return (
+
+   return (
     <tr key={product.id} className="hover:bg-gray-50">
       <td
         className="px-6 py-4 whitespace-nowrap hover:underline cursor-pointer"

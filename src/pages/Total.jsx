@@ -5,7 +5,7 @@ export default function Total() {
 
 	return (
 		<div>
-			<PeperList key='products' adminData={false}/>
+			<PeperList key='products' adminData={false} MstData={false}/>
 		</div>
 	);
 }
