@@ -18,7 +18,7 @@ import {
 } from 'firebase/database';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
-import {sendKakaoNotification} from "./kakao";
+import {sendKakaoCreateProduct} from "./kakao";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_KEY,
@@ -61,14 +61,15 @@ async function getUserDetails(user) {
 
       // user의 uid에 해당하는 department 값을 찾기
       const userDepartment = users[user.uid]?.department;
+      const userPhoneNum = users[user.uid]?.phoneNum;
 
-      return { ...user, isAdmin, isMst, dept: userDepartment };
+      return { ...user, isAdmin, isMst, dept: userDepartment, phoneNum: userPhoneNum };
     }
     return user;
   });
 }
 
-export async function addNewProduct(product, userName, userDept) {
+export async function addNewProduct(product, userName, userDept, userPhoneNum) {
   const userId = auth.currentUser?.uid;
   if (!userId) {
     throw new Error('User is not authenticated');
@@ -85,6 +86,7 @@ export async function addNewProduct(product, userName, userDept) {
     state: '대기',
     displayName: userName,
     dept: userDept,
+    writerPhonNum: userPhoneNum,
   });
   const emails = product.agree;
   const usersRef = ref(db, 'userdata');
@@ -105,7 +107,7 @@ export async function addNewProduct(product, userName, userDept) {
         }
       }
       if (matchedUser.matchedUserId) {
-        await set(ref(db, `admins/${matchedUser.matchedUserId}/${id}`), {
+        await set(ref(db, `admins/${id}/${matchedUser.matchedUserId}`), {
           id,
           oneState: '대기',
           date: dateTime,
@@ -124,7 +126,7 @@ export async function addNewProduct(product, userName, userDept) {
           link : encodeLink,
         };
 
-        await sendKakaoNotification(kakaoData);
+        await sendKakaoCreateProduct(kakaoData);
       } else {
         console.log('No matching user found for email:', email);
       }
@@ -162,43 +164,58 @@ export async function getProduct(filterState) {
 }
 
 export async function getReceive(adminId) {
-  return get(child(dbRef, `admins/${adminId}`)).then(async (snapshot) => {
-    if (snapshot.exists()) {
-      const allEntries = snapshot.val();
-      const augmentedEntriesPromises = Object.values(allEntries).map(async (entry) => {
-        const { id } = entry;
-        const productSnapshot = await get(child(dbRef, `products/${id}`));
-        if (productSnapshot.exists()) {
-          const productData = productSnapshot.val();
-          return {
-            ...entry,
-            ...productData
-          };
-        }
-        return entry;
-      });
-      const augmentedEntries = await Promise.all(augmentedEntriesPromises);
-      return augmentedEntries.sort((a, b) => {
-        if (a.date < b.date) return 1;
-        if (a.date > b.date) return -1;
-        return 0;
+  const adminsRef = ref(db, 'admins');
+  const snapshot = await get(adminsRef);
+
+  if (!snapshot.exists()) {
+    console.log('No admins data found.');
+    return [];
+  }
+
+  const allAdminsData = snapshot.val();
+  let userEntries = [];
+
+  for (let fileId in allAdminsData) {
+    const userData = allAdminsData[fileId][adminId];
+
+    if (userData) {
+      userEntries.push({
+        ...userData,
+        fileId: fileId,
       });
     }
-    return [];
+  }
+
+  const augmentedEntriesPromises = userEntries.map(async (entry) => {
+    const productSnapshot = await get(ref(db, `products/${entry.fileId}`));
+    if (productSnapshot.exists()) {
+      const productData = productSnapshot.val();
+      return {
+        ...entry,
+        ...productData,
+      };
+    }
+    return entry;
+  });
+
+  const augmentedEntries = await Promise.all(augmentedEntriesPromises);
+
+  return augmentedEntries.sort((a, b) => {
+    if (a.date < b.date) return 1;
+    if (a.date > b.date) return -1;
+    return 0;
   });
 }
-
 
 export async function getAll() {
   return get(child(dbRef, `products`)).then((snapshot) => {
     if (snapshot.exists()) {
       const allEntries = snapshot.val();
-      const sortedEntries = Object.values(allEntries).sort((a, b) => {
-        if (a.date < b.date) return 1;
-        if (a.date > b.date) return -1;
+      return Object.values(allEntries).sort((a, b) => {
+        if(a.date < b.date) return 1;
+        if(a.date > b.date) return -1;
         return 0;
       });
-      return sortedEntries;
     }
     return [];
   });
@@ -250,7 +267,7 @@ export const signupEmail = async (formData) => {
 
 // 승인버튼 클릭
 export async function setOneState(adminId, fileId) {
-  return get(child(dbRef, `admins/${adminId}/${fileId}/oneState`)).then(
+  return get(child(dbRef, `admins/${fileId}/${adminId}/oneState`)).then(
     async (snapshot) => {
       if (snapshot.exists()) {
         const state = snapshot.val();
@@ -268,7 +285,7 @@ export async function setOneState(adminId, fileId) {
           default:
             break;
         }
-        await set(ref(db, `admins/${adminId}/${fileId}/oneState`), newState);
+        await set(ref(db, `admins/${fileId}/${adminId}/oneState`), newState);
         return newState;
       }
     },
@@ -276,21 +293,22 @@ export async function setOneState(adminId, fileId) {
 }
 
 export async function getOneState(adminId, fileId) {
-  return get(child(dbRef, `admins/${adminId}/${fileId}/oneState`)).then(
-    (snapshot) => {
-      if (snapshot.exists()) {
-        return snapshot.val();
-      }
-    },
+  return get(child(dbRef, `admins/${fileId}/${adminId}/oneState`)).then(
+     (snapshot) => {
+       if (snapshot.exists()) {
+         return snapshot.val();
+       }
+     },
   );
 }
+
 
 // 반려사유등록하기
 export async function setRejectReason(fileId, reasonText, userName, userId) {
   // 첫 번째 경로에 저장
   const firstPath = ref(db, `products/${fileId}/reason/${userName}`);
 
-  const secondPath = ref(db, `admins/${userId}/${fileId}/reason`);
+  const secondPath = ref(db, `admins/${fileId}/${userId}/reason`);
 
   await Promise.all([set(firstPath, reasonText), set(secondPath, reasonText)]);
 
@@ -301,7 +319,7 @@ export async function setRejectReason(fileId, reasonText, userName, userId) {
 export async function removeRejectReason(fileId, userName, userId) {
   const firstPath = ref(db, `products/${fileId}/reason/${userName}`);
 
-  const secondPath = ref(db, `admins/${userId}/${fileId}/reason`);
+  const secondPath = ref(db, `admins/${fileId}/${userId}/reason`);
 
   await Promise.all([remove(firstPath), remove(secondPath)]);
   return true;
@@ -317,7 +335,7 @@ export async function getRejectReasonProduct(fileId) {
 }
 
 export async function getRejectReasonAdmin(userId, fileId) {
-  return get(child(dbRef, `admins/${userId}/${fileId}/reason`)).then(
+  return get(child(dbRef, `admins/${fileId}/${userId}/reason`)).then(
     (snapshot) => {
       if (snapshot.exists()) {
         return snapshot.val();
@@ -335,32 +353,29 @@ export async function removeAdmit(fileId, userName) {
   return remove(ref(db, `products/${fileId}/admitMember/${userName}`));
 }
 
-export async function getAllOneState() {
-  const adminsRef = ref(db, 'admins'); // 'admins' 참조를 가져옵니다.
+export async function getAllOneState(fileId) {
+  const adminsRef = ref(db, `admins/${fileId}`);
   const snapshot = await get(adminsRef);
   const data = snapshot.val();
 
   if (!data) {
     console.log('No matching documents found.');
-
     return [];
   }
 
   let oneStates = [];
   for (let userId in data) {
-    for (let file in data[userId]) {
-      oneStates.push({
-        id: data[userId][file].id,
-        state: data[userId][file].oneState,
-        name: data[userId][file].admitName,
-      });
-    }
+    oneStates.push({
+      id: data[userId].id,
+      state: data[userId].oneState,
+      name: data[userId].admitName,
+    });
   }
   return oneStates;
 }
 
-export async function setState(filId, state) {
-  return set(ref(db, `products/${filId}/state`), state)
+export async function setState(fileId, state) {
+  return set(ref(db, `products/${fileId}/state`), state);
 }
 
 export async function getUsersData() {
@@ -383,6 +398,6 @@ export async function getData(id) {
     }
   } catch (error) {
     console.error('Error fetching data:', error);
-    throw error;  // 다른 곳에서 에러를 핸들링할 수 있도록 에러를 던집니다.
+    throw error;
   }
 }

@@ -9,7 +9,7 @@ import VacationForm, { initVacationForm } from '../components/VacationForm';
 import { htmlToFile } from '../js/convertToWord.js';
 import moment from 'moment';
 import {ApprovalForm, initApprovalForm} from "../components/ApprovalForm";
-import {approvalDocument} from "../components/html/approval";
+import {approvalDocument} from "../components/html/approvalDocument";
 
 
 const options = ['지출결의서', '휴가계', '품의서'];
@@ -37,6 +37,7 @@ export default function Write() {
   const user = useAuthContext();
   const userName = user.user.displayName;
   const userDept = user.user.dept;
+  const userPhoneNum = user.user.phoneNum;
   const currentDate = moment().format('YYYY-MM-DD');
 
   const [product, setProduct] = useState({
@@ -44,6 +45,7 @@ export default function Write() {
     date: currentDate,
     dept: userDept,
     name: userName,
+    phoneNum : userPhoneNum
   });
 
   useEffect(() => {
@@ -53,6 +55,7 @@ export default function Write() {
       date: prevProduct.date,
       dept: prevProduct.dept,
       name: prevProduct.name,
+      phoneNum: prevProduct.phoneNum,
     }));
   }, [product.file]);
 
@@ -64,12 +67,13 @@ export default function Write() {
       return;
     }
 
-    addNewProduct(product, userName, userDept).then(() => {
+    addNewProduct(product, userName, userDept, userPhoneNum).then(() => {
       alert('등록 되었습니다.');
       setProduct(initForms[product.file] || initExpendForm);
       navigator(`/wait`);
     });
   };
+  console.log(product)
 
 
   const handleAgreeChange = (e) => {
@@ -81,7 +85,7 @@ export default function Write() {
         return {
           ...prevProduct,
           agree: [...prevProduct.agree, approver.email],
-          agreeName: [...prevProduct.agreeName, approver.name], // 이름 추가
+          agreeName: [...prevProduct.agreeName, approver.name],
         };
       } else {
         return {

@@ -13,7 +13,6 @@ export default function ReturnText({ product, onChildSubmit }) {
   const user = useAuthContext();
 
   useEffect(() => {
-    // 컴포넌트가 마운트될 때 반려 사유를 로드
     const fetchRejectReason = async () => {
       try {
         const loadedReason = await getRejectReasonAdmin(
@@ -33,7 +32,7 @@ export default function ReturnText({ product, onChildSubmit }) {
     };
 
     fetchRejectReason();
-  }, [onChildSubmit, product.id, user.user.displayName, user.user.uid]);
+  }, [onChildSubmit, product.id, user.user.displayName, user.user.uid, isSubmitted]);
 
   const handleChange = (e) => {
     setReason(e.target.value);

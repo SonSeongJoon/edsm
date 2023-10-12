@@ -12,6 +12,7 @@ import ReturnText from './ReturnText';
 import ExpenditureShow from './html/ExpenditureShow';
 import { VacationShow } from './html/VacationShow';
 import ApprovalShow from './html/approvalShow';
+import {sendKakaoAgreeProduct} from "../api/kakao";
 
 const STATE_APPROVED = '승인';
 const STATE_PENDING = '대기';
@@ -34,7 +35,6 @@ export default function DetailAdminFormat({
   const [data, setData] = useState('');
   const [isChildSubmitted, setIsChildSubmitted] = useState(false);
   const [state, setStates] = useState(states);
-
   const fetchInitialState = useCallback(async () => {
     try {
       const initialState = await getOneState(uid, product.id);
@@ -50,13 +50,21 @@ export default function DetailAdminFormat({
 
   const determineState = useCallback((state) => {
     if (!state || state.length === 0) return STATE_PENDING;
+    if (state.includes(STATE_REJECTED)) {
+      sendKakaoAgreeProduct(product, state='반려');
+      return STATE_REJECTED;
+    }
     if (state.includes(STATE_PENDING)) return STATE_PENDING;
-    if (state.includes(STATE_REJECTED)) return STATE_REJECTED;
-    if (state.every((value) => value === STATE_APPROVED)) return STATE_APPROVED;
+
+    if (state.every((value) => value === STATE_APPROVED)) {
+      sendKakaoAgreeProduct(product, state='승인');
+      return STATE_APPROVED;
+    }
 
     return '알 수 없음';
-  }, []);
+  }, [product]);
 
+  
   const handleAdmit = useCallback(async () => {
     try {
       const isData = Boolean(isChildSubmitted);
@@ -75,7 +83,7 @@ export default function DetailAdminFormat({
         await removeAdmit(product.id, user.user.displayName);
       }
 
-      const allState = await getAllOneState();
+      const allState = await getAllOneState(product.id);
       const updatedStates = allState
         .filter((stateItem) => stateItem.id === product.id)
         .map((stateItem) => ({
@@ -103,7 +111,7 @@ export default function DetailAdminFormat({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const allStateData = await getAllOneState();
+        const allStateData = await getAllOneState(product.id);
         const updatedStates = allStateData
           .filter((stateItem) => stateItem.id === product.id)
           .map((stateItem) => ({
@@ -119,7 +127,7 @@ export default function DetailAdminFormat({
     fetchData();
   }, [product.id]);
 
-  // 조건부 렌더링 컴포넌트 선택
+
   const SpecificComponent = COMPONENT_MAP[displayProduct.file] || (() => null);
 
   return (

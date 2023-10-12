@@ -25,6 +25,7 @@ export default function DetailUserFormat({
   setModalProduct,
 }) {
   const [reasonText, setReasonText] = useState(null);
+  console.log(product)
 
   useEffect(() => {
     const fetchReason = async () => {
@@ -34,6 +35,8 @@ export default function DetailUserFormat({
 
     fetchReason();
   }, [product.id]);
+  const allApproved = states?.every((stateItem) => stateItem.state === '승인');
+
 
   return (
     <div className="w-full xl:flex">
@@ -79,14 +82,14 @@ export default function DetailUserFormat({
           </div>
 
           <div className="mt-3">
-            {!isMst ? (
-              <button
-                className="bg-gray-500 text-white px-2 py-1 rounded text-sm mr-2 hover:bg-gray-600"
-                onClick={openEditModal}
-              >
-                수정하기
-              </button>
-            ) : null}
+	          {!isMst && !allApproved ? (
+		          <button
+			          className="bg-gray-500 text-white px-2 py-1 rounded text-sm mr-2 hover:bg-gray-600"
+			          onClick={openEditModal}
+		          >
+			          수정하기
+		          </button>
+	          ) : null}
           </div>
         </div>
         <div className="container mx-auto mt-5 flex w-full justify-end">

@@ -24,7 +24,7 @@ const routes = [
   { path: 'complete', component: Complete },
   { path: 'write', component: Write },
   { path: 'receive', component: Receive, requireAdmin: true },
-  { path: 'mst', component: MstPage, requireAdmin: true },
+  { path: 'mst', component: MstPage },
 ];
 
 const router = createBrowserRouter([
