@@ -52,7 +52,7 @@ export default function DetailUserFormat({
       )}
       <div className={`py-3 px-3 ${reasonText ? 'xl:w-4/6' : 'w-full'}`}>
         <div className="container mx-auto p-5 md:p-5 lg:p-8 shadow-lg rounded-lg bg-white border border-gray-200">
-          <p className="text-sm text-brand font-bold">[{oneState}]</p>
+          {/*<p className="text-sm text-brand font-bold">[{oneState}]</p>*/}
           {displayProduct.file === '지출결의서' ? (
             <ExpenditureShow product={displayProduct} />
           ) : displayProduct.file === '휴가계' ? (
