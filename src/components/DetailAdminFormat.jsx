@@ -14,6 +14,7 @@ import { VacationShow } from './html/Show/VacationShow';
 import ApprovalShow from './html/Show/approvalShow';
 import {sendKakaoAgreeProduct} from "../api/kakao";
 import {OvertimeShow} from "./html/Show/OvertimeShow";
+import {useParams} from "react-router-dom";
 
 const STATE_APPROVED = '승인';
 const STATE_PENDING = '대기';
@@ -49,6 +50,8 @@ export default function DetailAdminFormat({
   useEffect(() => {
     fetchInitialState();
   }, [fetchInitialState]);
+
+  const {path} = useParams();
 
   const determineState = useCallback((state) => {
     if (!state || state.length === 0) return STATE_PENDING;
@@ -176,8 +179,14 @@ export default function DetailAdminFormat({
 
         <div className="container mx-auto mt-10 flex w-full justify-end">
           <button
-            onClick={() => navigate(-1)}
-            className="px-4 py-2 rounded hover:bg-brand-dark border bg-gray-200 border-gray-300"
+             onClick={() => {
+               if (window.history.length > 2) {
+                 navigate(-1);
+               } else {
+                 navigate(`/${path}`);
+               }
+             }}
+             className="px-4 py-2 rounded hover:bg-brand-dark border bg-gray-200 border-gray-300"
           >
             뒤로 가기
           </button>
