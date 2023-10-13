@@ -73,7 +73,6 @@ export default function Write() {
       navigator(`/wait`);
     });
   };
-  console.log(product)
 
 
   const handleAgreeChange = (e) => {

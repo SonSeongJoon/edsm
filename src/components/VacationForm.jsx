@@ -116,12 +116,12 @@ const VacationForm = ({ product, handleChange }) => {
         </div>
 
         <div className="mt-5">
-          <div className="flex items-center">
+          <div>
             <label
               className="font-bold sm:text-md text-xm mr-2"
               htmlFor='Period'
             >
-              휴가 기간:
+              휴가기간
             </label>
             <input
               type="text"
