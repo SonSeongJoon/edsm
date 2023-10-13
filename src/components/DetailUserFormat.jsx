@@ -7,6 +7,7 @@ import { getRejectReasonProduct } from '../api/firebase';
 import { VacationShow } from './html/Show/VacationShow';
 import ApprovalShow from './html/Show/approvalShow';
 import { OvertimeShow } from './html/Show/OvertimeShow';
+import {useParams} from "react-router-dom";
 
 export default function DetailUserFormat({
   showEditModal,
@@ -27,6 +28,8 @@ export default function DetailUserFormat({
   handleDelete,
 }) {
   const [reasonText, setReasonText] = useState(null);
+  const {path} = useParams();
+
 
   useEffect(() => {
     const fetchReason = async () => {
@@ -109,9 +112,9 @@ export default function DetailUserFormat({
           <button
              onClick={() => {
                if (window.history.length > 2) {
-                 navigate(-1); // Navigate to the previous page
+                 navigate(-1);
                } else {
-                 navigate('/total'); // Navigate to '/total' if there is no previous page
+                 navigate(`/${path}`);
                }
              }}
              className="px-4 py-2 rounded hover:bg-brand-dark border bg-gray-200 border-gray-300"
