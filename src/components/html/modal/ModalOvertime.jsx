@@ -18,7 +18,7 @@ export const ModalOvertime = ({ modalProduct, handleEditChange }) => {
 					name="period"
 					value={modalProduct.period || ''}
 					onChange={handleEditChange}
-					className="border border-gray-500 p-1 rounded-md shadow-md w-1/2 h-10"
+					className="border border-gray-500 p-1 rounded-md shadow-md w-1/2 h-13"
 				/>
 			</div>
 			<div className="flex items-center mb-1">
