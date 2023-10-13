@@ -134,10 +134,9 @@ export async function addNewProduct(product, userName, userDept, userPhoneNum) {
           phoneNum: matchedUser.phoneNum,
           file: product.file,
           link: encodeLink,
-          title: product.title,
         };
 
-        await sendKakaoCreateProduct(kakaoData);
+        // await sendKakaoCreateProduct(kakaoData);
       } else {
         console.log('No matching user found for email:', email);
       }
@@ -239,7 +238,12 @@ export async function updateProduct(product, updatedProduct) {
 }
 
 export async function deleteProduct(productId) {
-  return remove(ref(db, `products/${productId}`));
+  const productRef = ref(db, `products/${productId}`);
+  const adminRef = ref(db, `admins/${productId}`);
+  await Promise.all([
+    remove(productRef),
+    remove(adminRef)
+  ]);
 }
 
 //Email 회원가입
