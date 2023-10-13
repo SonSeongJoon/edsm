@@ -57,7 +57,7 @@ const ModalVacation = ({ modalProduct, handleEditChange }) => {
 					name="Period"
 					value={modalProduct.Period || ''}
 					onChange={handleEditChange}
-					className="border border-gray-500 p-1 rounded-md shadow-md w-1/2"
+					className="border border-gray-500 p-1 rounded-md shadow-md w-3/4"
 				/>
 			</div>
 			<div className="flex items-center mb-1">

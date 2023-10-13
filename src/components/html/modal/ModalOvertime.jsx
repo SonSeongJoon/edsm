@@ -14,11 +14,11 @@ export const ModalOvertime = ({ modalProduct, handleEditChange }) => {
 			</div>
 			<div className="flex items-center mb-1">
 				<h1 className="font-bold mr-1 mb-1">초과근무 예정 일시 : </h1>
-				<input
+				<textarea
 					name="period"
 					value={modalProduct.period || ''}
 					onChange={handleEditChange}
-					className="border border-gray-500 p-1 rounded-md shadow-md w-1/2"
+					className="border border-gray-500 p-1 rounded-md shadow-md w-1/2 h-10"
 				/>
 			</div>
 			<div className="flex items-center mb-1">
