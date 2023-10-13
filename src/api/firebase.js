@@ -136,7 +136,7 @@ export async function addNewProduct(product, userName, userDept, userPhoneNum) {
           link: encodeLink,
         };
 
-        // await sendKakaoCreateProduct(kakaoData);
+        await sendKakaoCreateProduct(kakaoData);
       } else {
         console.log('No matching user found for email:', email);
       }
