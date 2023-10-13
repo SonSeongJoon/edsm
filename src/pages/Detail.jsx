@@ -78,7 +78,7 @@ export default function Detail() {
     '품의서': approvalDocument,
   };
 
-  const htmlString = fileFunctionMap[product.file]
+  const htmlString = product && product.file && fileFunctionMap[product.file]
      ? fileFunctionMap[product.file](product)
      : null;
 
