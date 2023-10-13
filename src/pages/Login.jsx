@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 
 export default function Login() {
   const [formData, setFormData] = useState({
-    email: '',
+    email: '@seoulir.co.kr',
     password: '',
   });
   const [isCapsLockOn, setIsCapsLockOn] = useState(false);
