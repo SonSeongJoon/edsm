@@ -31,17 +31,17 @@ export const OvertimeShow = ({ product }) => {
 							{name}
 						</p>
 					</div>
-					<div className="flex items-center mt-1">
+					<div className="items-center mt-2">
 						<h1 className="font-bold mr-2 sm:text-md text-xm">
-							초과근무 예정 일시 :{' '}
+							초과근무 예정 일시{' '}
 						</h1>
 						<p className="text-gray-600 text-sm sm:text-md">{period}</p>
 					</div>
-					<div className="flex items-center mt-1">
+					<div className="flex items-center mt-2">
 						<h1 className="font-bold mr-2 sm:text-md text-xm">사 유 : </h1>
 						<p className="text-gray-600 text-sm sm:text-md">{overReason}</p>
 					</div>
-					<div className="flex items-center mt-1">
+					<div className="flex items-center mt-2">
 						<h1 className="font-bold mr-2 sm:text-md text-xm">대체휴무 예정 일자 : </h1>
 						<p className="text-gray-600 text-sm sm:text-md">{useWhen}</p>
 					</div>
