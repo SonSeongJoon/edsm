@@ -18,7 +18,7 @@ import {
 } from 'firebase/database';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
-import {sendKakaoCreateProduct} from "./kakao";
+import { sendKakaoCreateProduct } from './kakao';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_KEY,
@@ -56,14 +56,24 @@ async function getUserDetails(user) {
   return get(usersQuery).then((snapshot) => {
     if (snapshot.exists()) {
       const users = snapshot.val();
-      const isAdmin = Object.keys(users).some(uid => users[uid].role === '부서장&대표' && uid === user.uid);
-      const isMst = Object.keys(users).some(uid => users[uid].department === '경영지원팀' && uid === user.uid);
+      const isAdmin = Object.keys(users).some(
+        (uid) => users[uid].role === '부서장&대표' && uid === user.uid,
+      );
+      const isMst = Object.keys(users).some(
+        (uid) => users[uid].department === '경영지원팀' && uid === user.uid,
+      );
 
       // user의 uid에 해당하는 department 값을 찾기
       const userDepartment = users[user.uid]?.department;
       const userPhoneNum = users[user.uid]?.phoneNum;
 
-      return { ...user, isAdmin, isMst, dept: userDepartment, phoneNum: userPhoneNum };
+      return {
+        ...user,
+        isAdmin,
+        isMst,
+        dept: userDepartment,
+        phoneNum: userPhoneNum,
+      };
     }
     return user;
   });
@@ -117,13 +127,13 @@ export async function addNewProduct(product, userName, userDept, userPhoneNum) {
           displayName: userName,
           admitName: matchedUser.name,
         });
-        const link = `https://seouliredsm.netlify.app/receive`
-        const encodeLink = encodeURIComponent(link)
+        const link = `https://seouliredsm.netlify.app/receive`;
+        const encodeLink = encodeURIComponent(link);
         const kakaoData = {
-          name : userName,
-          phoneNum : '01028184783',
-          file : product.file,
-          link : encodeLink,
+          name: userName,
+          phoneNum: '01028184783',
+          file: product.file,
+          link: encodeLink,
         };
 
         await sendKakaoCreateProduct(kakaoData);
@@ -212,8 +222,8 @@ export async function getAll() {
     if (snapshot.exists()) {
       const allEntries = snapshot.val();
       return Object.values(allEntries).sort((a, b) => {
-        if(a.date < b.date) return 1;
-        if(a.date > b.date) return -1;
+        if (a.date < b.date) return 1;
+        if (a.date > b.date) return -1;
         return 0;
       });
     }
@@ -263,8 +273,6 @@ export const signupEmail = async (formData) => {
   }
 };
 
-
-
 // 승인버튼 클릭
 export async function setOneState(adminId, fileId) {
   return get(child(dbRef, `admins/${fileId}/${adminId}/oneState`)).then(
@@ -294,14 +302,13 @@ export async function setOneState(adminId, fileId) {
 
 export async function getOneState(adminId, fileId) {
   return get(child(dbRef, `admins/${fileId}/${adminId}/oneState`)).then(
-     (snapshot) => {
-       if (snapshot.exists()) {
-         return snapshot.val();
-       }
-     },
+    (snapshot) => {
+      if (snapshot.exists()) {
+        return snapshot.val();
+      }
+    },
   );
 }
-
 
 // 반려사유등록하기
 export async function setRejectReason(fileId, reasonText, userName, userId) {
@@ -379,9 +386,9 @@ export async function setState(fileId, state) {
 }
 
 export async function getUsersData() {
-  return get(child(dbRef, `userdata`)).then(snapshot => {
+  return get(child(dbRef, `userdata`)).then((snapshot) => {
     return snapshot.val();
-  })
+  });
 }
 
 export async function getData(id) {
