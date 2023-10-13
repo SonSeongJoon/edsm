@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 
 import { EditModal } from './EditModal';
 import ReasonText from './ReasonText';
-import ExpenditureShow from './html/ExpenditureShow';
+import ExpenditureShow from './html/Show/ExpenditureShow';
 import { getRejectReasonProduct } from '../api/firebase';
-import { VacationShow } from './html/VacationShow';
-import ApprovalShow from './html/approvalShow';
+import { VacationShow } from './html/Show/VacationShow';
+import ApprovalShow from './html/Show/approvalShow';
 
 export default function DetailUserFormat({
   showEditModal,

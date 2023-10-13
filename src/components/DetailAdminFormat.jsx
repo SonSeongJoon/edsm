@@ -9,9 +9,9 @@ import {
 } from '../api/firebase';
 import { useAuthContext } from '../context/AuthContext';
 import ReturnText from './ReturnText';
-import ExpenditureShow from './html/ExpenditureShow';
-import { VacationShow } from './html/VacationShow';
-import ApprovalShow from './html/approvalShow';
+import ExpenditureShow from './html/Show/ExpenditureShow';
+import { VacationShow } from './html/Show/VacationShow';
+import ApprovalShow from './html/Show/approvalShow';
 import {sendKakaoAgreeProduct} from "../api/kakao";
 
 const STATE_APPROVED = '승인';

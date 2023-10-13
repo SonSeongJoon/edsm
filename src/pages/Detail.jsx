@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { expenditure } from '../components/html/Expenditure';
+import { expenditure } from '../components/html/Transhtml/Expenditure';
 import {deleteProduct, getAllOneState, getData, updateProduct} from '../api/firebase';
 import { getDatabase, ref, onValue, off } from 'firebase/database';
 import DetailUserFormat from '../components/DetailUserFormat';
 import { useAuthContext } from '../context/AuthContext';
 import DetailAdminFormat from '../components/DetailAdminFormat';
-import { vacationPlan } from '../components/html/VacationPlan';
+import { vacationPlan } from '../components/html/Transhtml/VacationPlan';
 import { useQuery } from '@tanstack/react-query';
-import {approvalDocument} from "../components/html/approvalDocument";
+import {approvalDocument} from "../components/html/Transhtml/approvalDocument";
 
 export default function Detail() {
   const location = useLocation();

@@ -2,14 +2,14 @@ import React, {useCallback, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
 import { addNewProduct } from '../api/firebase';
-import { expenditure } from '../components/html/Expenditure';
-import { vacationPlan} from '../components/html/VacationPlan'
+import { expenditure } from '../components/html/Transhtml/Expenditure';
+import { vacationPlan} from '../components/html/Transhtml/VacationPlan'
 import { ExpendForm, initExpendForm } from '../components/ExpendForm';
 import VacationForm, { initVacationForm } from '../components/VacationForm';
 import { htmlToFile } from '../js/convertToWord.js';
 import moment from 'moment';
 import {ApprovalForm, initApprovalForm} from "../components/ApprovalForm";
-import {approvalDocument} from "../components/html/approvalDocument";
+import {approvalDocument} from "../components/html/Transhtml/approvalDocument";
 
 
 const options = ['지출결의서', '휴가계', '품의서'];

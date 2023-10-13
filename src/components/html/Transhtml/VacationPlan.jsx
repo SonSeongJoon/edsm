@@ -1,5 +1,4 @@
 export const vacationPlan = ({
-  displayName,
   file,
   VacationReason,
   dept,
@@ -7,8 +6,8 @@ export const vacationPlan = ({
   TotalLeaveDays,
   UsedDays,
   RemainDays,
-                                Period,
-                                name
+  Period,
+  name,
 }) => {
   return `<!DOCTYPE html>
 <html lang="ko">
@@ -46,7 +45,7 @@ export const vacationPlan = ({
                 <td style="width: 25%;">소속</td>
                 <td style="width: 25%;">${dept}</td>
                 <td style="width: 25%;">성명</td>
-                <td style="width: 25%;">${displayName}</td>
+                <td style="width: 25%;">${name}</td>
             </tr>
             <tr>
                 <td style="width: 25%;">귀속 연도</td>
@@ -70,7 +69,7 @@ export const vacationPlan = ({
             </tr>
             <tr>
                 <td colspan="4" style="text-align: left;">
-                    <p style="text-align: end;">위 신청인 ${displayName}(인)</p>
+                    <p style="text-align: end;">위 신청인 ${name}(인)</p>
                     <br>
                     <p style="text-align: center;">서울아이알네트워크㈜  대표이사  귀하</p>
                     <br>

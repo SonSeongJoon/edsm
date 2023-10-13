@@ -1,5 +1,5 @@
 import React from 'react';
-import { ItemOutput } from './ItemOutput';
+import { ItemOutput } from '../ItemOutput';
 
 const ExpenditureShow = ({ product }) => {
   const { title, file, date, dept, deel, items, name } = product;
