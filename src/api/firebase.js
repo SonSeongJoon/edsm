@@ -131,7 +131,7 @@ export async function addNewProduct(product, userName, userDept, userPhoneNum) {
         const encodeLink = encodeURIComponent(link);
         const kakaoData = {
           name: userName,
-          phoneNum: '01028184783',
+          phoneNum: matchedUser.phoneNum,
           file: product.file,
           link: encodeLink,
           title: product.title,
