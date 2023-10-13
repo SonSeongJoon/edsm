@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { ItemInput } from './html/ItemInput';
+import { ItemInput } from '../html/ItemInput';
 
 const initExpendForm = {
   file: '지출결의서',

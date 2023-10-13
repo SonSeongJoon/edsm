@@ -1,6 +1,6 @@
 // ModalExpend.js
 import React from 'react';
-import {ItemModify} from "./ItemModify";
+import {ItemModify} from "../ItemModify";
 
 const ModalExpend = ({ modalProduct, handleEditChange, handleItemValue, handleRemoveItem, handleAddItem }) => {
 	const { items, title, deel } = modalProduct;

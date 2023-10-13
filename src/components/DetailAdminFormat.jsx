@@ -9,10 +9,11 @@ import {
 } from '../api/firebase';
 import { useAuthContext } from '../context/AuthContext';
 import ReturnText from './ReturnText';
-import ExpenditureShow from './html/ExpenditureShow';
-import { VacationShow } from './html/VacationShow';
-import ApprovalShow from './html/approvalShow';
+import ExpenditureShow from './html/Show/ExpenditureShow';
+import { VacationShow } from './html/Show/VacationShow';
+import ApprovalShow from './html/Show/approvalShow';
 import {sendKakaoAgreeProduct} from "../api/kakao";
+import {OvertimeShow} from "./html/Show/OvertimeShow";
 
 const STATE_APPROVED = '승인';
 const STATE_PENDING = '대기';
@@ -22,6 +23,7 @@ const COMPONENT_MAP = {
   지출결의서: ExpenditureShow,
   휴가계: VacationShow,
   품의서: ApprovalShow,
+  초과근무사전품의서: OvertimeShow,
 };
 
 export default function DetailAdminFormat({
