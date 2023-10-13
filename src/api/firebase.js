@@ -127,14 +127,13 @@ export async function addNewProduct(product, userName, userDept, userPhoneNum) {
           displayName: userName,
           admitName: matchedUser.name,
         });
-        const link = `https://seouliredsm.netlify.app/receive`;
+        const link = `https://seouliredsm.netlify.app/receive/detail/${id}`;
         const encodeLink = encodeURIComponent(link);
         const kakaoData = {
           name: userName,
-          phoneNum: '01028184783',
+          phoneNum: matchedUser.phoneNum,
           file: product.file,
           link: encodeLink,
-          title: product.title,
         };
 
         await sendKakaoCreateProduct(kakaoData);
@@ -239,7 +238,12 @@ export async function updateProduct(product, updatedProduct) {
 }
 
 export async function deleteProduct(productId) {
-  return remove(ref(db, `products/${productId}`));
+  const productRef = ref(db, `products/${productId}`);
+  const adminRef = ref(db, `admins/${productId}`);
+  await Promise.all([
+    remove(productRef),
+    remove(adminRef)
+  ]);
 }
 
 //Email 회원가입

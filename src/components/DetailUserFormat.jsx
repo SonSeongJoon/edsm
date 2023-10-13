@@ -6,7 +6,7 @@ import ExpenditureShow from './html/Show/ExpenditureShow';
 import { getRejectReasonProduct } from '../api/firebase';
 import { VacationShow } from './html/Show/VacationShow';
 import ApprovalShow from './html/Show/approvalShow';
-import {OvertimeShow} from "./html/Show/OvertimeShow";
+import { OvertimeShow } from './html/Show/OvertimeShow';
 
 export default function DetailUserFormat({
   showEditModal,
@@ -24,6 +24,7 @@ export default function DetailUserFormat({
   isMst,
   states,
   setModalProduct,
+  handleDelete,
 }) {
   const [reasonText, setReasonText] = useState(null);
 
@@ -36,7 +37,6 @@ export default function DetailUserFormat({
     fetchReason();
   }, [product.id]);
   const allApproved = states?.every((stateItem) => stateItem.state === '승인');
-
 
   return (
     <div className="w-full xl:flex">
@@ -59,39 +59,50 @@ export default function DetailUserFormat({
             <VacationShow product={displayProduct} />
           ) : displayProduct.file === '품의서' ? (
             <ApprovalShow product={displayProduct} />
-          ) :  displayProduct.file === '초과근무사전품의서' ? (
+          ) : displayProduct.file === '초과근무사전품의서' ? (
             <OvertimeShow product={displayProduct} />
-            ) : null}
+          ) : null}
           <div className="mt-5 mb-3 text-sm">
             <span className="font-bold">수신자:</span>
             {states?.map((stateItem, index) => (
-               <span key={index} className="ml-2">
-            {stateItem.name}{' '}
-                 <span
-                    className={`font-bold ${
-                       stateItem.state === '승인'
-                          ? 'text-green-600'
-                          : stateItem.state === '반려'
-                             ? 'text-red-600'
-                             : 'text-gray-600'
-                    }`}
-                 >
-                ({stateItem.state})
-            </span>
-                 {index !== states.length - 1 && ','}
-        </span>
+              <span key={index} className="ml-2">
+                {stateItem.name}{' '}
+                <span
+                  className={`font-bold ${
+                    stateItem.state === '승인'
+                      ? 'text-green-600'
+                      : stateItem.state === '반려'
+                      ? 'text-red-600'
+                      : 'text-gray-600'
+                  }`}
+                >
+                  ({stateItem.state})
+                </span>
+                {index !== states.length - 1 && ','}
+              </span>
             ))}
           </div>
-
-          <div className="mt-3">
-	          {(!isMst && !allApproved) ? (
-		          <button
-			          className="bg-gray-500 text-white px-2 py-1 rounded text-sm mr-2 hover:bg-gray-600"
-			          onClick={openEditModal}
-		          >
-			          수정하기
-		          </button>
-	          ) : null}
+          <div className="flex mt-3">
+            <div>
+              {!isMst && !allApproved ? (
+                <button
+                  className="bg-gray-500 text-white px-2 py-1 rounded text-sm mr-2 hover:bg-gray-600"
+                  onClick={openEditModal}
+                >
+                  수정하기
+                </button>
+              ) : null}
+            </div>
+            <div>
+              {isMst && !allApproved ? (
+                <button
+                  className="bg-brand text-white px-2 py-1 rounded text-sm mr-2 hover:bg-red-700"
+                  onClick={handleDelete}
+                >
+                  삭제하기
+                </button>
+              ) : null}
+            </div>
           </div>
         </div>
         <div className="container mx-auto mt-5 flex w-full justify-end">
@@ -111,7 +122,7 @@ export default function DetailUserFormat({
       </div>
       {reasonText ? (
         <div className="xl:w-2/6 xl:py-3 xl:pr-3 xl:pl-0 px-3">
-          <ReasonText reasonText={reasonText}/>
+          <ReasonText reasonText={reasonText} />
         </div>
       ) : null}
     </div>
