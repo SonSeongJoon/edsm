@@ -20,7 +20,7 @@ const corporations = ['서울IR네트워크', '서울IR인베스트먼트', '서
 export default function SignUp() {
   const initialFormData = {
     name: '',
-    email: '',
+    email: '@seoulir.co.kr',
     phoneNum: '',
     password: '',
     department: 'IR 1본부',
@@ -103,7 +103,7 @@ export default function SignUp() {
                 type="tel"
                 required
                 className="mt-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="핸드폰 번호"
+                placeholder="핸드폰 번호 ex) 01012345678"
                 value={formData.phoneNum}
                 onChange={handleChange}
               />
