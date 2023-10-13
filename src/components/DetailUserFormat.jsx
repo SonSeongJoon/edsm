@@ -6,6 +6,7 @@ import ExpenditureShow from './html/Show/ExpenditureShow';
 import { getRejectReasonProduct } from '../api/firebase';
 import { VacationShow } from './html/Show/VacationShow';
 import ApprovalShow from './html/Show/approvalShow';
+import {OvertimeShow} from "./html/Show/OvertimeShow";
 
 export default function DetailUserFormat({
   showEditModal,
@@ -58,7 +59,9 @@ export default function DetailUserFormat({
             <VacationShow product={displayProduct} />
           ) : displayProduct.file === '품의서' ? (
             <ApprovalShow product={displayProduct} />
-          ) : null}
+          ) :  displayProduct.file === '초과근무사전품의서' ? (
+            <OvertimeShow product={displayProduct} />
+            ) : null}
           <div className="mt-5 mb-3 text-sm">
             <span className="font-bold">수신자:</span>
             {states?.map((stateItem, index) => (

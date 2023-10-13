@@ -4,24 +4,27 @@ import { useAuthContext } from '../context/AuthContext';
 import { addNewProduct } from '../api/firebase';
 import { expenditure } from '../components/html/Transhtml/Expenditure';
 import { vacationPlan} from '../components/html/Transhtml/VacationPlan'
-import { ExpendForm, initExpendForm } from '../components/ExpendForm';
-import VacationForm, { initVacationForm } from '../components/VacationForm';
+import { ExpendForm, initExpendForm } from '../components/form/ExpendForm';
+import VacationForm, { initVacationForm } from '../components/form/VacationForm';
 import { htmlToFile } from '../js/convertToWord.js';
 import moment from 'moment';
-import {ApprovalForm, initApprovalForm} from "../components/ApprovalForm";
+import {ApprovalForm, initApprovalForm} from "../components/form/ApprovalForm";
 import {approvalDocument} from "../components/html/Transhtml/approvalDocument";
+import {initOvertimeForm, OvertimeForm} from "../components/form/OvertimeForm";
 
 
-const options = ['지출결의서', '휴가계', '품의서'];
+const options = ['지출결의서', '휴가계', '품의서', '초과근무사전품의서'];
 const initForms = {
   지출결의서: initExpendForm,
   휴가계: initVacationForm,
   품의서: initApprovalForm,
+  초과근무사전품의서: initOvertimeForm,
 };
 const Forms = {
   지출결의서: ExpendForm,
   휴가계: VacationForm,
   품의서: ApprovalForm,
+  초과근무사전품의서: OvertimeForm,
 };
 const approvers = [
   { name: '서민아 이사', email: 'minah_seo@seoulir.co.kr' },
@@ -121,6 +124,8 @@ export default function Write() {
         } else if (product.file === '품의서') {
           const htmlString = approvalDocument(product);
           htmlToFile(htmlString, 'doc')
+        } else if(product.file === '초과근무사전품의서') {
+          // const htmlString =
         }
       },
       text: '워드 다운로드',
@@ -133,7 +138,7 @@ export default function Write() {
     <>
       <div className="flex flex-col xl:flex-row max-w-screen-2xl mx-auto ml-2 items-start mb-5">
         {/* Left Side */}
-        <div className="flex-2 md:mr-10 mb-5 md:mb-0">
+        <div className="sm:w-1/2 flex-2 md:mr-10 mb-5 md:mb-0">
           <div className="font-bold text-3xl mr-3 mt-5 text-brand">
             품위서 작성하기
           </div>
