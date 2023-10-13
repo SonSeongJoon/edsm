@@ -107,11 +107,18 @@ export default function DetailUserFormat({
         </div>
         <div className="container mx-auto mt-5 flex w-full justify-end">
           <button
-            onClick={() => navigate(-1)}
-            className="px-4 py-2 rounded hover:bg-brand-dark border bg-gray-200 border-gray-300"
+             onClick={() => {
+               if (window.history.length > 2) {
+                 navigate(-1); // Navigate to the previous page
+               } else {
+                 navigate('/total'); // Navigate to '/total' if there is no previous page
+               }
+             }}
+             className="px-4 py-2 rounded hover:bg-brand-dark border bg-gray-200 border-gray-300"
           >
             뒤로 가기
           </button>
+
           <button
             className="bg-blue-800 text-white px-4 py-2 rounded hover:bg-blue-900 ml-3"
             onClick={() => htmlToFile('doc')}
