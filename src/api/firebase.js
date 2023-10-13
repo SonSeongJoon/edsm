@@ -134,6 +134,7 @@ export async function addNewProduct(product, userName, userDept, userPhoneNum) {
           phoneNum: '01028184783',
           file: product.file,
           link: encodeLink,
+          title: product.title,
         };
 
         await sendKakaoCreateProduct(kakaoData);

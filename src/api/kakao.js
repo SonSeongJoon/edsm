@@ -3,7 +3,7 @@ import axios from 'axios';
 export const sendKakaoCreateProduct = async (data) => {
 	try {
 		const response = await axios.get(
-			`https://port-0-kakaoapi-euegqv2blnfy3ekc.sel5.cloudtype.app/send_kakao_create/name/${data.name}/phoneNum/${data.phoneNum}/file/${data.file}/link/${data.link}`,
+			`https://port-0-kakaoapi-euegqv2blnfy3ekc.sel5.cloudtype.app/send_kakao_create/name/${data.name}/phoneNum/${data.phoneNum}/file/${data.file}/link/${data.link}/title/${data.title}`,
 		);
 		console.log('Kakao notification sent successfully:', response.data);
 	} catch (error) {
