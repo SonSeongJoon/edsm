@@ -263,7 +263,6 @@ export async function updateProduct(product, userName, productID, updatedProduct
           file: product.file,
           link: productID,
         };
-        console.log(kakaoData)
         await sendKakaoModifyProduct(kakaoData);
       }),
     );
