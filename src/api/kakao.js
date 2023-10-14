@@ -14,7 +14,7 @@ export const sendKakaoCreateProduct = async (data) => {
 export const sendKakaoModifyProduct = async (data) => {
 	try {
 		const response = await axios.get(
-			`https://port-0-kakaoapi-euegqv2blnfy3ekc.sel5.cloudtype.app/send_kakao_modify/name/${data.name}/phoneNum/${data.phoneNum}/file/${data.file}/link/${data.link}`,
+			`https://port-0-kakaoapi-euegqv2blnfy3ekc.sel5.cloudtype.app/send_kakao_modify/name/${data.name}/writeName/${data.writeName}/phoneNum/${data.phoneNum}/file/${data.file}/link/${data.link}`,
 		);
 		console.log('Kakao notification sent successfully:', response.data);
 	} catch (error) {
