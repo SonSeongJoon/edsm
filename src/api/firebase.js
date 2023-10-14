@@ -264,6 +264,7 @@ export async function updateProduct(product, updatedProduct) {
           file: product.file,
           link: product.id,
         };
+        console.log(kakaoData)
         await sendKakaoModifyProduct(kakaoData);
       }),
     );
