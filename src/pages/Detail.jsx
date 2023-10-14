@@ -130,7 +130,6 @@ export default function Detail() {
     updateProduct(product, userName, productID, modalProduct)
       .then(() => {
         setShowEditModal(false);
-        sendKakaoModifyProduct(product)
       })
       .catch((error) => {
         console.error('Failed to update product:', error);
