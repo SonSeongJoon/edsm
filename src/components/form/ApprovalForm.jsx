@@ -13,8 +13,8 @@ const initApprovalForm = {
 
 const ApprovalForm = ({ product, handleChange }) => {
   return (
-    <div className="max-w-screen-lg mx-auto p-5">
-      <div className="container border-gray-500 sm:p-2 md:p-5">
+    <div className="max-w-screen-lg mx-auto">
+      <div className="container border-gray-500">
         <div className="header p-2 sm:flex-col md:flex-row">
           <div className="font-bold mr-3 mb-2 sm:mb-3 md:mb-0">제목</div>
           <input
@@ -49,7 +49,7 @@ const ApprovalForm = ({ product, handleChange }) => {
             <input
                name="period"
                value={product.period || ''}
-               className="w-[300px] px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+               className="w-full px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                onChange={handleChange}
             />
           </div>
@@ -62,7 +62,7 @@ const ApprovalForm = ({ product, handleChange }) => {
                type="text"
                placeholder='260,000원 (각 130,000원)'
                value={product.price || ''}
-               className="w-[230px] px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+               className="w-full px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                onChange={handleChange}
             />
           </div>
@@ -74,7 +74,7 @@ const ApprovalForm = ({ product, handleChange }) => {
                name="note"
                value={product.note || ''}
                placeholder='예시) 법인카드 사용'
-               className="w-[200px] px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+               className="w-full px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                onChange={handleChange}
             />
           </div>
