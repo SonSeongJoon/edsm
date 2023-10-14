@@ -233,6 +233,7 @@ export async function getAll() {
 
 export async function updateProduct(product, updatedProduct) {
   const emails = product.agree;
+  console.log(emails)
   const usersRef = ref(db, 'userdata');
   const snapshot = await get(usersRef);
 
@@ -257,7 +258,8 @@ export async function updateProduct(product, updatedProduct) {
           }
         }
         const kakaoData = {
-          name: product.name,
+          writeName: product.name,
+          name: matchedUser.name,
           phoneNum: matchedUser.phoneNum,
           file: product.file,
           link: product.id,
