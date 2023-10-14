@@ -125,7 +125,8 @@ export default function Detail() {
   };
 
   function handleSave() {
-    updateProduct(product, modalProduct)
+    const userName = product.name;
+    updateProduct(product, userName, modalProduct)
       .then(() => {
         setShowEditModal(false);
         sendKakaoModifyProduct(product)
