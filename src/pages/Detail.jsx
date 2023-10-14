@@ -9,7 +9,6 @@ import DetailAdminFormat from '../components/DetailAdminFormat';
 import { vacationPlan } from '../components/html/Transhtml/VacationPlan';
 import { useQuery } from '@tanstack/react-query';
 import {approvalDocument} from "../components/html/Transhtml/approvalDocument";
-import {sendKakaoModifyProduct} from "../api/kakao";
 
 export default function Detail() {
   const location = useLocation();
@@ -126,10 +125,10 @@ export default function Detail() {
 
   function handleSave() {
     const userName = product.name;
-    updateProduct(product, userName, modalProduct)
+    const productID = product.id;
+    updateProduct(product, userName, productID, modalProduct)
       .then(() => {
         setShowEditModal(false);
-        sendKakaoModifyProduct(product)
       })
       .catch((error) => {
         console.error('Failed to update product:', error);

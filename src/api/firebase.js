@@ -231,8 +231,7 @@ export async function getAll() {
   });
 }
 
-export async function updateProduct(product, userName, updatedProduct) {
-  const id = uuid();
+export async function updateProduct(product, userName, productID, updatedProduct) {
   const emails = product.agree;
   const usersRef = ref(db, 'userdata');
   const snapshot = await get(usersRef);
@@ -262,9 +261,8 @@ export async function updateProduct(product, userName, updatedProduct) {
           name: matchedUser.name,
           phoneNum: matchedUser.phoneNum,
           file: product.file,
-          link: id,
+          link: productID,
         };
-        console.log(kakaoData)
         await sendKakaoModifyProduct(kakaoData);
       }),
     );
