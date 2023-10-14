@@ -13,7 +13,7 @@ const initApprovalForm = {
 
 const ApprovalForm = ({ product, handleChange }) => {
   return (
-    <div className="max-w-screen-2xl mx-auto p-5">
+    <div className="max-w-screen-lg mx-auto p-5">
       <div className="container border-gray-500 sm:p-2 md:p-5">
         <div className="header p-2 sm:flex-col md:flex-row">
           <div className="font-bold mr-3 mb-2 sm:mb-3 md:mb-0">제목</div>

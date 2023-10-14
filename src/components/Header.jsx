@@ -22,7 +22,7 @@ export default function Header({ toggleSidebar }) {
    return (
     <div className="flex p-3 border-b border-b-gray-300 justify-between items-center">
       <div className="flex">
-         <button onClick={toggleSidebar} className="mr-4 sm:hidden">
+         <button onClick={toggleSidebar} className="mr-4 md:hidden">
             <FiMenu size={24} />
          </button>
          <div className='flex items-end'>
