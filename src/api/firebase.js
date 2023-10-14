@@ -18,7 +18,7 @@ import {
 } from 'firebase/database';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
-import { sendKakaoCreateProduct } from './kakao';
+import { sendKakaoCreateProduct, sendKakaoModifyProduct } from './kakao';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_KEY,
@@ -232,18 +232,46 @@ export async function getAll() {
 }
 
 export async function updateProduct(product, updatedProduct) {
-  return set(ref(db, `products/${product.id}`), updatedProduct).catch(
-    console.error,
-  );
+  const emails = product.agree;
+  const usersRef = ref(db, 'userdata');
+  const snapshot = await get(usersRef);
+
+  if (snapshot.exists()) {
+    const usersData = snapshot.val();
+
+    await set(ref(db, `products/${product.id}`), updatedProduct).catch(
+      console.error,
+    );
+
+    await Promise.all(
+      emails.map(async (email) => {
+        let matchedUser;
+        for (const [userId, userData] of Object.entries(usersData)) {
+          if (userData.email === email) {
+            matchedUser = {
+              matchedUserId: userId,
+              name: userData.name,
+              phoneNum: userData.phoneNum,
+            };
+            break;
+          }
+        }
+        const kakaoData = {
+          name: product.name,
+          phoneNum: matchedUser.phoneNum,
+          file: product.file,
+          link: product.id,
+        };
+        await sendKakaoModifyProduct(kakaoData);
+      }),
+    );
+  }
 }
 
 export async function deleteProduct(productId) {
   const productRef = ref(db, `products/${productId}`);
   const adminRef = ref(db, `admins/${productId}`);
-  await Promise.all([
-    remove(productRef),
-    remove(adminRef)
-  ]);
+  await Promise.all([remove(productRef), remove(adminRef)]);
 }
 
 //Email 회원가입
@@ -397,19 +425,19 @@ export async function getUsersData() {
 }
 
 export async function getData(id) {
-  const db = getDatabase();
-  const productRef = ref(db, `products/${id}`);
+	const db = getDatabase();
+	const productRef = ref(db, `products/${id}`);
 
-  try {
-    const snapshot = await get(productRef);
-    if (snapshot.exists()) {
-      return snapshot.val();
-    } else {
-      console.log(`No data found for product id: ${id}`);
-      return null;
-    }
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error;
-  }
+	try {
+		const snapshot = await get(productRef);
+		if(snapshot.exists()) {
+			return snapshot.val();
+		} else {
+			console.log(`No data found for product id: ${id}`);
+			return null;
+		}
+	} catch (error) {
+		console.error('Error fetching data:', error);
+		throw error;
+	}
 }
