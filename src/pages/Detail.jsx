@@ -9,7 +9,6 @@ import DetailAdminFormat from '../components/DetailAdminFormat';
 import { vacationPlan } from '../components/html/Transhtml/VacationPlan';
 import { useQuery } from '@tanstack/react-query';
 import {approvalDocument} from "../components/html/Transhtml/approvalDocument";
-import {sendKakaoModifyProduct} from "../api/kakao";
 
 export default function Detail() {
   const location = useLocation();
