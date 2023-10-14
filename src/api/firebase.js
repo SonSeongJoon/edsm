@@ -256,15 +256,17 @@ export async function updateProduct(product, userName, productID, updatedProduct
             break;
           }
         }
-        const kakaoData = {
-          writeName: userName,
-          name: matchedUser.name,
-          phoneNum: matchedUser.phoneNum,
-          file: product.file,
-          link: productID,
-        };
-        console.log(kakaoData)
-        await sendKakaoModifyProduct(kakaoData);
+        if (userName !== undefined || productID !== undefined) {
+          const kakaoData = {
+            writeName: userName,
+            name: matchedUser.name,
+            phoneNum: matchedUser.phoneNum,
+            file: product.file,
+            link: productID,
+          };
+          console.log(kakaoData)
+          await sendKakaoModifyProduct(kakaoData);
+        }
       }),
     );
   }
