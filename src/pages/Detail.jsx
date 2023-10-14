@@ -162,7 +162,6 @@ export default function Detail() {
           />
         ) : (
           <DetailUserFormat
-            oneState={state}
             showEditModal={showEditModal}
             modalProduct={modalProduct}
             handleEditChange={handleEditChange}
