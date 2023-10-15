@@ -157,7 +157,7 @@ export default function Detail() {
   return (
      <div className="flex justify-center items-center h-full">
        {isErrorProduct || isErrorAllState ? (
-          <p>데이터가 삭제되었습니다.</p>
+          <p>삭제된 데이터입니다.</p>
        ) : isErrorProduct ? (
           <p>{errorProduct.message}</p>
        ) : isErrorAllState ? (
