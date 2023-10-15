@@ -85,7 +85,7 @@ const ExpendForm = ({ product, setProduct, handleChange }) => {
                 />
                 <div className="flex space-x-3 mt-5 ml-0 sm:ml-2 items-center">
                   {idx === product.items.length - 1 && (
-                    <div className="flex space-x-3 mt-5 ml-0 sm:ml-2 items-center">
+                    <div className="flex space-x-3 mt-5 ml-0 sm:ml-2 items-center mb-4">
                       <button
                         className="bg-brand px-2 py-1 text-white text-sm rounded-md flex-shrink-0"
                         onClick={() => addItem()}
