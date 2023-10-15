@@ -167,21 +167,10 @@ export default function Write() {
             handleChange={handleChange}
             userDept={userDept}
           />
-          <div className="mt-5 flex flex-col lg:flex-row w-full justify-center space-y-2 lg:space-y-0 lg:space-x-2">
-            {buttons.map((btn, idx) => (
-              <button
-                key={idx}
-                onClick={btn.onClick}
-                className={`${btn.className} text-white px-2 md:px-4 py-1 md:py-2 rounded focus:outline-none focus:ring transition duration-150 ease-in-out shadow-md`}
-              >
-                {btn.text}
-              </button>
-            ))}
-          </div>
+
         </div>
         {/* Right Side */}
         <div className="w-full lg:w-1/4 flex-1 bg-gray-100 p-2 md:p-4 rounded">
-          <div className="mb-5">
             <div className="font-bold text-lg md:text-xl mb-3">
               결재 승인 요청
             </div>
@@ -202,9 +191,21 @@ export default function Write() {
                 </span>
               </label>
             ))}
+          <div className="mt-5 flex flex-col lg:flex-row w-full justify-center space-y-2 lg:space-y-0 lg:space-x-2">
+            {buttons.map((btn, idx) => (
+               <button
+                  key={idx}
+                  onClick={btn.onClick}
+                  className={`${btn.className} text-white px-2 md:px-4 py-1 md:py-2 rounded focus:outline-none focus:ring transition duration-150 ease-in-out shadow-md`}
+               >
+                 {btn.text}
+               </button>
+            ))}
           </div>
         </div>
+
       </div>
+
     </>
   );
 }
