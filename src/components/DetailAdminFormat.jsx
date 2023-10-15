@@ -103,13 +103,7 @@ export default function DetailAdminFormat({
     } catch (error) {
       console.error('Error handling admit: ', error);
     }
-  }, [
-    uid,
-    product.id,
-    isChildSubmitted,
-    user.user.displayName,
-    determineState,
-  ]);
+  }, [data, isChildSubmitted, uid, product.id, determineState, user.user.displayName]);
 
   useEffect(() => {
     const fetchData = async () => {
