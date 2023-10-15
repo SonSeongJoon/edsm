@@ -2,7 +2,7 @@ import React from 'react';
 import { ItemOutput } from '../ItemOutput';
 
 const ExpenditureShow = ({ product }) => {
-  const { title, file, date, dept, deel, items, name } = product;
+  const { title, file, date, dept, deel, items, name, corporation } = product;
 
   return (
     <div>
@@ -13,6 +13,7 @@ const ExpenditureShow = ({ product }) => {
       </div>
        <div className="flex items-center mb-3 justify-between mt-2">
           <div className="flex">
+             <h1 className="text-xm sm:text-md text-gray-500 mr-2">{corporation}</h1>
              <h1 className="text-xm sm:text-md text-gray-500 mr-2">{dept}</h1>
              <h1 className="text-xm sm:text-md text-gray-500">{name}</h1>
           </div>
