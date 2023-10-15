@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { ItemInput } from '../html/ItemInput';
 
 const initExpendForm = {
@@ -17,7 +17,7 @@ const ExpendForm = ({ product, setProduct, handleChange }) => {
       ...prevProduct,
       items: [{ title: '', amount: '', note: '' }],
     }));
-  }, [product.file, setProduct]); 
+  }, [product.file, setProduct]);
 
   const addItem = () => {
     if (product.items.length < 4) {
@@ -46,7 +46,6 @@ const ExpendForm = ({ product, setProduct, handleChange }) => {
       };
     });
   };
-
 
   return (
     <div className="max-w-screen-2xl mx-auto">
@@ -85,19 +84,23 @@ const ExpendForm = ({ product, setProduct, handleChange }) => {
                   idx={idx}
                 />
                 <div className="flex space-x-3 mt-5 ml-0 sm:ml-2 items-center">
-                  <button
-                    className="bg-brand px-2 py-1 text-white text-sm rounded-md flex-shrink-0"
-                    onClick={() => addItem()}
-                  >
-                    추가
-                  </button>
-                  {idx !== 0 && idx === product.items.length - 1 && (
-                    <button
-                      className="bg-brand px-2 py-1 text-white text-sm rounded-md flex-shrink-0"
-                      onClick={() => removeItem(idx)}
-                    >
-                      삭제
-                    </button>
+                  {idx === product.items.length - 1 && (
+                    <div className="flex space-x-3 mt-5 ml-0 sm:ml-2 items-center mb-4">
+                      <button
+                        className="bg-brand px-2 py-1 text-white text-sm rounded-md flex-shrink-0"
+                        onClick={() => addItem()}
+                      >
+                        추가
+                      </button>
+                      {idx !== 0 && (
+                        <button
+                          className="bg-brand px-2 py-1 text-white text-sm rounded-md flex-shrink-0"
+                          onClick={() => removeItem(idx)}
+                        >
+                          삭제
+                        </button>
+                      )}
+                    </div>
                   )}
                 </div>
               </div>

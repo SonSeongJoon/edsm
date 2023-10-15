@@ -308,31 +308,28 @@ export const signupEmail = async (formData) => {
 };
 
 // 승인버튼 클릭
-export async function setOneState(adminId, fileId) {
-  return get(child(dbRef, `admins/${fileId}/${adminId}/oneState`)).then(
-    async (snapshot) => {
-      if (snapshot.exists()) {
-        const state = snapshot.val();
-        let newState = '';
-        switch (state) {
-          case '대기':
-            newState = '승인';
-            break;
-          case '승인':
-            newState = '반려';
-            break;
-          case '반려':
-            newState = '대기';
-            break;
-          default:
-            break;
-        }
-        await set(ref(db, `admins/${fileId}/${adminId}/oneState`), newState);
-        return newState;
-      }
-    },
-  );
+export async function setOneState(adminId, fileId, desiredState) {
+  const validStates = ['대기', '승인', '반려'];
+
+  if (!validStates.includes(desiredState)) {
+    throw new Error("Invalid state provided");
+  }
+
+  // 현재 데이터베이스의 oneState 값을 가져옵니다.
+  const currentStateSnapshot = await get(child(dbRef, `admins/${fileId}/${adminId}/oneState`));
+
+  if (currentStateSnapshot.exists() && currentStateSnapshot.val() === desiredState) {
+    // 현재 상태와 원하는 상태가 동일한 경우 경고 메시지를 표시합니다.
+    alert('이미 선택된 상태입니다.');
+    return desiredState; // 현재 상태를 반환합니다.
+  }
+
+  await set(ref(db, `admins/${fileId}/${adminId}/oneState`), desiredState);
+
+  return desiredState;
 }
+
+
 
 export async function getOneState(adminId, fileId) {
   return get(child(dbRef, `admins/${fileId}/${adminId}/oneState`)).then(
