@@ -12,7 +12,7 @@ import {approvalDocument} from "../components/html/Transhtml/approvalDocument";
 
 export default function Detail() {
   const location = useLocation();
-  const { isMst, state } = location.state || {};
+  const { isMst } = location.state || {};
   const navigate = useNavigate();
   const { id } = useParams();
   const [states, setStates] = useState([]);
