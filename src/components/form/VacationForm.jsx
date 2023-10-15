@@ -9,7 +9,7 @@ const initVacationForm = {
   TotalLeaveDays: '',
   UsedDays: '',
   RemainDays: '',
-  Period: '',
+  Period: '2023-10-11 ~ 2023-10-13 (3일간)',
   VacationReason: '',
   agree: [],
   agreeName: [],
@@ -132,7 +132,6 @@ const VacationForm = ({ product, handleChange }) => {
               value={product.Period || ''}
               className="w-80 px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
               onChange={handleChange}
-              placeholder="예시) 2023-10-11 ~ 2023-10-13 (3일간)"
             />
           </div>
           <div className='mt-2'>
