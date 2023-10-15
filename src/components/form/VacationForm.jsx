@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
-import moment from 'moment';
-const year = moment().format('YYYY')
 
 const initVacationForm = {
   file: '휴가계',
   title: '',
-  AttributionYear: year,
+  AttributionYear: '',
   TotalLeaveDays: '',
   UsedDays: '',
   RemainDays: '',
