@@ -63,9 +63,9 @@ async function getUserDetails(user) {
         (uid) => users[uid].department === '경영지원팀' && uid === user.uid,
       );
 
-      // user의 uid에 해당하는 department 값을 찾기
       const userDepartment = users[user.uid]?.department;
       const userPhoneNum = users[user.uid]?.phoneNum;
+      const userCorporation = users[user.uid]?.corporation;
 
       return {
         ...user,
@@ -73,13 +73,14 @@ async function getUserDetails(user) {
         isMst,
         dept: userDepartment,
         phoneNum: userPhoneNum,
+        corporation: userCorporation,
       };
     }
     return user;
   });
 }
 
-export async function addNewProduct(product, userName, userDept, userPhoneNum) {
+export async function addNewProduct(product, userName, userDept, userPhoneNum, userCorporation) {
   const userId = auth.currentUser?.uid;
   if (!userId) {
     throw new Error('User is not authenticated');
@@ -97,6 +98,7 @@ export async function addNewProduct(product, userName, userDept, userPhoneNum) {
     displayName: userName,
     dept: userDept,
     writerPhonNum: userPhoneNum,
+    corporation: userCorporation,
   });
   const emails = product.agree;
   const usersRef = ref(db, 'userdata');

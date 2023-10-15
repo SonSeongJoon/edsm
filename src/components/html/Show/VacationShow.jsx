@@ -11,8 +11,9 @@ export const VacationShow = ({ product }) => {
     RemainDays,
     Period,
     VacationReason,
-     dept,
-     name,
+    dept,
+    name,
+    corporation,
   } = product;
 
   return (
@@ -24,15 +25,18 @@ export const VacationShow = ({ product }) => {
       </div>
       <div className="flex items-center mb-3 justify-between mt-2">
         <div className="flex">
+          <h1 className="text-xm sm:text-md text-gray-500 mr-2">
+            {corporation}
+          </h1>
           <h1 className="text-xm sm:text-md text-gray-500 mr-2">{dept}</h1>
           <h1 className="text-xm sm:text-md text-gray-500">{name}</h1>
         </div>
-        <div className='flex'>
+        <div className="flex">
           <p className="text-xm sm:text-md text-gray-500  mr-2">{file}</p>
           <h1 className="text-gray-600 text-xm sm:text-md">{date}</h1>
         </div>
       </div>
-      <div className='border p-2 rounded-lg border-gray-300'>
+      <div className="border p-2 rounded-lg border-gray-300">
         <div className="flex items-center">
           <h1 className="sm:text-md text-xm font-bold mr-2">귀속연도 : </h1>
           <p className="text-gray-600 text-sm sm:text-md">{AttributionYear}</p>
@@ -57,10 +61,10 @@ export const VacationShow = ({ product }) => {
               <h1 className="font-bold mr-2 sm:text-md text-xm">잔여일수 : </h1>
               <p className="text-gray-600 text-sm sm:text-md">{RemainDays}</p>
             </div>
-             <div className="flex items-center mt-3">
-                <h1 className="font-bold mr-2 sm:text-md text-xm">휴가기간 : </h1>
-                <p className="text-gray-600 text-sm sm:text-md">{Period}</p>
-             </div>
+            <div className="flex items-center mt-3">
+              <h1 className="font-bold mr-2 sm:text-md text-xm">휴가기간 : </h1>
+              <p className="text-gray-600 text-sm sm:text-md">{Period}</p>
+            </div>
           </div>
         </div>
         <div className="flex items-center mt-5">
