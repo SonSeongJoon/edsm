@@ -56,7 +56,7 @@ export default function DetailAdminFormat({
   const determineState = useCallback((state) => {
     if (!state || state.length === 0) return STATE_PENDING;
     if (state.includes(STATE_REJECTED)) {
-      // sendKakaoAgreeProduct(product, state='반려');
+      sendKakaoAgreeProduct(product, state='반려');
       return STATE_REJECTED;
     }
     if (state.includes(STATE_PENDING)) return STATE_PENDING;
@@ -69,17 +69,16 @@ export default function DetailAdminFormat({
     return '알 수 없음';
   }, [product]);
 
-  
-  const handleAdmit = useCallback(async () => {
+
+  const handleAdmitAction = useCallback(async (actionState) => {
+
     try {
-      const isData = Boolean(isChildSubmitted);
-      const rejectState = data === STATE_REJECTED;
-      if (isData && rejectState) {
+      if (data === STATE_REJECTED && isChildSubmitted) {
         alert('사유를 먼저 삭제하세요');
         return;
       }
 
-      const updatedState = await setOneState(uid, product.id);
+      const updatedState = await setOneState(uid, product.id, actionState);
       setData(updatedState);
 
       if (updatedState === STATE_APPROVED) {
@@ -90,15 +89,15 @@ export default function DetailAdminFormat({
 
       const allState = await getAllOneState(product.id);
       const updatedStates = allState
-        .filter((stateItem) => stateItem.id === product.id)
-        .map((stateItem) => ({
-          name: stateItem.name,
-          state: stateItem.state,
-        }));
+      .filter((stateItem) => stateItem.id === product.id)
+      .map((stateItem) => ({
+        name: stateItem.name,
+        state: stateItem.state,
+      }));
       setStates(updatedStates);
 
       const resultState = determineState(
-        updatedStates.map((stateItem) => stateItem.state),
+         updatedStates.map((stateItem) => stateItem.state),
       );
       await setState(product.id, resultState);
     } catch (error) {
@@ -107,7 +106,6 @@ export default function DetailAdminFormat({
   }, [
     uid,
     product.id,
-    data,
     isChildSubmitted,
     user.user.displayName,
     determineState,
@@ -191,19 +189,24 @@ export default function DetailAdminFormat({
             뒤로 가기
           </button>
           <button
-            className={`
-              ${
-                data === STATE_APPROVED
-                  ? 'bg-emerald-600 hover:bg-emerald-700'
-                  : data === STATE_PENDING
-                  ? 'bg-gray-600 hover:bg-gray-700'
-                  : 'bg-red-800 hover:bg-red-900'
-              } 
-              text-white px-4 py-2 rounded ml-2
-            `}
-            onClick={handleAdmit}
+             className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded ml-2"
+             onClick={() => handleAdmitAction(STATE_APPROVED)}
           >
-            현재 {data} 상태
+            승인
+          </button>
+
+          <button
+             className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded ml-2"
+             onClick={() => handleAdmitAction(STATE_PENDING)}
+          >
+            대기
+          </button>
+
+          <button
+             className="bg-red-800 hover:bg-red-900 text-white px-4 py-2 rounded ml-2"
+             onClick={() => handleAdmitAction(STATE_REJECTED)}
+          >
+            반려
           </button>
         </div>
       </div>
@@ -212,7 +215,7 @@ export default function DetailAdminFormat({
           {data === STATE_REJECTED ? (
             <ReturnText
               product={product}
-              onAdmit={handleAdmit}
+              onAdmit={handleAdmitAction}
               onChildSubmit={setIsChildSubmitted}
             />
           ) : null}
