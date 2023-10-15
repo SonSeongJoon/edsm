@@ -21,15 +21,13 @@ export default function PaperRow({ product, isAdmins, isMst }) {
   }, []);
   const displayDate = isSmallScreen ? date.split(' | ')[0] : date;
 
-   const handleClick = () => {
-      navigate(`/${basePath}/detail/${id}`, {
-         state: { isMst, state}
-      });
-   };
+  const handleClick = () => {
+    navigate(`/${basePath}/detail/${id}`, {
+      state: { isMst, state },
+    });
+  };
 
-
-
-   return (
+  return (
     <tr key={product.id} className="hover:bg-gray-50">
       <td
         className="px-6 py-4 whitespace-nowrap hover:underline cursor-pointer"
@@ -43,8 +41,18 @@ export default function PaperRow({ product, isAdmins, isMst }) {
       {isAdmins || isMst ? (
         <td className="px-6 py-4 whitespace-nowrap">{displayName}</td>
       ) : null}
-      <td className="px-6 py-4 whitespace-nowrap">
-        {isAdmins ? oneState : state}
+      <td className="px-6 py-4 whitespace-nowrap text-gray-400">
+        <span
+          className={
+            (isAdmins ? oneState : state) === '승인'
+              ? 'text-green-600 font-bold'
+              : (isAdmins ? oneState : state) === '반려'
+              ? 'text-red-500 font-bold'
+              : ''
+          }
+        >
+          {isAdmins ? oneState : state}
+        </span>
       </td>
     </tr>
   );

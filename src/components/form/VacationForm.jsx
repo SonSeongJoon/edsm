@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
+import moment from 'moment';
+const year = moment().format('YYYY')
 
 const initVacationForm = {
   file: '휴가계',
   title: '',
-  AttributionYear: '',
+  AttributionYear: year,
   TotalLeaveDays: '',
   UsedDays: '',
   RemainDays: '',
@@ -25,9 +27,9 @@ const VacationForm = ({ product, handleChange }) => {
   }, [handleChange, product.TotalLeaveDays, product.UsedDays]);
 
   return (
-    <div className="max-w-screen-lg mx-auto p-3">
-      <div className="container bg-white p-3">
-        <div className="mb-5">
+    <div className="max-w-screen-lg mx-auto">
+      <div className="container bg-white p-2">
+        <div className="mb-3">
           <label
             className="block sm:text-md text-xm font-bold mb-2"
             htmlFor="title"

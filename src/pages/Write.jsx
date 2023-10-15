@@ -1,17 +1,24 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
 import { addNewProduct } from '../api/firebase';
 import { expenditure } from '../components/html/Transhtml/Expenditure';
-import { vacationPlan} from '../components/html/Transhtml/VacationPlan'
+import { vacationPlan } from '../components/html/Transhtml/VacationPlan';
 import { ExpendForm, initExpendForm } from '../components/form/ExpendForm';
-import VacationForm, { initVacationForm } from '../components/form/VacationForm';
+import VacationForm, {
+  initVacationForm,
+} from '../components/form/VacationForm';
 import { htmlToFile } from '../js/convertToWord.js';
 import moment from 'moment';
-import {ApprovalForm, initApprovalForm} from "../components/form/ApprovalForm";
-import {approvalDocument} from "../components/html/Transhtml/approvalDocument";
-import {initOvertimeForm, OvertimeForm} from "../components/form/OvertimeForm";
-
+import {
+  ApprovalForm,
+  initApprovalForm,
+} from '../components/form/ApprovalForm';
+import { approvalDocument } from '../components/html/Transhtml/approvalDocument';
+import {
+  initOvertimeForm,
+  OvertimeForm,
+} from '../components/form/OvertimeForm';
 
 const options = ['지출결의서', '휴가계', '품의서', '초과근무사전품의서'];
 const initForms = {
@@ -49,12 +56,12 @@ export default function Write() {
     date: currentDate,
     dept: userDept,
     name: userName,
-    phoneNum : userPhoneNum
+    phoneNum: userPhoneNum,
   });
 
   useEffect(() => {
-    setProduct(prevProduct => ({
-      ...initForms[product.file] || initExpendForm,
+    setProduct((prevProduct) => ({
+      ...(initForms[product.file] || initExpendForm),
       items: initForms[product.file]?.items || [],
       date: prevProduct.date,
       dept: prevProduct.dept,
@@ -62,8 +69,6 @@ export default function Write() {
       phoneNum: prevProduct.phoneNum,
     }));
   }, [product.file]);
-
-
 
   const handleSubmit = () => {
     if (product.agree.length === 0) {
@@ -77,7 +82,6 @@ export default function Write() {
       navigator(`/wait`);
     });
   };
-
 
   const handleAgreeChange = (e) => {
     const { name, checked } = e.target;
@@ -119,13 +123,13 @@ export default function Write() {
         if (product.file === '지출결의서') {
           const htmlString = expenditure(product);
           htmlToFile(htmlString, 'doc');
-        } else if (product.file === '휴가계'){
+        } else if (product.file === '휴가계') {
           const htmlString = vacationPlan(product);
           htmlToFile(htmlString, 'doc');
         } else if (product.file === '품의서') {
           const htmlString = approvalDocument(product);
-          htmlToFile(htmlString, 'doc')
-        } else if(product.file === '초과근무사전품의서') {
+          htmlToFile(htmlString, 'doc');
+        } else if (product.file === '초과근무사전품의서') {
           // const htmlString =
         }
       },
@@ -134,17 +138,16 @@ export default function Write() {
     },
   ];
 
-
   return (
     <>
-      <div className="flex flex-col xl:flex-row max-w-screen-2xl mx-auto ml-2 items-start mb-5">
+      <div className="flex flex-col lg:flex-row max-w-screen-2xl mx-auto p-4 items-start mb-8 space-y-4 lg:space-y-0 lg:space-x-4">
         {/* Left Side */}
-        <div className="sm:w-1/2 flex-2 md:mr-10 mb-5 md:mb-0">
-          <div className="font-bold text-3xl mr-3 mt-5 text-brand">
+        <div className="w-full lg:w-3/4 flex-2">
+          <div className="font-semibold text-2xl md:text-3xl text-brand mb-4">
             품위서 작성하기
           </div>
-          <div className="flex items-center mt-3">
-            <p className="text-lg mr-3">* 양식 선택</p>
+          <div className="flex items-center mb-4">
+            <p className="text-base md:text-lg mr-3">* 양식 선택</p>
             <select
               id="select"
               name="file"
@@ -164,12 +167,12 @@ export default function Write() {
             handleChange={handleChange}
             userDept={userDept}
           />
-          <div className="mt-5 flex flex-col md:flex-row w-full justify-center space-y-4 md:space-y-0 md:space-x-4">
+          <div className="mt-5 flex flex-col lg:flex-row w-full justify-center space-y-2 lg:space-y-0 lg:space-x-2">
             {buttons.map((btn, idx) => (
               <button
                 key={idx}
                 onClick={btn.onClick}
-                className={`${btn.className} text-white px-4 py-2 rounded focus:outline-none focus:ring transition duration-150 ease-in-out shadow-md`}
+                className={`${btn.className} text-white px-2 md:px-4 py-1 md:py-2 rounded focus:outline-none focus:ring transition duration-150 ease-in-out shadow-md hover:bg-indigo-700`}
               >
                 {btn.text}
               </button>
@@ -177,22 +180,26 @@ export default function Write() {
           </div>
         </div>
         {/* Right Side */}
-        <div className="flex-1">
-          <div className="mt-5 mb-5">
-            <div className="font-bold text-xl">결재 승인 요청</div>
+        <div className="w-full lg:w-1/4 flex-1 bg-gray-100 p-2 md:p-4 rounded">
+          <div className="mb-5">
+            <div className="font-bold text-lg md:text-xl mb-3">
+              결재 승인 요청
+            </div>
             {approvers.map((approver) => (
               <label
                 key={approver.name}
-                className="flex items-center space-x-2 mt-2"
+                className="flex items-center space-x-2 mt-2 hover:bg-gray-200 p-2 rounded transition duration-150 ease-in-out cursor-pointer"
               >
                 <input
                   type="checkbox"
                   name={approver.name}
                   onChange={handleAgreeChange}
-                  className="form-checkbox"
+                  className="form-checkbox text-brand border-gray-300 rounded focus:border-brand focus:ring focus:ring-offset-0 focus:ring-brand focus:ring-opacity-50"
                   checked={product.agree.includes(approver.email)}
                 />
-                <span>{approver.name}</span>
+                <span className="text-sm md:text-base text-gray-700">
+                  {approver.name}
+                </span>
               </label>
             ))}
           </div>
