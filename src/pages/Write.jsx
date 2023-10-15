@@ -172,7 +172,7 @@ export default function Write() {
               <button
                 key={idx}
                 onClick={btn.onClick}
-                className={`${btn.className} text-white px-2 md:px-4 py-1 md:py-2 rounded focus:outline-none focus:ring transition duration-150 ease-in-out shadow-md hover:bg-indigo-700`}
+                className={`${btn.className} text-white px-2 md:px-4 py-1 md:py-2 rounded focus:outline-none focus:ring transition duration-150 ease-in-out shadow-md`}
               >
                 {btn.text}
               </button>
