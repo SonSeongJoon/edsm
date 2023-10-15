@@ -80,7 +80,13 @@ async function getUserDetails(user) {
   });
 }
 
-export async function addNewProduct(product, userName, userDept, userPhoneNum, userCorporation) {
+export async function addNewProduct(
+  product,
+  userName,
+  userDept,
+  userPhoneNum,
+  userCorporation,
+) {
   const userId = auth.currentUser?.uid;
   if (!userId) {
     throw new Error('User is not authenticated');
@@ -233,7 +239,12 @@ export async function getAll() {
   });
 }
 
-export async function updateProduct(product, userName, productID, updatedProduct) {
+export async function updateProduct(
+  product,
+  userName,
+  productID,
+  updatedProduct,
+) {
   const emails = product.agree;
   const usersRef = ref(db, 'userdata');
   const snapshot = await get(usersRef);
@@ -314,13 +325,18 @@ export async function setOneState(adminId, fileId, desiredState) {
   const validStates = ['대기', '승인', '반려'];
 
   if (!validStates.includes(desiredState)) {
-    throw new Error("Invalid state provided");
+    throw new Error('Invalid state provided');
   }
 
   // 현재 데이터베이스의 oneState 값을 가져옵니다.
-  const currentStateSnapshot = await get(child(dbRef, `admins/${fileId}/${adminId}/oneState`));
+  const currentStateSnapshot = await get(
+    child(dbRef, `admins/${fileId}/${adminId}/oneState`),
+  );
 
-  if (currentStateSnapshot.exists() && currentStateSnapshot.val() === desiredState) {
+  if (
+    currentStateSnapshot.exists() &&
+    currentStateSnapshot.val() === desiredState
+  ) {
     // 현재 상태와 원하는 상태가 동일한 경우 경고 메시지를 표시합니다.
     alert('이미 선택된 상태입니다.');
     return desiredState; // 현재 상태를 반환합니다.
@@ -330,8 +346,6 @@ export async function setOneState(adminId, fileId, desiredState) {
 
   return desiredState;
 }
-
-
 
 export async function getOneState(adminId, fileId) {
   return get(child(dbRef, `admins/${fileId}/${adminId}/oneState`)).then(
@@ -434,10 +448,11 @@ export async function getData(id) {
 			return snapshot.val();
 		} else {
 			console.log(`No data found for product id: ${id}`);
-			return null;
+			Error(`No data found for product id: ${id}`);
 		}
 	} catch (error) {
 		console.error('Error fetching data:', error);
 		throw error;
 	}
 }
+

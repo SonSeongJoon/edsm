@@ -23,17 +23,20 @@ export default function Detail() {
   const [updatedProduct, setUpdatedProduct] = useState(null);
   const user = useAuthContext();
 
-  const { data: allState, isLoading: isLoadingAllState } = useQuery(
-     ["allState", id],
-     () => getAllOneState(id)
-  );
+  const {
+    data: allState,
+    isLoading: isLoadingAllState,
+    isError: isErrorAllState,
+    error: errorAllState
+  } = useQuery(["allState", id], () => getAllOneState(id));
 
+  const {
+    data: product,
+    isLoading: isLoadingProduct,
+    isError: isErrorProduct,
+    error: errorProduct
+  } = useQuery(["product", id], () => getData(id));
 
-
-  const { data: product, isLoading: isLoadingProduct } = useQuery(
-     ["product", id],
-     () => getData(id),
-  );
 
 
   useEffect(() => {
@@ -146,42 +149,49 @@ export default function Detail() {
     }
   }
 
+
+
   const displayProduct = updatedProduct || product;
   const isAdmin = user?.user?.isAdmin;
   const isReceivePath = currentPath.includes('/receive');
   return (
-    <div className="flex justify-center items-center h-full">
-      {product ? (
-        isAdmin && isReceivePath ? (
-          <DetailAdminFormat
-            displayProduct={displayProduct}
-            product={product}
-            navigate={navigate}
-            states={states}
-
-          />
-        ) : (
-          <DetailUserFormat
-            showEditModal={showEditModal}
-            modalProduct={modalProduct}
-            handleEditChange={handleEditChange}
-            handleItemValue={handleItemValue}
-            handleSave={handleSave}
-            closeEditModal={closeEditModal}
-            displayProduct={displayProduct}
-            product={product}
-            openEditModal={openEditModal}
-            handleDelete={handleDelete}
-            navigate={navigate}
-            htmlToFile={htmlToFile}
-            isMst={isMst}
-            states={states}
-            setModalProduct={setModalProduct}
-          />
-        )
-      ) : (
-        <p>Loading...</p> // or a loading spinner
-      )}
-    </div>
+     <div className="flex justify-center items-center h-full">
+       {isErrorProduct || isErrorAllState ? (
+          <p>삭제된 데이터입니다.</p>
+       ) : isErrorProduct ? (
+          <p>{errorProduct.message}</p>
+       ) : isErrorAllState ? (
+          <p>{errorAllState.message}</p>
+       ) : product ? (
+          isAdmin && isReceivePath ? (
+             <DetailAdminFormat
+                displayProduct={displayProduct}
+                product={product}
+                navigate={navigate}
+                states={states}
+             />
+          ) : (
+             <DetailUserFormat
+                showEditModal={showEditModal}
+                modalProduct={modalProduct}
+                handleEditChange={handleEditChange}
+                handleItemValue={handleItemValue}
+                handleSave={handleSave}
+                closeEditModal={closeEditModal}
+                displayProduct={displayProduct}
+                product={product}
+                openEditModal={openEditModal}
+                handleDelete={handleDelete}
+                navigate={navigate}
+                htmlToFile={htmlToFile}
+                isMst={isMst}
+                states={states}
+                setModalProduct={setModalProduct}
+             />
+          )
+       ) : (
+          <p>Loading...</p>
+       )}
+     </div>
   );
 }
