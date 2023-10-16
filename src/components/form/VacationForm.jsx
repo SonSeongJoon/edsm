@@ -17,12 +17,12 @@ const initVacationForm = {
 
 const VacationForm = ({ product, handleChange }) => {
   useEffect(() => {
-    const totalLeaveDays = parseInt(product.TotalLeaveDays) || 0;
-    const usedDays = parseInt(product.UsedDays) || 0;
+    const totalLeaveDays = parseFloat(product.TotalLeaveDays) || 0.0;
+    const usedDays = parseFloat(product.UsedDays) || 0.0;
     const remainDays = totalLeaveDays - usedDays;
 
     handleChange({
-      target: { name: 'RemainDays', value: remainDays.toString() },
+      target: { name: 'RemainDays', value: remainDays.toFixed(1) },
     });
   }, [handleChange, product.TotalLeaveDays, product.UsedDays]);
 
@@ -74,7 +74,8 @@ const VacationForm = ({ product, handleChange }) => {
               총 연차일수
             </label>
             <input
-              type="number"
+              type="text"
+              pattern="\d*\.?\d*" // allows numbers and a single decimal point
               name="TotalLeaveDays"
               id="TotalLeaveDays"
               value={product.TotalLeaveDays || ''}
@@ -90,7 +91,8 @@ const VacationForm = ({ product, handleChange }) => {
               기사용일수
             </label>
             <input
-              type="number"
+               type="text"
+               pattern="\d*\.?\d*" // allows numbers and a single decimal point
               name="UsedDays"
               id="UsedDays"
               value={product.UsedDays || ''}
