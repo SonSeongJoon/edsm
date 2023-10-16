@@ -168,7 +168,7 @@ export default function Write() {
         {/* Left Side */}
         <div className="w-full lg:w-3/4 flex-2">
           <div className="font-semibold text-2xl md:text-3xl text-brand mb-4">
-            품위서 작성하기
+            품의서 작성하기
           </div>
           <div className="flex items-center mb-4">
             <p className="text-base md:text-lg mr-3">* 양식 선택</p>
