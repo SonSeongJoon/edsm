@@ -14,7 +14,7 @@ const ApprovalShow = ({ product }) => {
      <div>
        <div className="w-full flex justify-between items-center mb-3">
          <h1 className="sm:text-2xl text-md font-bold">{title}</h1>
-         <h1 className="text-xm sm:text-md text-gray-500">{corporation}</h1>
+         <h1 className="text-xxm sm:text-md text-gray-500">{corporation}</h1>
        </div>
        <div className="flex items-center mb-3 justify-between mt-2">
          <div className="flex">
