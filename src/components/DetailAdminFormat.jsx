@@ -71,7 +71,6 @@ export default function DetailAdminFormat({
 
 
   const handleAdmitAction = useCallback(async (actionState) => {
-
     try {
       if (data === STATE_REJECTED && isChildSubmitted) {
         alert('사유를 먼저 삭제하세요');
@@ -79,6 +78,13 @@ export default function DetailAdminFormat({
       }
 
       const updatedState = await setOneState(uid, product.id, actionState);
+
+      // Check if the returned state indicates it's already selected
+      if (updatedState === actionState && data === updatedState) {
+        alert('이미 선택된 상태입니다.'); // Optional alert to notify the user
+        return; // Exit the function
+      }
+
       setData(updatedState);
 
       if (updatedState === STATE_APPROVED) {
@@ -104,6 +110,7 @@ export default function DetailAdminFormat({
       console.error('Error handling admit: ', error);
     }
   }, [data, isChildSubmitted, uid, product.id, determineState, user.user.displayName]);
+
 
   useEffect(() => {
     const fetchData = async () => {
