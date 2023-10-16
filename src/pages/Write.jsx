@@ -51,9 +51,8 @@ export default function Write() {
   const userPhoneNum = user.user.phoneNum;
   const userCorporation = user.user.corporation;
   const currentDate = moment().format('YYYY-MM-DD');
-  const [file, setFile] = useState(null); // 파일 상태 관리
-  console.log(file);
-
+  // const [file, setFile] = useState(null); // 파일 상태 관리
+  const file = undefined;
   const [product, setProduct] = useState({
     ...initExpendForm,
     date: currentDate,
@@ -224,7 +223,6 @@ export default function Write() {
           {/*   onChange={(e) => setFile(e.target.files[0])}*/}
           {/*/>*/}
           <div className="flex">
-
             <div className="mt-5 flex flex-col lg:flex-row w-full justify-center space-y-2 lg:space-y-0 lg:space-x-2">
               {buttons.map((btn, idx) => (
                 <button
@@ -237,7 +235,6 @@ export default function Write() {
               ))}
             </div>
           </div>
-
         </div>
       </div>
     </>
