@@ -191,7 +191,7 @@ export default function DetailAdminFormat({
               <a
                 href={product.downloadURL}
                 download
-                className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-700 ml-3"
+                className="bg-gray-500 text-white px-2 py-1  text-sm rounded hover:bg-gray-700 ml-3"
               >
                 첨부파일 다운로드
               </a>
