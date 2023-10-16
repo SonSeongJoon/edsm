@@ -104,17 +104,17 @@ export default function DetailUserFormat({
                 </button>
               ) : null}
             </div>
-            <div className="mt-auto flex justify-end">
-              {product.downloadURL && (
-                 <a
-                    href={product.downloadURL}
-                    download
-                    className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-700 ml-3"
-                 >
-                   첨부파일 다운로드
-                 </a>
-              )}
-            </div>
+            {/*<div className="mt-auto flex justify-end">*/}
+            {/*  {product.downloadURL && (*/}
+            {/*     <a*/}
+            {/*        href={product.downloadURL}*/}
+            {/*        download*/}
+            {/*        className="bg-gray-500 text-white px-2 py-1 text-sm rounded hover:bg-gray-700 ml-3"*/}
+            {/*     >*/}
+            {/*       첨부파일 다운로드*/}
+            {/*     </a>*/}
+            {/*  )}*/}
+            {/*</div>*/}
           </div>
         </div>
         <div className="container mx-auto mt-5 flex w-full justify-end">
