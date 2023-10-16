@@ -215,7 +215,16 @@ export default function Write() {
               </span>
             </label>
           ))}
+          <p className='mt-5 text-xm text-gray-500'>
+            등록할 파일이 없다면 바로 "등록하기" 클릭
+          </p>
+          <input
+             className=""
+             type="file"
+             onChange={(e) => setFile(e.target.files[0])}
+          />
           <div className="flex">
+
             <div className="mt-5 flex flex-col lg:flex-row w-full justify-center space-y-2 lg:space-y-0 lg:space-x-2">
               {buttons.map((btn, idx) => (
                 <button
@@ -228,11 +237,7 @@ export default function Write() {
               ))}
             </div>
           </div>
-          <input
-            className="mt-5"
-            type="file"
-            onChange={(e) => setFile(e.target.files[0])}
-          />
+
         </div>
       </div>
     </>
