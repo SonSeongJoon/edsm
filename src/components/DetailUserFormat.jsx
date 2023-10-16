@@ -126,6 +126,16 @@ export default function DetailUserFormat({
           >
             워드 다운로드
           </button>
+          {product.downloadURL && (
+             <a
+                href={product.downloadURL}
+                download
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 ml-3"
+             >
+               첨부파일 다운로드
+             </a>
+          )}
+
         </div>
       </div>
       {reasonText ? (

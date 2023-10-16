@@ -16,6 +16,9 @@ import {
   remove,
   set,
 } from 'firebase/database';
+import { getStorage, ref as Ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
+
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 import { sendKakaoCreateProduct, sendKakaoModifyProduct } from './kakao';
@@ -25,6 +28,7 @@ const firebaseConfig = {
   authDomain: process.env.REACT_APP_ADMIN_DOMAIN,
   databaseURL: process.env.REACT_APP_DATABASE_URL,
   projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE,
 };
 
 initializeApp(firebaseConfig);
@@ -86,6 +90,7 @@ export async function addNewProduct(
   userDept,
   userPhoneNum,
   userCorporation,
+  downloadURL,
 ) {
   const userId = auth.currentUser?.uid;
   if (!userId) {
@@ -105,6 +110,7 @@ export async function addNewProduct(
     dept: userDept,
     writerPhonNum: userPhoneNum,
     corporation: userCorporation,
+    downloadURL: downloadURL,
   });
   const emails = product.agree;
   const usersRef = ref(db, 'userdata');
@@ -449,5 +455,32 @@ export async function getData(id) {
 		console.error('Error fetching data:', error);
 		throw error;
 	}
+}
+
+export const handleUpload = async (file) => {
+  const storage = getStorage();
+  const storageRef = Ref(storage, 'uploads/' + file.name);
+
+  const uploadTask = uploadBytesResumable(storageRef, file);
+
+  return new Promise((resolve, reject) => {
+    uploadTask.on('state_changed',
+       (snapshot) => {
+         // Upload progress
+         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+         console.log('Upload is ' + progress + '% done');
+       },
+       (error) => {
+         console.log(error);
+         reject(error);
+       },
+       () => {
+         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+           console.log('File available at', downloadURL);
+           resolve(downloadURL);
+         });
+       }
+    );
+  });
 }
 
