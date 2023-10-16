@@ -80,10 +80,17 @@ export default function Write() {
       alert('결재요청자를 선택하세요.');
       return;
     }
+    let downloadURL;
 
+    if (file) {
+      try {
+        downloadURL = await handleUpload(file); // Pass the selected file as an argument
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        return;
+      }
+    }
     try {
-      const downloadURL = await handleUpload(file); // Pass the selected file as an argument
-
       await addNewProduct(
         product,
         userName,

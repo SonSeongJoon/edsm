@@ -110,7 +110,7 @@ export async function addNewProduct(
     dept: userDept,
     writerPhonNum: userPhoneNum,
     corporation: userCorporation,
-    downloadURL: downloadURL,
+    ...(downloadURL && { downloadURL: downloadURL }),
   });
   const emails = product.agree;
   const usersRef = ref(db, 'userdata');
