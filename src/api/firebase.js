@@ -16,6 +16,9 @@ import {
   remove,
   set,
 } from 'firebase/database';
+import { getStorage, ref as Ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
+
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 import { sendKakaoCreateProduct, sendKakaoModifyProduct } from './kakao';
@@ -25,6 +28,7 @@ const firebaseConfig = {
   authDomain: process.env.REACT_APP_ADMIN_DOMAIN,
   databaseURL: process.env.REACT_APP_DATABASE_URL,
   projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE,
 };
 
 initializeApp(firebaseConfig);
@@ -86,6 +90,7 @@ export async function addNewProduct(
   userDept,
   userPhoneNum,
   userCorporation,
+  downloadURL,
 ) {
   const userId = auth.currentUser?.uid;
   if (!userId) {
@@ -105,6 +110,7 @@ export async function addNewProduct(
     dept: userDept,
     writerPhonNum: userPhoneNum,
     corporation: userCorporation,
+    ...(downloadURL && { downloadURL: downloadURL }),
   });
   const emails = product.agree;
   const usersRef = ref(db, 'userdata');
@@ -312,7 +318,6 @@ export const signupEmail = async (formData) => {
     });
   } catch (error) {
     console.error('Error signing up with email and password:', error);
-    // 이미 가입된 회원인 경우
     if (error.code === 'auth/email-already-in-use') {
       alert('이미 가입된 회원입니다.');
     }
@@ -320,7 +325,6 @@ export const signupEmail = async (formData) => {
   }
 };
 
-// 승인버튼 클릭
 export async function setOneState(adminId, fileId, desiredState) {
   const validStates = ['대기', '승인', '반려'];
 
@@ -328,7 +332,6 @@ export async function setOneState(adminId, fileId, desiredState) {
     throw new Error('Invalid state provided');
   }
 
-  // 현재 데이터베이스의 oneState 값을 가져옵니다.
   const currentStateSnapshot = await get(
     child(dbRef, `admins/${fileId}/${adminId}/oneState`),
   );
@@ -337,9 +340,7 @@ export async function setOneState(adminId, fileId, desiredState) {
     currentStateSnapshot.exists() &&
     currentStateSnapshot.val() === desiredState
   ) {
-    // 현재 상태와 원하는 상태가 동일한 경우 경고 메시지를 표시합니다.
-    alert('이미 선택된 상태입니다.');
-    return desiredState; // 현재 상태를 반환합니다.
+    return desiredState;
   }
 
   await set(ref(db, `admins/${fileId}/${adminId}/oneState`), desiredState);
@@ -454,5 +455,32 @@ export async function getData(id) {
 		console.error('Error fetching data:', error);
 		throw error;
 	}
+}
+
+export const handleUpload = async (file) => {
+  const storage = getStorage();
+  const storageRef = Ref(storage, 'uploads/' + file.name);
+
+  const uploadTask = uploadBytesResumable(storageRef, file);
+
+  return new Promise((resolve, reject) => {
+    uploadTask.on('state_changed',
+       (snapshot) => {
+         // Upload progress
+         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+         console.log('Upload is ' + progress + '% done');
+       },
+       (error) => {
+         console.log(error);
+         reject(error);
+       },
+       () => {
+         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+           console.log('File available at', downloadURL);
+           resolve(downloadURL);
+         });
+       }
+    );
+  });
 }
 

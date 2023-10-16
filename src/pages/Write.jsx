@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
-import { addNewProduct } from '../api/firebase';
+import { addNewProduct, handleUpload } from '../api/firebase';
 import { expenditure } from '../components/html/Transhtml/Expenditure';
 import { vacationPlan } from '../components/html/Transhtml/VacationPlan';
 import { ExpendForm, initExpendForm } from '../components/form/ExpendForm';
@@ -51,6 +51,8 @@ export default function Write() {
   const userPhoneNum = user.user.phoneNum;
   const userCorporation = user.user.corporation;
   const currentDate = moment().format('YYYY-MM-DD');
+  const [file, setFile] = useState(null); // 파일 상태 관리
+  console.log(file);
 
   const [product, setProduct] = useState({
     ...initExpendForm,
@@ -58,7 +60,7 @@ export default function Write() {
     dept: userDept,
     name: userName,
     phoneNum: userPhoneNum,
-    corporation : userCorporation
+    corporation: userCorporation,
   });
 
   useEffect(() => {
@@ -69,21 +71,41 @@ export default function Write() {
       dept: prevProduct.dept,
       name: prevProduct.name,
       phoneNum: prevProduct.phoneNum,
-      corporation : prevProduct.corporation,
+      corporation: prevProduct.corporation,
     }));
   }, [product.file]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (product.agree.length === 0) {
       alert('결재요청자를 선택하세요.');
       return;
     }
+    let downloadURL;
 
-    addNewProduct(product, userName, userDept, userPhoneNum, userCorporation).then(() => {
+    if (file) {
+      try {
+        downloadURL = await handleUpload(file); // Pass the selected file as an argument
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        return;
+      }
+    }
+    try {
+      await addNewProduct(
+        product,
+        userName,
+        userDept,
+        userPhoneNum,
+        userCorporation,
+        downloadURL,
+      );
+
       alert('등록 되었습니다.');
       setProduct(initForms[product.file] || initExpendForm);
       navigator(`/wait`);
-    });
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
   };
 
   const handleAgreeChange = (e) => {
@@ -170,45 +192,54 @@ export default function Write() {
             handleChange={handleChange}
             userDept={userDept}
           />
-
         </div>
         {/* Right Side */}
         <div className="w-full lg:w-1/4 flex-1 bg-gray-100 p-2 md:p-4 rounded">
-            <div className="font-bold text-lg md:text-xl mb-3">
-              결재 승인 요청
-            </div>
-            {approvers.map((approver) => (
-              <label
-                key={approver.name}
-                className="flex items-center space-x-2 mt-2 hover:bg-gray-200 p-2 rounded transition duration-150 ease-in-out cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  name={approver.name}
-                  onChange={handleAgreeChange}
-                  className="form-checkbox text-brand border-gray-300 rounded focus:border-brand focus:ring focus:ring-offset-0 focus:ring-brand focus:ring-opacity-50"
-                  checked={product.agree.includes(approver.email)}
-                />
-                <span className="text-sm md:text-base text-gray-700">
-                  {approver.name}
-                </span>
-              </label>
-            ))}
-          <div className="mt-5 flex flex-col lg:flex-row w-full justify-center space-y-2 lg:space-y-0 lg:space-x-2">
-            {buttons.map((btn, idx) => (
-               <button
+          <div className="font-bold text-lg md:text-xl mb-3">
+            결재 승인 요청
+          </div>
+          {approvers.map((approver) => (
+            <label
+              key={approver.name}
+              className="flex items-center space-x-2 mt-2 hover:bg-gray-200 p-2 rounded transition duration-150 ease-in-out cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                name={approver.name}
+                onChange={handleAgreeChange}
+                className="form-checkbox text-brand border-gray-300 rounded focus:border-brand focus:ring focus:ring-offset-0 focus:ring-brand focus:ring-opacity-50"
+                checked={product.agree.includes(approver.email)}
+              />
+              <span className="text-sm md:text-base text-gray-700">
+                {approver.name}
+              </span>
+            </label>
+          ))}
+          <p className='mt-5 text-xm text-gray-500'>
+            등록할 파일이 없다면 바로 "등록하기" 클릭
+          </p>
+          <input
+             className=""
+             type="file"
+             onChange={(e) => setFile(e.target.files[0])}
+          />
+          <div className="flex">
+
+            <div className="mt-5 flex flex-col lg:flex-row w-full justify-center space-y-2 lg:space-y-0 lg:space-x-2">
+              {buttons.map((btn, idx) => (
+                <button
                   key={idx}
                   onClick={btn.onClick}
                   className={`${btn.className} text-white px-2 md:px-4 py-1 md:py-2 rounded focus:outline-none focus:ring transition duration-150 ease-in-out shadow-md`}
-               >
-                 {btn.text}
-               </button>
-            ))}
+                >
+                  {btn.text}
+                </button>
+              ))}
+            </div>
           </div>
+
         </div>
-
       </div>
-
     </>
   );
 }

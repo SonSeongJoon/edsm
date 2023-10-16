@@ -9,7 +9,7 @@ module.exports = {
         brand: 'rgb(230, 0, 18)',
       },
       fontSize: {
-        xxm: '0.3rem',
+        xxm: '0.6rem',
         xm: '0.8rem',
         sm: '0.9rem',
         md: '1rem',
