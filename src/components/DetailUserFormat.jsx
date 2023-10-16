@@ -83,7 +83,7 @@ export default function DetailUserFormat({
               </span>
             ))}
           </div>
-          <div className="flex mt-3">
+          <div className="flex justify-between items-end mt-3">
             <div>
               {!isMst && !allApproved ? (
                 <button
@@ -103,6 +103,17 @@ export default function DetailUserFormat({
                   삭제하기
                 </button>
               ) : null}
+            </div>
+            <div className="mt-auto flex justify-end">
+              {product.downloadURL && (
+                 <a
+                    href={product.downloadURL}
+                    download
+                    className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-700 ml-3"
+                 >
+                   첨부파일 다운로드
+                 </a>
+              )}
             </div>
           </div>
         </div>
@@ -126,16 +137,6 @@ export default function DetailUserFormat({
           >
             워드 다운로드
           </button>
-          {product.downloadURL && (
-             <a
-                href={product.downloadURL}
-                download
-                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 ml-3"
-             >
-               첨부파일 다운로드
-             </a>
-          )}
-
         </div>
       </div>
       {reasonText ? (
