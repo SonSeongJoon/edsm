@@ -37,17 +37,28 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // 모든 필드가 채워져 있는지 확인
+    for (let key in formData) {
+      if (formData[key] === '' || formData[key] === null) {
+        alert('모든 필드를 입력해주세요.');
+        return; // 함수 종료
+      }
+    }
+
     try {
       await signupEmail(formData);
       alert('가입이 완료되었습니다!');
       console.log('User registered successfully.');
       setFormData(initialFormData); // <- 입력 폼을 초기 상태로 설정하는 부분
-      // Navigate to another page or show a success message
     } catch (error) {
       console.error('Error registering user:', error);
-      // Show an error message to the user
+      // 사용자에게 오류 메시지 표시
+      alert(`오류가 발생했습니다: ${error.message}`);
     }
   };
+
+
   const handleLogin = () => {
     navigate(`/login`);
   };
