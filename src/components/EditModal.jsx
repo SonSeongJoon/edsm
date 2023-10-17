@@ -3,6 +3,7 @@ import ModalExpend from './html/modal/ModalExpend';
 import ModalVacation from './html/modal/Modalvacation';
 import ModalApproval from './html/modal/Modalapproval';
 import {ModalOvertime} from "./html/modal/ModalOvertime";
+import {ModalAlternative} from "./html/modal/ModalAlternative";
 
 export function EditModal({
   modalProduct,
@@ -65,6 +66,11 @@ export function EditModal({
           />
         ) : modalProduct.file === '초과근무사전품의서' ? (
            <ModalOvertime
+              modalProduct={modalProduct}
+              handleEditChange={handleEditChange}
+           />
+        ) : modalProduct.file === '대체휴무사용품의서' ? (
+           <ModalAlternative
               modalProduct={modalProduct}
               handleEditChange={handleEditChange}
            />

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ApprovalShow = ({ product }) => {
-  const { title, content, period, price, note, dept, name, file, corporation } = product;
+  const { title, content, startDate, endDate, price, note, dept, name, file, corporation } = product;
   const date = new Date()
   .toLocaleDateString('ko-KR', {
     year: 'numeric',
@@ -9,6 +9,10 @@ const ApprovalShow = ({ product }) => {
     day: '2-digit',
   })
   .replace(/. /g, '.');
+
+
+
+
 
   return (
      <div>
@@ -30,11 +34,11 @@ const ApprovalShow = ({ product }) => {
          <div className="flex flex-col">
            <div className="flex">
              <h1 className="font-bold mr-2 sm:text-md text-xm">항 목 : </h1>
-             <p className="text-gray-600 text-sm sm:text-md">{content}</p>
+             <p className="text-gray-600 text-sm sm:text-md" dangerouslySetInnerHTML={{ __html: content.replace(/\n/g, '<br />') }}></p>
            </div>
            <div className="flex items-center mt-1">
              <h1 className="font-bold mr-2 sm:text-md text-xm">기 간 : </h1>
-             <p className="text-gray-600 text-sm sm:text-md">{period}</p>
+             <p className="text-gray-600 text-sm sm:text-md">{startDate} ~ {endDate}</p>
            </div>
            <div className="flex items-center mt-1">
              <h1 className="font-bold mr-2 sm:text-md text-xm">금 액 : </h1>

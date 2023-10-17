@@ -8,7 +8,18 @@ export const vacationPlan = ({
   RemainDays,
   Period,
   name,
+  admitMember,
 }) => {
+  let keys = [];
+
+  if (admitMember) {
+    keys = Object.keys(admitMember);
+    if (keys.includes("한현석")) {
+      keys = keys.filter(key => key !== "한현석");
+      keys.push("한현석");
+    }
+  }
+
   return `<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -38,8 +49,8 @@ export const vacationPlan = ({
             <td style="width: 20%;">대표이사</td>
         </tr>
             <tr>
-                <td style="height: 45px;"></td>
-                <td style="height: 45px;"></td>
+                <td style="height: 45px;">${keys[0] ? keys[0] : ''}</td>
+                <td style="height: 45px;">${keys[1] ? keys[1] : ''}</td>
             </tr>
             <tr>
                 <td style="width: 25%;">소속</td>
