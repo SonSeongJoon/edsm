@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const AlternativeShow = ({ product }) => {
-	const { title, whenDate, whatDate, dept, name, file, corporation } = product;
+	const { title, whatYear, whenYear, whatTime, whenTime, dept, name, file, corporation } = product;
 	const date = new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/. /g, '.');
 
 	return (
@@ -26,13 +26,13 @@ export const AlternativeShow = ({ product }) => {
 						<h1 className="font-bold mr-2 sm:text-md text-xm">휴무자 : </h1>
 						<p className="text-gray-600 text-sm sm:text-md">{name}</p>
 					</div>
-					<div className="items-center mt-2">
+					<div className="flex items-center mt-2">
 						<h1 className="font-bold mr-2 sm:text-md text-xm">초과근무 일시 : </h1>
-						<p className="text-gray-600 text-sm sm:text-md">{whatDate}</p>
+						<p className="text-gray-600 text-sm sm:text-md">{whatYear +" / "+ whatTime} </p>
 					</div>
 					<div className="flex items-center mt-2">
 						<h1 className="font-bold mr-2 sm:text-md text-xm">대체휴무 일시 : </h1>
-						<p className="text-gray-600 text-sm sm:text-md">{whenDate}</p>
+						<p className="text-gray-600 text-sm sm:text-md">{whenYear +" / "+ whenTime}</p>
 					</div>
 				</div>
 			</div>

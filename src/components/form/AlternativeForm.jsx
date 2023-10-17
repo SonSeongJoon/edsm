@@ -4,8 +4,10 @@ const initAlternativeForm = {
 	file: '대체휴무사용품의서',
 	title: '',
 	name: '',
-	whatDate: '23년 00월 00일 00시~00시 (00시간)',
-	whenDate: '23년 00월 00일 00시~00시 (00시간)',
+	whatYear: '',
+	whenYear: '',
+	whatTime: '00시~00시 (00시간)',
+	whenTime: '00시~00시 (00시간)',
 	agree: [],
 	agreeName: [],
 };
@@ -40,25 +42,43 @@ const AlternativeForm = ({ product, handleChange }) => {
 					</div>
 
 					{/* Period Section */}
-					<div className="mb-3">
-						<div className="font-bold">초과근무 일시</div>
-						<textarea
-							name="period"
-							value={product.whatDate || ''}
-							className="w-full px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+					<div className="mb-3 flex items-center">
+						<div className="font-bold mr-3">초과근무 일시</div>
+						{/* Date input */}
+						<input
+							type="date"
+							name="whatYear"
+							value={product.whatYear || ''}
+							className="w-1/4 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mr-3"
+							onChange={handleChange}
+						/>
+						<input
+							name="whatTime"
+							type="text"
+							value={product.whatTime || ''}
+							placeholder='개인별 매출 기여도 정리'
+							className="w-1/3 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
 							onChange={handleChange}
 						/>
 					</div>
 
 					{/* Price Section */}
-					<div className="mb-3">
-						<div className="font-bold">대체휴무 일시</div>
+					<div className="mb-3 flex items-center">
+						<div className="font-bold mr-3">대체휴무 일시</div>
+						{/* Date input */}
 						<input
-							name="overReason"
+							type="date"
+							name="whenYear"
+							value={product.whenYear || ''}
+							className="w-1/4 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mr-3"
+							onChange={handleChange}
+						/>
+						<input
+							name="whenTime"
 							type="text"
-							value={product.whenDate || ''}
+							value={product.whenTime || ''}
 							placeholder='개인별 매출 기여도 정리'
-							className="w-full px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+							className="w-1/3 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
 							onChange={handleChange}
 						/>
 					</div>

@@ -14,18 +14,38 @@ export const ModalAlternative = ({ modalProduct, handleEditChange }) => {
 			</div>
 			<div className="flex items-center mb-1">
 				<h1 className="font-bold mr-1 mb-1">초과근무 일시 : </h1>
-				<textarea
-					name="period"
-					value={modalProduct.whatDate || ''}
+				{/* Year (날짜) input */}
+				<input
+					type="date"
+					name="whatYear"
+					value={modalProduct.whatYear || ''}
 					onChange={handleEditChange}
-					className="border border-gray-500 p-1 rounded-md shadow-md w-1/2 h-13"
+					className="border border-gray-500 p-1 rounded-md shadow-md w-1/2 mr-2"
+				/>
+				{/* Time (텍스트) input */}
+				<input
+					type="text"
+					name="whatTime"
+					value={modalProduct.whatTime || ''}
+					onChange={handleEditChange}
+					className="border border-gray-500 p-1 rounded-md shadow-md w-1/2"
 				/>
 			</div>
 			<div className="flex items-center mb-1">
 				<h1 className="font-bold mr-1 mb-1">대체휴무 일시 : </h1>
+				{/* Year (날짜) input */}
 				<input
-					name="overReason"
-					value={modalProduct.whenDate || ''}
+					type="date"
+					name="whenYear"
+					value={modalProduct.whenYear || ''}
+					onChange={handleEditChange}
+					className="border border-gray-500 p-1 rounded-md shadow-md w-1/2 mr-2"
+				/>
+				{/* Time (텍스트) input */}
+				<input
+					type="text"
+					name="whenTime"
+					value={modalProduct.whenTime || ''}
 					onChange={handleEditChange}
 					className="border border-gray-500 p-1 rounded-md shadow-md w-1/2"
 				/>
