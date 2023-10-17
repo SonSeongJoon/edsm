@@ -73,8 +73,8 @@ export const approvalDocument = ({
             <tr>
                 <td>부 서</td>
                 <td colspan="1">${dept}</td>
-                <td rowspan="2">${keys[0] ? keys[0] : ''}</td>
-                <td rowspan="2">${keys[1] ? keys[1] : ''}</td>
+                <td rowspan="2">${keys[0] ? '전자승인' : ''}</td>
+                <td rowspan="2">${keys[1] ? '전자승인' : ''}</td>
             </tr>
             <tr>
                 <td>품 의 자</td>

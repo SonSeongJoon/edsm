@@ -59,8 +59,8 @@ export const expenditure = ({ file, dept, deel, title, items, date, name, admitM
             <th style="width: 70px;">&nbsp;대표이사&nbsp;</th>
         </tr>
         <tr>
-            <td style="height: 45px;">${keys[0] ? keys[0] : ''}</td>
-            <td style="height: 45px;">${keys[1] ? keys[1] : ''}</td>
+            <td style="height: 45px;">${keys[0] ? '전자승인' : ''}</td>
+            <td style="height: 45px;">${keys[1] ? '전자승인' : ''}</td>
         </tr>
     </table>
         </div>
