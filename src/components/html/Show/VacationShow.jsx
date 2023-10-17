@@ -12,6 +12,7 @@ export const VacationShow = ({ product }) => {
     VacationReason,
     dept,
     name,
+     Period,
     corporation,
     startDate,
     endDate,
@@ -65,7 +66,7 @@ export const VacationShow = ({ product }) => {
           <div className="flex items-center mt-3">
             <h1 className="font-bold mr-2 sm:text-md text-xm">휴가기간 : </h1>
             <p className="text-gray-600 text-sm sm:text-md">
-              {startDate} ~ {endDate} ({daysDifference}일간)
+              {Period ? Period : `${startDate} ~ ${endDate} (${daysDifference}일간)`}
             </p>
           </div>
         </div>
