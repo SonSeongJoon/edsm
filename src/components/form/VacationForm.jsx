@@ -188,12 +188,15 @@ const VacationForm = ({ product, handleChange }) => {
                   [ {product.daysDifference || ''}일간 ]
                 </span>
               )}
-              <button
-                onClick={toggleHalfDay}
-                className="ml-2 px-3 py-1 border rounded bg-gray-500 text-white text-xm"
-              >
-                {isHalfDay ? '반차 취소' : '반차 버튼'}
-              </button>
+              {(product.daysDifference === '1' ||
+                product.daysDifference === '0.5') && (
+                <button
+                  onClick={toggleHalfDay}
+                  className="ml-2 px-3 py-1 border rounded bg-gray-500 text-white text-xm"
+                >
+                  {isHalfDay ? '반차 취소' : '반차 버튼'}
+                </button>
+              )}
             </div>
           </div>
           <div className="mt-2">
