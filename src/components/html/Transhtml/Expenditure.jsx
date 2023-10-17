@@ -4,10 +4,15 @@ export const expenditure = ({ file, dept, deel, title, items, date, name, admitM
 	if (admitMember) {
 		keys = Object.keys(admitMember);
 		if (keys.includes("한현석")) {
-			keys = keys.filter(key => key !== "한현석");
-			keys.push("한현석");
+			if (keys.length === 1) {
+				keys.unshift('');  // 한현석만 있으면 앞에 빈 값을 추가
+			} else {
+				keys = keys.filter(key => key !== "한현석");
+				keys.push("한현석");
+			}
 		}
 	}
+
 
 	const totalAmount = items.reduce((sum, item) => {
 		if (item && item.amount) {
