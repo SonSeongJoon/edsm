@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import moment from 'moment';
 const year = moment().format('YYYY')
 
@@ -9,13 +9,26 @@ const initVacationForm = {
   TotalLeaveDays: '',
   UsedDays: '',
   RemainDays: '',
-  Period: '2023-10-11 ~ 2023-10-13 (3일간)',
+  startDate: '',
+  endDate: '',
   VacationReason: '',
+  daysDifference: '',
   agree: [],
   agreeName: [],
 };
 
 const VacationForm = ({ product, handleChange }) => {
+  const [daysDifference, setDaysDifference] = useState('');
+
+  useEffect(() => {
+    if (product.startDate && product.endDate) {
+      const start = moment(product.startDate);
+      const end = moment(product.endDate);
+      const diff = end.diff(start, 'days') + 1; // +1 to include the start date
+      setDaysDifference(diff);
+    }
+  }, [product.startDate, product.endDate]);
+
   useEffect(() => {
     const totalLeaveDays = parseFloat(product.TotalLeaveDays) || 0.0;
     const usedDays = parseFloat(product.UsedDays) || 0.0;
@@ -120,21 +133,42 @@ const VacationForm = ({ product, handleChange }) => {
         </div>
 
         <div className="mt-5">
-          <div>
-            <label
-              className="font-bold sm:text-md text-xm mr-2"
-              htmlFor='Period'
-            >
-              휴가기간
-            </label>
-            <input
-              type="text"
-              name="Period"
-              id="Period"
-              value={product.Period || ''}
-              className="w-80 px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-              onChange={handleChange}
-            />
+          <div className="flex space-x-2 sm:space-x-2">
+            <div>
+              <label
+                 className="font-bold sm:text-md text-xm mr-2"
+                 htmlFor='startDate'
+              >
+                시작 날짜
+              </label>
+              <input
+                 type="date"
+                 name="startDate"
+                 id="startDate"
+                 value={product.startDate || ''}
+                 className="px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                 onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label
+                 className="font-bold sm:text-md text-xm mr-2"
+                 htmlFor='endDate'
+              >
+                종료 날짜
+              </label>
+              <input
+                 type="date"
+                 name="endDate"
+                 id="endDate"
+                 value={product.endDate || ''}
+                 className="px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mr-3"
+                 onChange={handleChange}
+              />
+              {daysDifference && (
+                 <span className='font-bold text-green-600'>[ {daysDifference}일간 ]</span>
+              )}
+            </div>
           </div>
           <div className='mt-2'>
             <label
