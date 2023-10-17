@@ -72,8 +72,8 @@ export const vacationPlan = ({
             <td style="width: 20%;">대표이사</td>
         </tr>
             <tr>
-                <td style="height: 45px;">${keys[0] ? keys[0] : ''}</td>
-                <td style="height: 45px;">${keys[1] ? keys[1] : ''}</td>
+                <td style="height: 45px;">${keys[0] ? '전자승인' : ''}</td>
+                <td style="height: 45px;">${keys[1] ? '전자승인' : ''}</td>
             </tr>
             <tr>
                 <td style="width: 25%;">소속</td>
