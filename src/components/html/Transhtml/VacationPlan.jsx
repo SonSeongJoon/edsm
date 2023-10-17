@@ -9,6 +9,7 @@ export const vacationPlan = ({
   Period,
   name,
   admitMember,
+   corporation,
 }) => {
   let keys = [];
 
@@ -42,6 +43,15 @@ export const vacationPlan = ({
             table-layout: fixed;
             width: 100%;
             height: 90%;
+        }
+        .corporation-text {
+            text-align: center;
+            font-size: 24px; 
+            margin-top: 40px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -79,7 +89,7 @@ export const vacationPlan = ({
                 <td>휴가기간</td>
                 <td colspan="3">${Period}</td>
             </tr>
-            <tr style="height: 370px;">
+            <tr style="height: 300px;">
                 <th>휴가사유</th>
                 <td colspan="3">${VacationReason}</td>
             </tr>
@@ -98,6 +108,9 @@ export const vacationPlan = ({
                 </td>
             </tr>
         </table>
+    </div>
+    <div class="corporation-text">
+        ${corporation}
     </div>
 </body>
 </html>
