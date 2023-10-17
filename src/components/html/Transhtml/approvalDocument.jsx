@@ -6,7 +6,8 @@ export const approvalDocument = ({
   content,
   dept,
   title,
-  period,
+  startDate,
+  endDate,
   price,
   note,
   admitMember,
@@ -16,9 +17,9 @@ export const approvalDocument = ({
 
   if (admitMember) {
     keys = Object.keys(admitMember);
-    if (keys.includes("한현석")) {
-      keys = keys.filter(key => key !== "한현석");
-      keys.push("한현석");
+    if (keys.includes('한현석')) {
+      keys = keys.filter((key) => key !== '한현석');
+      keys.push('한현석');
     }
   }
 
@@ -72,7 +73,7 @@ export const approvalDocument = ({
             <tr style="height: 370px;">
                 <td colspan="5" style="text-align: left;" >
                     <p>${content}</p>
-                    <p>기 간: ${period}</p>
+                    <p>기 간: ${startDate} ~ ${endDate}</p> 
                     <p>금 액: ${price}</p>
                     <p>비 고: ${note}</p>
                 </td>
