@@ -98,7 +98,7 @@ export default function DetailUserFormat({
               ) : null}
             </div>
             <div>
-              {isMst && !allApproved ? (
+              {isMst ? (
                 <button
                   className="bg-brand text-white px-2 py-1 rounded text-sm mr-2 hover:bg-red-700"
                   onClick={handleDelete}
