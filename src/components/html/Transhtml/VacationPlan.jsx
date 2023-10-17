@@ -6,25 +6,33 @@ export const vacationPlan = ({
   TotalLeaveDays,
   UsedDays,
   RemainDays,
-  Period,
+  startDate,
+  endDate,
   name,
   admitMember,
-   corporation,
+  corporation,
 }) => {
   let keys = [];
 
   if (admitMember) {
     keys = Object.keys(admitMember);
-    if (keys.includes("한현석")) {
+    if (keys.includes('한현석')) {
       if (keys.length === 1) {
-        keys.unshift('');  // 한현석만 있으면 앞에 빈 값을 추가
+        keys.unshift(''); // 한현석만 있으면 앞에 빈 값을 추가
       } else {
-        keys = keys.filter(key => key !== "한현석");
-        keys.push("한현석");
+        keys = keys.filter((key) => key !== '한현석');
+        keys.push('한현석');
       }
     }
   }
+   const calculateDateDifference = (start, end) => {
+      const startDateObj = new Date(start);
+      const endDateObj = new Date(end);
+      const differenceInTime = endDateObj - startDateObj;
+      return parseInt(differenceInTime / (1000 * 60 * 60 * 24)) + 1;
+   };
 
+   const daysDifference = calculateDateDifference(startDate, endDate);
 
   return `<!DOCTYPE html>
 <html lang="ko">
@@ -87,7 +95,7 @@ export const vacationPlan = ({
             </tr>
             <tr>
                 <td>휴가기간</td>
-                <td colspan="3">${Period}</td>
+                <td colSpan="3">${startDate} ~ ${endDate} (${daysDifference}일간)</td>
             </tr>
             <tr style="height: 300px;">
                 <th>휴가사유</th>
