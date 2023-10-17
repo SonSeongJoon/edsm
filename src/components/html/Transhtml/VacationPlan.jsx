@@ -15,10 +15,15 @@ export const vacationPlan = ({
   if (admitMember) {
     keys = Object.keys(admitMember);
     if (keys.includes("한현석")) {
-      keys = keys.filter(key => key !== "한현석");
-      keys.push("한현석");
+      if (keys.length === 1) {
+        keys.unshift('');  // 한현석만 있으면 앞에 빈 값을 추가
+      } else {
+        keys = keys.filter(key => key !== "한현석");
+        keys.push("한현석");
+      }
     }
   }
+
 
   return `<!DOCTYPE html>
 <html lang="ko">
