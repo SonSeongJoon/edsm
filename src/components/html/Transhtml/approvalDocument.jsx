@@ -6,11 +6,21 @@ export const approvalDocument = ({
   content,
   dept,
   title,
-   period,
-   price,
-   note,
+  period,
+  price,
+  note,
+  admitMember,
 }) => {
   const date = moment().format('YYYY.MM.DD');
+  let keys = [];
+
+  if (admitMember) {
+    keys = Object.keys(admitMember);
+    if (keys.includes("한현석")) {
+      keys = keys.filter(key => key !== "한현석");
+      keys.push("한현석");
+    }
+  }
 
   return `<!DOCTYPE html>
 <html lang="ko">
@@ -39,16 +49,14 @@ export const approvalDocument = ({
             <tr>
                 <td style="width: 23%;">품 의 일 자</td>
                 <td style="width: 23%;">${date}</td>
-                <td style="width: 18%;">담 당</td>
                 <td style="width: 18%;">본부장</td>
                 <td style="width: 18%;">대표이사</td>
             </tr>
             <tr>
                 <td>부 서</td>
                 <td colspan="1">${dept}</td>
-                <td rowspan="2"></td>
-                <td rowspan="2"></td>
-                <td rowspan="2"></td>
+                <td rowspan="2">${keys[0] ? keys[0] : ''}</td>
+                <td rowspan="2">${keys[1] ? keys[1] : ''}</td>
             </tr>
             <tr>
                 <td>품 의 자</td>

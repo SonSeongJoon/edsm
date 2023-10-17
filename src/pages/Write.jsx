@@ -19,19 +19,22 @@ import {
   initOvertimeForm,
   OvertimeForm,
 } from '../components/form/OvertimeForm';
+import {AlternativeForm, initAlternativeForm} from "../components/form/AlternativeForm";
 
-const options = ['지출결의서', '휴가계', '품의서', '초과근무사전품의서'];
+const options = ['지출결의서', '휴가계', '품의서', '초과근무사전품의서', '대체휴무사용품의서'];
 const initForms = {
   지출결의서: initExpendForm,
   휴가계: initVacationForm,
   품의서: initApprovalForm,
   초과근무사전품의서: initOvertimeForm,
+  대체휴무사용품의서: initAlternativeForm,
 };
 const Forms = {
   지출결의서: ExpendForm,
   휴가계: VacationForm,
   품의서: ApprovalForm,
   초과근무사전품의서: OvertimeForm,
+  대체휴무사용품의서: AlternativeForm,
 };
 const approvers = [
   { name: '서민아 이사', email: 'minah_seo@seoulir.co.kr' },
@@ -154,6 +157,8 @@ export default function Write() {
           const htmlString = approvalDocument(product);
           htmlToFile(htmlString, 'doc');
         } else if (product.file === '초과근무사전품의서') {
+          // const htmlString =
+        } else if (product.file === '대체휴무사용품의서') {
           // const htmlString =
         }
       },

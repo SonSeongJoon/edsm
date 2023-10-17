@@ -1,4 +1,14 @@
-export const expenditure = ({ file, dept, deel, title, items, date, name}) => {
+export const expenditure = ({ file, dept, deel, title, items, date, name, admitMember}) => {
+	let keys = [];
+
+	if (admitMember) {
+		keys = Object.keys(admitMember);
+		if (keys.includes("한현석")) {
+			keys = keys.filter(key => key !== "한현석");
+			keys.push("한현석");
+		}
+	}
+
 	const totalAmount = items.reduce((sum, item) => {
 		if (item && item.amount) {
 			// 쉼표 제거 후 정수로 변환
@@ -8,9 +18,7 @@ export const expenditure = ({ file, dept, deel, title, items, date, name}) => {
 		return sum;
 	}, 0);
 
-	// 합산된 금액을 쉼표가 포함된 문자열로 변환합니다.
 	const formattedTotalAmount = totalAmount.toLocaleString();
-
 
 	return `<!DOCTYPE html>
 <html lang="ko">
@@ -18,7 +26,7 @@ export const expenditure = ({ file, dept, deel, title, items, date, name}) => {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${file}</title> <!-- Use the title variable here -->
+    <title>${file}</title>
     <style>
         table, th, td {
             border: 1px solid black;
@@ -37,8 +45,8 @@ export const expenditure = ({ file, dept, deel, title, items, date, name}) => {
             <th style="width: 70px;">&nbsp;대표이사&nbsp;</th>
         </tr>
         <tr>
-            <td style="height: 45px;"></td>
-            <td style="height: 45px;"></td>
+            <td style="height: 45px;">${keys[0] ? keys[0] : ''}</td>
+            <td style="height: 45px;">${keys[1] ? keys[1] : ''}</td>
         </tr>
     </table>
         </div>
@@ -117,9 +125,6 @@ export const expenditure = ({ file, dept, deel, title, items, date, name}) => {
         </div>
         <div style="text-align: center">
         <p style="text-align: center; font-size: 13px;">상기와 같이 경비지출을 의뢰하오니 결재를 바랍니다.</p>
-        <img src="${
-		window.location.origin
-	}/seoulir_html.png" alt="seoulir">
     </div>
  
 </body>

@@ -8,6 +8,7 @@ import { VacationShow } from './html/Show/VacationShow';
 import ApprovalShow from './html/Show/approvalShow';
 import { OvertimeShow } from './html/Show/OvertimeShow';
 import {useParams} from "react-router-dom";
+import {AlternativeShow} from "./html/Show/AlternativeShow";
 
 export default function DetailUserFormat({
   showEditModal,
@@ -62,6 +63,8 @@ export default function DetailUserFormat({
             <ApprovalShow product={displayProduct} />
           ) : displayProduct.file === '초과근무사전품의서' ? (
             <OvertimeShow product={displayProduct} />
+          ) : displayProduct.file === '대체휴무사용품의서' ? (
+             <AlternativeShow product={displayProduct} />
           ) : null}
           <div className="mt-5 mb-3 text-sm">
             <span className="font-bold">수신자:</span>
