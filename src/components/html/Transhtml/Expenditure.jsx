@@ -1,4 +1,4 @@
-export const expenditure = ({ file, dept, deel, title, items, date, name, admitMember}) => {
+export const expenditure = ({ file, dept, deel, title, items, date, name, admitMember, corporation}) => {
 	let keys = [];
 
 	if (admitMember) {
@@ -37,6 +37,15 @@ export const expenditure = ({ file, dept, deel, title, items, date, name, admitM
             border: 1px solid black;
             border-collapse: collapse;
             padding: 8px;
+        }
+        .corporation-text {
+            text-align: center;
+            font-size: 24px; 
+            margin-top: 40px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -129,9 +138,11 @@ export const expenditure = ({ file, dept, deel, title, items, date, name, admitM
         </table>
         </div>
         <div style="text-align: center">
-        <p style="text-align: center; font-size: 13px;">상기와 같이 경비지출을 의뢰하오니 결재를 바랍니다.</p>
+        <p style="text-align: center; font-size: 13px;">상기와 같이 의뢰하오니 결재를 바랍니다.</p>
     </div>
- 
+    <div class="corporation-text">
+        ${corporation}
+    </div>
 </body>
 </html>`;
 };

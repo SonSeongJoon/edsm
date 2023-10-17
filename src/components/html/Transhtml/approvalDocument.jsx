@@ -11,24 +11,24 @@ export const approvalDocument = ({
   price,
   note,
   admitMember,
+  corporation,
 }) => {
   const date = moment().format('YYYY.MM.DD');
   let keys = [];
 
   if (admitMember) {
     keys = Object.keys(admitMember);
-    if (keys.includes("한현석")) {
+    if (keys.includes('한현석')) {
       if (keys.length === 1) {
-        keys.unshift('');  // 한현석만 있으면 앞에 빈 값을 추가
+        keys.unshift('');
       } else {
-        keys = keys.filter(key => key !== "한현석");
-        keys.push("한현석");
+        keys = keys.filter((key) => key !== '한현석');
+        keys.push('한현석');
       }
     }
   }
 
   const formattedContent = content.replace(/\n/g, '<br>');
-
 
   return `<!DOCTYPE html>
 <html lang="ko">
@@ -48,6 +48,16 @@ export const approvalDocument = ({
             width: 100%;
             height: 90%;
         }
+        .corporation-text {
+            text-align: center;
+            font-size: 24px; 
+            margin-top: 40px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: bold;
+        }
+
     </style>
 </head>
 <body>
@@ -77,7 +87,7 @@ export const approvalDocument = ({
             <tr>
                 <td colspan="5">내 용</td>
             </tr>
-            <tr style="height: 370px;">
+            <tr style="height: 500px;">
                 <td colspan="5" style="text-align: left;" >
                     <p>항 목</p> 
                     <p>${formattedContent}</p>
@@ -88,10 +98,13 @@ export const approvalDocument = ({
             </tr>
             <tr>
                 <td colspan="5" style="text-align: left;">
-                    <p>상기와 같이 경비지출을 의뢰하오니 결재를 바랍니다.</p>
+                    <p>상기와 같이 의뢰하오니 결재를 바랍니다.</p>
                 </td>
             </tr>
         </table>
+    </div>
+    <div class="corporation-text">
+        ${corporation}
     </div>
 </body>
 </html>
