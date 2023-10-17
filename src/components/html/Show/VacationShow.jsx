@@ -16,15 +16,10 @@ export const VacationShow = ({ product }) => {
     corporation,
     startDate,
     endDate,
+    daysDifference,
   } = product;
-  const calculateDateDifference = (start, end) => {
-    const startDateObj = new Date(start);
-    const endDateObj = new Date(end);
-    const differenceInTime = endDateObj - startDateObj;
-    return parseInt(differenceInTime / (1000 * 60 * 60 * 24)) + 1;
-  };
 
-  const daysDifference = calculateDateDifference(startDate, endDate);
+
 
 
   return (

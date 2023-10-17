@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-const year = moment().format('YYYY')
+
+const year = moment().format('YYYY');
 
 const initVacationForm = {
   file: '휴가계',
@@ -18,16 +19,33 @@ const initVacationForm = {
 };
 
 const VacationForm = ({ product, handleChange }) => {
-  const [daysDifference, setDaysDifference] = useState('');
+  const [daysDifference, setDaysDifference] = useState(
+    product.daysDifference || '',
+  ); // 초기 상태 설정
+  const [isHalfDay, setIsHalfDay] = useState(false); // 반차 상태 저장
 
   useEffect(() => {
     if (product.startDate && product.endDate) {
       const start = moment(product.startDate);
       const end = moment(product.endDate);
-      const diff = end.diff(start, 'days') + 1; // +1 to include the start date
+      const diff = end.diff(start, 'days') + 1;
       setDaysDifference(diff);
+      handleChange({
+        // daysDifference 값을 product에 저장합니다.
+        target: { name: 'daysDifference', value: diff.toString() },
+      });
     }
-  }, [product.startDate, product.endDate]);
+  }, [product.startDate, product.endDate, handleChange]);
+
+  const toggleHalfDay = () => {
+    if (product.daysDifference === '1' || product.daysDifference === '0.5') {
+      const newDiff = isHalfDay ? '1' : '0.5';
+      setIsHalfDay(!isHalfDay);
+      handleChange({
+        target: { name: 'daysDifference', value: newDiff },
+      });
+    }
+  };
 
   useEffect(() => {
     const totalLeaveDays = parseFloat(product.TotalLeaveDays) || 0.0;
@@ -104,8 +122,8 @@ const VacationForm = ({ product, handleChange }) => {
               기사용일수
             </label>
             <input
-               type="text"
-               pattern="\d*\.?\d*" // allows numbers and a single decimal point
+              type="text"
+              pattern="\d*\.?\d*" // allows numbers and a single decimal point
               name="UsedDays"
               id="UsedDays"
               value={product.UsedDays || ''}
@@ -136,41 +154,49 @@ const VacationForm = ({ product, handleChange }) => {
           <div className="flex space-x-2 sm:space-x-2">
             <div>
               <label
-                 className="font-bold sm:text-md text-xm mr-2"
-                 htmlFor='startDate'
+                className="font-bold sm:text-md text-xm mr-2"
+                htmlFor="startDate"
               >
                 시작 날짜
               </label>
               <input
-                 type="date"
-                 name="startDate"
-                 id="startDate"
-                 value={product.startDate || ''}
-                 className="px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                 onChange={handleChange}
+                type="date"
+                name="startDate"
+                id="startDate"
+                value={product.startDate || ''}
+                className="px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                onChange={handleChange}
               />
             </div>
             <div>
               <label
-                 className="font-bold sm:text-md text-xm mr-2"
-                 htmlFor='endDate'
+                className="font-bold sm:text-md text-xm mr-2"
+                htmlFor="endDate"
               >
                 종료 날짜
               </label>
               <input
-                 type="date"
-                 name="endDate"
-                 id="endDate"
-                 value={product.endDate || ''}
-                 className="px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mr-3"
-                 onChange={handleChange}
+                type="date"
+                name="endDate"
+                id="endDate"
+                value={product.endDate || ''}
+                className="px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mr-3"
+                onChange={handleChange}
               />
               {daysDifference && (
-                 <span className='font-bold text-green-600'>[ {daysDifference}일간 ]</span>
+                <span className="font-bold text-green-600">
+                  [ {product.daysDifference || ''}일간 ]
+                </span>
               )}
+              <button
+                onClick={toggleHalfDay}
+                className="ml-2 px-3 py-1 border rounded bg-gray-500 text-white text-xm"
+              >
+                {isHalfDay ? '반차 취소' : '반차 버튼'}
+              </button>
             </div>
           </div>
-          <div className='mt-2'>
+          <div className="mt-2">
             <label
               className="block sm:text-md text-xm font-bold mb-2"
               htmlFor="VacationReason"
