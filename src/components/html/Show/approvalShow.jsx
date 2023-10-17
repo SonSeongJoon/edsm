@@ -10,6 +10,10 @@ const ApprovalShow = ({ product }) => {
   })
   .replace(/. /g, '.');
 
+
+
+
+
   return (
      <div>
        <div className="w-full flex justify-between items-center mb-3">
@@ -30,7 +34,7 @@ const ApprovalShow = ({ product }) => {
          <div className="flex flex-col">
            <div className="flex">
              <h1 className="font-bold mr-2 sm:text-md text-xm">항 목 : </h1>
-             <p className="text-gray-600 text-sm sm:text-md">{content}</p>
+             <p className="text-gray-600 text-sm sm:text-md" dangerouslySetInnerHTML={{ __html: content.replace(/\n/g, '<br />') }}></p>
            </div>
            <div className="flex items-center mt-1">
              <h1 className="font-bold mr-2 sm:text-md text-xm">기 간 : </h1>

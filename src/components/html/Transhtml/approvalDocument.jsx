@@ -22,6 +22,8 @@ export const approvalDocument = ({
       keys.push('한현석');
     }
   }
+  const formattedContent = content.replace(/\n/g, '<br>');
+
 
   return `<!DOCTYPE html>
 <html lang="ko">
@@ -72,7 +74,8 @@ export const approvalDocument = ({
             </tr>
             <tr style="height: 370px;">
                 <td colspan="5" style="text-align: left;" >
-                    <p>${content}</p>
+                    <p>항 목</p> 
+                    <p>${formattedContent}</p>
                     <p>기 간: ${startDate} ~ ${endDate}</p> 
                     <p>금 액: ${price}</p>
                     <p>비 고: ${note}</p>

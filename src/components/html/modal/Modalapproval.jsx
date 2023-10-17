@@ -13,6 +13,15 @@ const ModalApproval = ({ modalProduct, handleEditChange }) => {
 				/>
 			</div>
 			<div className="flex items-center mb-1">
+				<h1 className="font-bold mr-1 mb-1">항 목 : </h1>
+				<textarea
+					name="content"
+					value={modalProduct.content || ''}
+					onChange={handleEditChange}
+					className="border border-gray-500 p-1 rounded-md shadow-md w-1/2"
+				/>
+			</div>
+			<div className="flex items-center mb-1">
 				<h1 className="font-bold mr-1 mb-1">시작 날짜 : </h1>
 				<input
 					type="date"
