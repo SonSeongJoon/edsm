@@ -105,7 +105,7 @@ export const vacationPlan = ({
                 <td colspan="4" style="text-align: left;">
                     <p style="text-align: end;">위 신청인 ${name}(인)</p>
                     <br>
-                    <p style="text-align: center;">서울아이알네트워크㈜  대표이사  귀하</p>
+                    <p style="text-align: center;">서울아이알 대표이사  귀하</p>
                     <br>
                     <p>* 휴가자는 사유가 있을시 이를 증명할 사본을 제출함. (예 : 예비군훈련 등..)</p>
                 </td>
