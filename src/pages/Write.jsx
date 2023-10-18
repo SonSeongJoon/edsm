@@ -133,50 +133,52 @@ export default function Write() {
     });
   };
 
-  // useCallback은 함수를 메모이제이션하며, 의존성이 변경될 때만 함수를 재생성합니다.
   const handleChange = useCallback((e) => {
-    // 이벤트 객체에서 'name'과 'value' 속성을 추출합니다. 이는 현재 변경된 입력 필드의 이름과 값입니다.
     const { name, value } = e.target;
 
-    // 만약 변경이 발생한 필드의 이름이 'price'인 경우 특별한 로직을 수행합니다.
     if (name === 'price') {
-      // value 문자열을 분해하여 숫자와 쉼표가 아닌 문자열을 추출합니다.
-      const nonNumericParts = value.split(/[\d,]+/);
+      const nonNumericParts = value.split(/[\d,]+/).filter(Boolean);
+      const numbersWithCommas = value.split(/[^\d,]+/).filter(Boolean);
 
-      // value 문자열에서 숫자와 쉼표로 구성된 부분을 모두 찾습니다.
-      const numbersWithCommas = value.match(/[\d,]+/g);
+      // 숫자가 포함된 경우에만 처리
+      if (numbersWithCommas.length) {
+        const formattedNumbers = numbersWithCommas.map((numStr) =>
+           parseInt(numStr.replace(/,/g, '')).toLocaleString('en-US')  // 쉼표 제거 후 숫자로 변환하고 다시 포맷
+        );
 
-      // 숫자 문자열이 존재하는 경우만 로직을 계속 진행합니다.
-      if (numbersWithCommas) {
-        // 각 숫자 문자열에 대해 쉼표를 제거하고 정수로 변환한 후, 세 자리마다 쉼표를 삽입하여 문자열로 다시 변환합니다.
-        const formattedNumbers = numbersWithCommas.map((numStr) => {
-          const numberWithoutCommas = numStr.replace(/,/g, '');
-          return parseInt(numberWithoutCommas).toLocaleString('en-US');
-        });
-
-        // 포맷된 숫자 문자열과 숫자가 아닌 문자열을 번갈아가면서 결합하여 최종 문자열을 생성합니다.
         let result = '';
-        for (let i = 0; i < nonNumericParts.length; i++) {
-          result += nonNumericParts[i];
-          if (i < formattedNumbers.length) {
-            result += formattedNumbers[i];
+        let nonNumericIndex = 0;
+        let numericIndex = 0;
+
+        // 숫자와 비숫자 세그먼트를 번갈아 가며 결과 문자열을 만든다.
+        for (let i = 0; i < value.length; i++) {
+          if (/\d/.test(value[i])) {
+            if (numericIndex < formattedNumbers.length) {
+              result += formattedNumbers[numericIndex++];
+              // 숫자 세그먼트를 건너뛰기 위해 인덱스를 조정한다.
+              i += numbersWithCommas[numericIndex - 1].length - 1;
+            }
+          } else {
+            if (nonNumericIndex < nonNumericParts.length) {
+              result += nonNumericParts[nonNumericIndex++];
+              // 비숫자 세그먼트를 건너뛰기 위해 인덱스를 조정한다.
+              i += nonNumericParts[nonNumericIndex - 1]?.length - 1 || 0;
+            }
           }
         }
 
-        // setProduct 함수를 호출하여 'price' 필드의 값을 최종 문자열로 업데이트합니다.
         setProduct((prevProduct) => ({
-          ...prevProduct,  // 이전 상태 객체의 모든 속성을 새 객체에 복사합니다.
-          [name]: result,  // 'price' 필드만 새로운 값으로 변경합니다.
+          ...prevProduct,
+          [name]: result,
         }));
       } else {
-        // 숫자 문자열이 없는 경우, value를 그대로 사용합니다.
         setProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
       }
     } else {
-      // 'price' 필드가 아닌 다른 필드의 경우, 입력된 값을 그대로 상태에 반영합니다.
       setProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
     }
-  }, [setProduct]);  // setProduct 상태 설정 함수가 변경되면, 이 함수를 재생성합니다.
+  }, [setProduct]);
+
 
 
 
