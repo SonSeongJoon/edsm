@@ -457,30 +457,46 @@ export async function getData(id) {
 	}
 }
 
-export const handleUpload = async (file) => {
+export const handleMultipleFilesUpload = async (files) => {
   const storage = getStorage();
-  const storageRef = Ref(storage, 'uploads/' + file.name);
+  const uploadPromises = [];
 
-  const uploadTask = uploadBytesResumable(storageRef, file);
+  files.forEach((file) => {
+    const storageRef = Ref(storage, 'uploads/' + file.name);
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
-  return new Promise((resolve, reject) => {
-    uploadTask.on('state_changed',
-       (snapshot) => {
-         // Upload progress
-         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-         console.log('Upload is ' + progress + '% done');
-       },
-       (error) => {
-         console.log(error);
-         reject(error);
-       },
-       () => {
-         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-           console.log('File available at', downloadURL);
-           resolve(downloadURL);
-         });
-       }
-    );
+    // 각 파일 업로드 작업의 프로미스를 배열에 저장합니다.
+    // 이제 각 프로미스는 파일의 URL과 이름을 포함하는 객체를 반환합니다.
+    const uploadPromise = new Promise((resolve, reject) => {
+      uploadTask.on('state_changed',
+         (snapshot) => {
+           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+           console.log('Upload is ' + progress + '% done');
+         },
+         (error) => {
+           console.log(error);
+           reject(error);
+         },
+         () => {
+           // 업로드가 성공적으로 완료되면 다운로드 URL을 가져옵니다.
+           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+             console.log('File available at', downloadURL);
+
+             // URL과 파일명을 함께 반환합니다.
+             resolve({
+               url: downloadURL,
+               name: file.name // 파일명도 함께 저장합니다.
+             });
+           });
+         }
+      );
+    });
+    uploadPromises.push(uploadPromise);
   });
+
+  // Promise.all을 사용하여 모든 업로드 작업이 완료될 때까지 기다립니다.
+  // 모든 프로미스가 해결되면, 각 파일에 대한 다운로드 URL과 파일명을 포함하는 객체의 배열이 반환됩니다.
+  return Promise.all(uploadPromises);
 }
+
 

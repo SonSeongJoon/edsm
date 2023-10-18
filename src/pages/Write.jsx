@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
-import { addNewProduct, handleUpload } from '../api/firebase';
+import {addNewProduct, handleMultipleFilesUpload} from '../api/firebase';
 import { expenditure } from '../components/html/Transhtml/Expenditure';
 import { vacationPlan } from '../components/html/Transhtml/VacationPlan';
 import { ExpendForm, initExpendForm } from '../components/form/ExpendForm';
@@ -19,9 +19,18 @@ import {
   initOvertimeForm,
   OvertimeForm,
 } from '../components/form/OvertimeForm';
-import {AlternativeForm, initAlternativeForm} from "../components/form/AlternativeForm";
+import {
+  AlternativeForm,
+  initAlternativeForm,
+} from '../components/form/AlternativeForm';
 
-const options = ['지출결의서', '휴가계', '품의서', '초과근무사전품의서', '대체휴무사용품의서'];
+const options = [
+  '지출결의서',
+  '휴가계',
+  '품의서',
+  '초과근무사전품의서',
+  '대체휴무사용품의서',
+];
 const initForms = {
   지출결의서: initExpendForm,
   휴가계: initVacationForm,
@@ -54,8 +63,8 @@ export default function Write() {
   const userPhoneNum = user.user.phoneNum;
   const userCorporation = user.user.corporation;
   const currentDate = moment().format('YYYY-MM-DD');
-  // const [file, setFile] = useState(null); // 파일 상태 관리
-  const file = undefined;
+  const [files, setFiles] = useState([]); // 파일 상태 관리
+  // const file = undefined;
   const [product, setProduct] = useState({
     ...initExpendForm,
     date: currentDate,
@@ -84,14 +93,15 @@ export default function Write() {
     }
     let downloadURL;
 
-    if (file) {
+    if (files.length > 0) { // 하나 이상의 파일이 있는 경우에만 업로드 처리를 합니다.
       try {
-        downloadURL = await handleUpload(file); // Pass the selected file as an argument
+        downloadURL = await handleMultipleFilesUpload(files); // 파일 배열 전체를 전달합니다.
       } catch (error) {
-        console.error('Error uploading file:', error);
+        console.error('Error uploading files:', error);
         return;
       }
     }
+
     try {
       await addNewProduct(
         product,
@@ -133,54 +143,51 @@ export default function Write() {
     });
   };
 
-  const handleChange = useCallback((e) => {
-    const { name, value } = e.target;
+  const handleChange = useCallback(
+    (e) => {
+      const { name, value } = e.target;
 
-    if (name === 'price') {
-      const nonNumericParts = value.split(/[\d,]+/).filter(Boolean);
-      const numbersWithCommas = value.split(/[^\d,]+/).filter(Boolean);
+      if (name === 'price') {
+        const nonNumericParts = value.split(/[\d,]+/).filter(Boolean);
+        const numbersWithCommas = value.split(/[^\d,]+/).filter(Boolean);
 
-      // 숫자가 포함된 경우에만 처리
-      if (numbersWithCommas.length) {
-        const formattedNumbers = numbersWithCommas.map((numStr) =>
-           parseInt(numStr.replace(/,/g, '')).toLocaleString('en-US')  // 쉼표 제거 후 숫자로 변환하고 다시 포맷
-        );
+        // 숫자가 포함된 경우에만 처리
+        if (numbersWithCommas.length) {
+          const formattedNumbers = numbersWithCommas.map((numStr) =>
+            parseInt(numStr.replace(/,/g, '')).toLocaleString('en-US'),
+          );
 
-        let result = '';
-        let nonNumericIndex = 0;
-        let numericIndex = 0;
+          let result = '';
+          let nonNumericIndex = 0;
+          let numericIndex = 0;
 
-        // 숫자와 비숫자 세그먼트를 번갈아 가며 결과 문자열을 만든다.
-        for (let i = 0; i < value.length; i++) {
-          if (/\d/.test(value[i])) {
-            if (numericIndex < formattedNumbers.length) {
-              result += formattedNumbers[numericIndex++];
-              // 숫자 세그먼트를 건너뛰기 위해 인덱스를 조정한다.
-              i += numbersWithCommas[numericIndex - 1].length - 1;
-            }
-          } else {
-            if (nonNumericIndex < nonNumericParts.length) {
-              result += nonNumericParts[nonNumericIndex++];
-              // 비숫자 세그먼트를 건너뛰기 위해 인덱스를 조정한다.
-              i += nonNumericParts[nonNumericIndex - 1]?.length - 1 || 0;
+          for (let i = 0; i < value.length; i++) {
+            if (/\d/.test(value[i])) {
+              if (numericIndex < formattedNumbers.length) {
+                result += formattedNumbers[numericIndex++];
+                i += numbersWithCommas[numericIndex - 1].length - 1;
+              }
+            } else {
+              if (nonNumericIndex < nonNumericParts.length) {
+                result += nonNumericParts[nonNumericIndex++];
+                i += nonNumericParts[nonNumericIndex - 1]?.length - 1 || 0;
+              }
             }
           }
-        }
 
-        setProduct((prevProduct) => ({
-          ...prevProduct,
-          [name]: result,
-        }));
+          setProduct((prevProduct) => ({
+            ...prevProduct,
+            [name]: result,
+          }));
+        } else {
+          setProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
+        }
       } else {
         setProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
       }
-    } else {
-      setProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
-    }
-  }, [setProduct]);
-
-
-
+    },
+    [setProduct],
+  );
 
   const FormComponent = Forms[product.file] || ExpendForm;
   const buttons = [
@@ -263,14 +270,19 @@ export default function Write() {
               </span>
             </label>
           ))}
-          {/*<p className='mt-5 text-xm text-gray-500'>*/}
-          {/*  등록할 파일이 없다면 바로 "등록하기" 클릭*/}
-          {/*</p>*/}
-          {/*<input*/}
-          {/*   className=""*/}
-          {/*   type="file"*/}
-          {/*   onChange={(e) => setFile(e.target.files[0])}*/}
-          {/*/>*/}
+          <p className='mt-5 text-xm text-gray-500'>
+            등록할 파일이 없다면 바로 "등록하기" 클릭
+          </p>
+          <input
+             className=""
+             type="file"
+             multiple
+             onChange={(e) => {
+               const filesArray = Array.from(e.target.files);
+               setFiles(filesArray);
+             }}
+          />
+
           <div className="flex">
             <div className="mt-5 flex flex-col lg:flex-row w-full justify-center space-y-2 lg:space-y-0 lg:space-x-2">
               {buttons.map((btn, idx) => (
