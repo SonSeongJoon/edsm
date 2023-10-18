@@ -135,8 +135,38 @@ export default function Write() {
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    setProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
-  }, []);
+
+    if (name === 'price') {
+      const nonNumericParts = value.split(/[\d,]+/);
+
+      const numbersWithCommas = value.match(/[\d,]+/g);
+
+      if (numbersWithCommas) {
+        const formattedNumbers = numbersWithCommas.map((numStr) => {
+          const numberWithoutCommas = numStr.replace(/,/g, '');
+          return parseInt(numberWithoutCommas).toLocaleString('en-US');
+        });
+
+        let result = '';
+        for (let i = 0; i < nonNumericParts.length; i++) {
+          result += nonNumericParts[i];
+          if (i < formattedNumbers.length) {
+            result += formattedNumbers[i];
+          }
+        }
+
+        setProduct((prevProduct) => ({
+          ...prevProduct,
+          [name]: result,
+        }));
+      } else {
+        setProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
+      }
+    } else {
+      setProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
+    }
+  }, [setProduct]);
+
 
   const FormComponent = Forms[product.file] || ExpendForm;
   const buttons = [

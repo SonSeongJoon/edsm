@@ -15,15 +15,32 @@ const initApprovalForm = {
 };
 
 const ApprovalForm = ({ product, handleChange }) => {
-  const today = moment().format('YYYY-MM-DD'); // 오늘 날짜를 가져옵니다.
+  const today = moment().format('YYYY-MM-DD');
+
+  const handlePriceBlur = (e) => {
+    const { value } = e.target;
+
+    const formattedValue = value.replace(/\d+/g, (match) => {
+      return parseInt(match).toLocaleString();
+    });
+
+    handleChange({
+      target: {
+        name: 'price',
+        value: formattedValue
+      }
+    });
+  };
+
+
 
   return (
     <div className="max-w-screen-lg mx-auto">
       <div className="container border-gray-500">
         <div className="header p-2 sm:flex-col md:flex-row">
-          <div className='mb-3'>
+          <div className="mb-3">
             <span className="font-bold ">품의일자(고정) : </span>
-            <span>{today}</span> {/* 오늘 날짜를 표시합니다. */}
+            <span>{today}</span>
           </div>
           <div className="font-bold mr-3 mb-2 sm:mb-3 md:mb-0">제목</div>
           <input
@@ -56,19 +73,19 @@ const ApprovalForm = ({ product, handleChange }) => {
             <div className="font-bold">기간</div>
             <div className="flex items-center">
               <input
-                 type="date"
-                 name="startDate"
-                 value={product.startDate || ''}
-                 className="w-1/2 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mr-2"
-                 onChange={handleChange}
+                type="date"
+                name="startDate"
+                value={product.startDate || ''}
+                className="w-1/2 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mr-2"
+                onChange={handleChange}
               />
               ~
               <input
-                 type="date"
-                 name="endDate"
-                 value={product.endDate || ''}
-                 className="w-1/2 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 ml-2"
-                 onChange={handleChange}
+                type="date"
+                name="endDate"
+                value={product.endDate || ''}
+                className="w-1/2 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 ml-2"
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -83,6 +100,7 @@ const ApprovalForm = ({ product, handleChange }) => {
               value={product.price || ''}
               className="w-full px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
               onChange={handleChange}
+              onBlur={handlePriceBlur}
             />
           </div>
 
