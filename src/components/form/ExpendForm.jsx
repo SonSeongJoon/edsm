@@ -39,13 +39,43 @@ const ExpendForm = ({ product, setProduct, handleChange }) => {
   const updateItemValue = (idx, key, value) => {
     setProduct((prevProduct) => {
       const newItems = [...prevProduct.items];
-      newItems[idx] = { ...newItems[idx], [key]: value };
+
+      if (key === 'amount') {
+        const nonNumericParts = value.split(/[\d,]+/);
+
+        const numbersWithCommas = value.match(/[\d,]+/g);
+
+        let result = value; // 기본적으로 원래 값을 사용합니다.
+
+        if (numbersWithCommas) {
+          const formattedNumbers = numbersWithCommas.map((numStr) => {
+            const numberWithoutCommas = numStr.replace(/,/g, '');
+            return parseInt(numberWithoutCommas).toLocaleString('en-US');
+          });
+
+          result = '';
+          for (let i = 0; i < nonNumericParts.length; i++) {
+            result += nonNumericParts[i];
+            if (i < formattedNumbers.length) {
+              result += formattedNumbers[i];
+            }
+          }
+        }
+
+        newItems[idx] = { ...newItems[idx], [key]: result }; // 포맷된 값을 사용합니다.
+      } else {
+        newItems[idx] = { ...newItems[idx], [key]: value }; // 다른 필드는 원래의 로직을 그대로 사용합니다.
+      }
+
       return {
         ...prevProduct,
         items: newItems,
       };
     });
   };
+
+
+
 
   return (
     <div className="max-w-screen-2xl mx-auto">
