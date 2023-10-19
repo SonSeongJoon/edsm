@@ -34,7 +34,9 @@ export default function DetailUserFormat({
 }) {
   const [reasonText, setReasonText] = useState(null);
   const [files, setFiles] = useState(product.downloadURL || []);
-  const fileInputRef = useRef(null); // 이 ref는 파일 input 엘리먼트를 가리킵니다.
+  const fileInputRef = useRef(null);
+  const [tempFiles, setTempFiles] = useState([]); // 임시 파일 상태
+
 
   const { path } = useParams();
 
@@ -62,37 +64,47 @@ export default function DetailUserFormat({
       console.error('Error during file deletion:', error);
     }
   };
+  const handleFileChange = (e) => {
+    const newFiles = Array.from(e.target.files); // 새로운 파일들
+    setTempFiles(newFiles); // 임시 파일 상태 설정
+  };
 
   const handleSubmit = async () => {
-    if (files.length === 0) {
+    if (tempFiles.length === 0) {
       alert('추가할 파일이 없습니다.');
       return;
     }
 
     try {
-      const newDownloadURLs = await handleMultipleFilesUpload(files);
+      const newDownloadURLs = await handleMultipleFilesUpload(tempFiles);
       console.log(newDownloadURLs);
 
-      const updatedDownloadURLs = await updateProductDownloadURLs(
-        product.id,
-        newDownloadURLs,
-      );
+      setFiles((prevFiles) => [
+        ...prevFiles,
+        ...newDownloadURLs.map((url, index) => ({
+          url,
+          name: tempFiles[index].name,
+        })),
+      ]);
 
-      alert('파일이 성공적으로 추가되었습니다.');
-      // 업로드가 성공하면, 파일 상태를 업데이트하고 파일 input을 초기화합니다.
-      setFiles(updatedDownloadURLs);
       setModalProduct((prevProduct) => ({
         ...prevProduct,
-        downloadURL: updatedDownloadURLs,
+        downloadURL: newDownloadURLs,
       }));
-      // 파일 input을 초기화합니다.
+
+      alert('파일이 성공적으로 추가되었습니다.');
+
+      setTempFiles([]);
+
       if (fileInputRef.current) {
-        fileInputRef.current.value = ''; // 이렇게 하면 파일 input의 값이 초기화됩니다.
+        fileInputRef.current.value = '';
       }
     } catch (error) {
       console.error('An error occurred while adding files:', error);
+      alert('파일을 추가하는 중 문제가 발생했습니다.');
     }
   };
+
 
   return (
     <div className="w-full xl:flex">
@@ -166,20 +178,16 @@ export default function DetailUserFormat({
               <div>
                 <p className="text-sm text-gray-500 mt-1">첨부파일 추가하기</p>
                 <input
-                  type="file"
-                  multiple
-                  ref={fileInputRef}
-                  className="text-xs"
-                  onChange={(e) => {
-                    const newFiles = Array.from(e.target.files);
-                    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
-                  }}
+                   type="file"
+                   multiple
+                   ref={fileInputRef}
+                   onChange={handleFileChange}
                 />
                 <button
                   className="ml-2 bg-gray-500 hover:bg-gray-700 text-white text-xs py-1 px-2 rounded"
                   onClick={handleSubmit}
                 >
-                  등록
+                  등 록
                 </button>
               </div>
             </div>
@@ -201,24 +209,25 @@ export default function DetailUserFormat({
                     다운로드 클릭
                   </a>
                   <span className="text-gray-700 text-xs">{file.name}</span>
-                  <button
-                    onClick={() => {
-                      const confirmDelete = window.confirm(
-                        `${file.name} 파일을 삭제하시겠습니까?`,
-                      );
-                      if (confirmDelete) {
-                        deleteFile(file, index);
-                      }
-                    }}
-                    className="text-red-500 hover:text-red-700 ml-2"
-                  >
-                    X
-                  </button>
+                  {!isMst ? (
+                    <button
+                      onClick={() => {
+                        const confirmDelete = window.confirm(
+                          `${file.name} 파일을 삭제하시겠습니까?`,
+                        );
+                        if (confirmDelete) {
+                          deleteFile(file, index);
+                        }
+                      }}
+                      className="text-red-500 hover:text-red-700 ml-2"
+                    >
+                      X
+                    </button>
+                  ) : null}
                 </div>
               ))}
             </div>
           ) : null}
-          {/* 파일 추가하기 섹션. 첨부파일 섹션 바로 아래에 위치시킵니다. */}
         </div>
         <div className="container mx-auto mt-5 flex w-full justify-end">
           <button
