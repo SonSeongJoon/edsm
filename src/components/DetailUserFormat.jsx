@@ -48,6 +48,7 @@ export default function DetailUserFormat({
     fetchReason();
   }, [product.id]);
   const allApproved = states?.every((stateItem) => stateItem.state === '승인');
+  const oneApproved = states?.some((stateItem) => stateItem.state === '승인');
 
   const deleteFile = async (fileToDelete, index) => {
     try {
@@ -150,13 +151,21 @@ export default function DetailUserFormat({
               ) : null}
             </div>
             <div>
-              {isMst ? (
+              {!isMst && !oneApproved ? (
                 <button
                   className="bg-brand text-white px-2 py-1 rounded text-sm mr-2 hover:bg-red-700"
                   onClick={handleDelete}
                 >
-                  삭제하기
+                  승인 전 삭제
                 </button>
+              ) : null}
+              {isMst ? (
+                 <button
+                    className="bg-brand text-white px-2 py-1 rounded text-sm mr-2 hover:bg-red-700"
+                    onClick={handleDelete}
+                 >
+                   삭제
+                 </button>
               ) : null}
             </div>
           </div>
