@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { expenditure } from '../components/html/Transhtml/Expenditure';
-import {deleteProduct, getAllOneState, getData, updateProduct} from '../api/firebase';
+import {
+  deleteProduct,
+  getAllOneState,
+  getData,
+  updateProduct,
+} from '../api/firebase';
 import { getDatabase, ref, onValue, off } from 'firebase/database';
 import DetailUserFormat from '../components/DetailUserFormat';
 import { useAuthContext } from '../context/AuthContext';
 import DetailAdminFormat from '../components/DetailAdminFormat';
 import { vacationPlan } from '../components/html/Transhtml/VacationPlan';
 import { useQuery } from '@tanstack/react-query';
-import {approvalDocument} from "../components/html/Transhtml/approvalDocument";
+import { approvalDocument } from '../components/html/Transhtml/approvalDocument';
 
 export default function Detail() {
   const location = useLocation();
@@ -27,17 +32,15 @@ export default function Detail() {
     data: allState,
     isLoading: isLoadingAllState,
     isError: isErrorAllState,
-    error: errorAllState
-  } = useQuery(["allState", id], () => getAllOneState(id));
+    error: errorAllState,
+  } = useQuery(['allState', id], () => getAllOneState(id));
 
   const {
     data: product,
     isLoading: isLoadingProduct,
     isError: isErrorProduct,
-    error: errorProduct
-  } = useQuery(["product", id], () => getData(id));
-
-
+    error: errorProduct,
+  } = useQuery(['product', id], () => getData(id));
 
   useEffect(() => {
     if (product) {
@@ -60,29 +63,29 @@ export default function Detail() {
   useEffect(() => {
     if (allState && product) {
       const filteredStates = allState
-      .filter((stateItem) => stateItem.id === product.id)
-      .map((stateItem) => ({
-        name: stateItem.name,
-        state: stateItem.state,
-      }));
+        .filter((stateItem) => stateItem.id === product.id)
+        .map((stateItem) => ({
+          name: stateItem.name,
+          state: stateItem.state,
+        }));
       setStates(filteredStates);
     }
   }, [allState, product]);
-
 
   if (isLoadingAllState || isLoadingProduct) {
     return <p>Loading...</p>;
   }
 
   const fileFunctionMap = {
-    '지출결의서': expenditure,
-    '휴가계': vacationPlan,
-    '품의서': approvalDocument,
+    지출결의서: expenditure,
+    휴가계: vacationPlan,
+    품의서: approvalDocument,
   };
 
-  const htmlString = product && product.file && fileFunctionMap[product.file]
-     ? fileFunctionMap[product.file](product)
-     : null;
+  const htmlString =
+    product && product.file && fileFunctionMap[product.file]
+      ? fileFunctionMap[product.file](product)
+      : null;
 
   function htmlToFile(fileExtension) {
     const sourceMap = {
@@ -149,49 +152,49 @@ export default function Detail() {
     }
   }
 
-
-
   const displayProduct = updatedProduct || product;
   const isAdmin = user?.user?.isAdmin;
   const isReceivePath = currentPath.includes('/receive');
   return (
-     <div className="flex justify-center items-center h-full">
-       {isErrorProduct || isErrorAllState ? (
+     <div className="relative">
+       <div className="flex justify-center items-center h-full mt-5 border-b border-gray-200"> {/* 하단 테두리 추가 */}
+        {isErrorProduct || isErrorAllState ? (
           <p>삭제된 데이터입니다.</p>
-       ) : isErrorProduct ? (
+        ) : isErrorProduct ? (
           <p>{errorProduct.message}</p>
-       ) : isErrorAllState ? (
+        ) : isErrorAllState ? (
           <p>{errorAllState.message}</p>
-       ) : product ? (
+        ) : product ? (
           isAdmin && isReceivePath ? (
-             <DetailAdminFormat
-                displayProduct={displayProduct}
-                product={product}
-                navigate={navigate}
-                states={states}
-             />
+            <DetailAdminFormat
+              displayProduct={displayProduct}
+              product={product}
+              navigate={navigate}
+              states={states}
+            />
           ) : (
-             <DetailUserFormat
-                showEditModal={showEditModal}
-                modalProduct={modalProduct}
-                handleEditChange={handleEditChange}
-                handleItemValue={handleItemValue}
-                handleSave={handleSave}
-                closeEditModal={closeEditModal}
-                displayProduct={displayProduct}
-                product={product}
-                openEditModal={openEditModal}
-                handleDelete={handleDelete}
-                navigate={navigate}
-                htmlToFile={htmlToFile}
-                isMst={isMst}
-                states={states}
-                setModalProduct={setModalProduct}
-             />
+            <DetailUserFormat
+              showEditModal={showEditModal}
+              modalProduct={modalProduct}
+              handleEditChange={handleEditChange}
+              handleItemValue={handleItemValue}
+              handleSave={handleSave}
+              closeEditModal={closeEditModal}
+              displayProduct={displayProduct}
+              product={product}
+              openEditModal={openEditModal}
+              handleDelete={handleDelete}
+              navigate={navigate}
+              htmlToFile={htmlToFile}
+              isMst={isMst}
+              states={states}
+              setModalProduct={setModalProduct}
+            />
           )
-       ) : (
+        ) : (
           <p>Loading...</p>
-       )}
-     </div>
+        )}
+      </div>
+    </div>
   );
 }

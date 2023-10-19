@@ -28,7 +28,7 @@ function App() {
             <Sidebar toggleSidebar={toggleSidebar} />
           </div>
           <QueryClientProvider client={queryClient}>
-            <main className="flex-grow overflow-y-auto max-h-[calc(100vh-4.1rem)]">
+            <main className="flex-grow overflow-y-auto overflow-x-hidden max-h-[calc(100vh-4.2rem)]">
               <Outlet />
             </main>
           </QueryClientProvider>

@@ -15,8 +15,15 @@ import {
   ref,
   remove,
   set,
+  update,
 } from 'firebase/database';
-import { getStorage, ref as Ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref as Ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from 'firebase/storage';
 
 
 import { v4 as uuid } from 'uuid';
@@ -289,8 +296,25 @@ export async function updateProduct(
 }
 
 export async function deleteProduct(productId) {
+  const db = getDatabase();
   const productRef = ref(db, `products/${productId}`);
   const adminRef = ref(db, `admins/${productId}`);
+
+  const productSnapshot = await get(productRef);
+  if (productSnapshot.exists()) {
+    const productData = productSnapshot.val();
+
+    if (productData.downloadURL && Array.isArray(productData.downloadURL)) {
+      const storage = getStorage();
+      const promises = productData.downloadURL.map((file) => {
+        const url = new URL(file.url);
+        const fileRef = Ref(storage, url);
+
+        return deleteObject(fileRef);
+      });
+      await Promise.all(promises);
+    }
+  }
   await Promise.all([remove(productRef), remove(adminRef)]);
 }
 
@@ -440,47 +464,108 @@ export async function getUsersData() {
 }
 
 export async function getData(id) {
-	const db = getDatabase();
-	const productRef = ref(db, `products/${id}`);
+  const db = getDatabase();
+  const productRef = ref(db, `products/${id}`);
 
-	try {
-		const snapshot = await get(productRef);
-		if(snapshot.exists()) {
-			return snapshot.val();
-		} else {
-			console.log(`No data found for product id: ${id}`);
-			Error(`No data found for product id: ${id}`);
-		}
-	} catch (error) {
-		console.error('Error fetching data:', error);
-		throw error;
-	}
+  try {
+    const snapshot = await get(productRef);
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      console.log(`No data found for product id: ${id}`);
+      Error(`No data found for product id: ${id}`);
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
 }
 
-export const handleUpload = async (file) => {
+export const handleMultipleFilesUpload = async (files) => {
   const storage = getStorage();
-  const storageRef = Ref(storage, 'uploads/' + file.name);
+  const uploadPromises = [];
 
-  const uploadTask = uploadBytesResumable(storageRef, file);
+  files.forEach((file) => {
+    const storageRef = Ref(storage, 'uploads/' + file.name);
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
-  return new Promise((resolve, reject) => {
-    uploadTask.on('state_changed',
-       (snapshot) => {
-         // Upload progress
-         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-         console.log('Upload is ' + progress + '% done');
-       },
-       (error) => {
-         console.log(error);
-         reject(error);
-       },
-       () => {
-         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-           console.log('File available at', downloadURL);
-           resolve(downloadURL);
-         });
-       }
-    );
+    const uploadPromise = new Promise((resolve, reject) => {
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+        },
+        (error) => {
+          console.log(error);
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            resolve({
+              url: downloadURL,
+              name: file.name,
+            });
+          });
+        },
+      );
+    });
+    uploadPromises.push(uploadPromise);
   });
+
+  // Promise.all을 사용하여 모든 업로드 작업이 완료될 때까지 기다립니다.
+  // 모든 프로미스가 해결되면, 각 파일에 대한 다운로드 URL과 파일명을 포함하는 객체의 배열이 반환됩니다.
+  return Promise.all(uploadPromises);
+};
+
+export const handleFileDelete = async (productId, file, index) => {
+  try {
+    const storage = getStorage();
+    const fileRef = Ref(storage, `uploads/${file.name}`); // 파일의 스토리지 경로를 지정합니다.
+    await deleteObject(fileRef);
+
+    // Realtime Database에서 제품 데이터 가져오기
+    const db = getDatabase();
+    const productRef = ref(db, 'products/' + productId);
+
+    // 제품 데이터를 가져옵니다.
+    const snapshot = await get(productRef);
+    if (snapshot.exists()) {
+      const productData = snapshot.val(); // 제품 데이터를 가져옵니다.
+
+      const updatedDownloadURLs = productData.downloadURL || [];
+      updatedDownloadURLs.splice(index, 1); // 배열에서 해당 요소를 제거합니다.
+
+      await update(productRef, { downloadURL: updatedDownloadURLs });
+    } else {
+      console.log('No such product!');
+    }
+  } catch (error) {
+    console.error('Error removing file: ', error);
+  }
+};
+
+// Firebase Realtime Database에서 특정 제품의 파일 다운로드 URL을 업데이트하는 함수
+export async function updateProductDownloadURLs(productId, newFileURLs) {
+  try {
+    // 데이터베이스에서 해당 제품의 참조를 가져옵니다.
+    const productRef = ref(db, 'products/' + productId);
+
+    // 제품의 downloadURL 필드를 새 파일 URL들로 직접 업데이트합니다.
+    await update(productRef, {
+      downloadURL: newFileURLs, // 새로운 파일 URL들만 포함
+    });
+
+    console.log('File URLs updated with new files only.');
+    return newFileURLs; // 새 파일 URL들을 반환합니다.
+  } catch (error) {
+    console.error('An error occurred while updating file URLs:', error);
+    throw error; // 오류를 호출자에게 전파합니다.
+  }
 }
+
+
+
 
