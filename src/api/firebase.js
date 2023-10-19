@@ -296,8 +296,25 @@ export async function updateProduct(
 }
 
 export async function deleteProduct(productId) {
+  const db = getDatabase();
   const productRef = ref(db, `products/${productId}`);
   const adminRef = ref(db, `admins/${productId}`);
+
+  const productSnapshot = await get(productRef);
+  if (productSnapshot.exists()) {
+    const productData = productSnapshot.val();
+
+    if (productData.downloadURL && Array.isArray(productData.downloadURL)) {
+      const storage = getStorage();
+      const promises = productData.downloadURL.map((file) => {
+        const url = new URL(file.url);
+        const fileRef = Ref(storage, url);
+
+        return deleteObject(fileRef);
+      });
+      await Promise.all(promises);
+    }
+  }
   await Promise.all([remove(productRef), remove(adminRef)]);
 }
 
