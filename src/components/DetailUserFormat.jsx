@@ -47,7 +47,7 @@ export default function DetailUserFormat({
 
     fetchReason();
   }, [product.id]);
-  const allApproved = states?.every((stateItem) => stateItem.state === '승인');
+  // const allApproved = states?.every((stateItem) => stateItem.state === '승인');
   const oneApproved = states?.some((stateItem) => stateItem.state === '승인');
 
   const deleteFile = async (fileToDelete, index) => {
@@ -141,7 +141,7 @@ export default function DetailUserFormat({
           </div>
           <div className="flex justify-between items-end mt-3">
             <div>
-              {!isMst && !allApproved ? (
+              {!isMst && !oneApproved ? (
                 <button
                   className="bg-gray-500 text-white px-2 py-1 rounded text-sm mr-2 hover:bg-gray-600"
                   onClick={openEditModal}
