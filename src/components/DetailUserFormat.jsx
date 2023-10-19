@@ -245,7 +245,7 @@ export default function DetailUserFormat({
 
           <button
             className="bg-blue-800 text-white px-4 py-2 rounded hover:bg-blue-900 ml-3"
-            onClick={() => htmlToFile('doc')}
+            onClick={() => htmlToFile('doc', product.title)}
           >
             워드 다운로드
           </button>
