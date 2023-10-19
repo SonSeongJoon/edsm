@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react'; // useRef를 import 합니다.
 
 import { EditModal } from './EditModal';
 import ReasonText from './ReasonText';
 import ExpenditureShow from './html/Show/ExpenditureShow';
-import { getRejectReasonProduct } from '../api/firebase';
+import {
+  getRejectReasonProduct,
+  handleFileDelete,
+  handleMultipleFilesUpload,
+  updateProductDownloadURLs,
+} from '../api/firebase';
 import { VacationShow } from './html/Show/VacationShow';
 import ApprovalShow from './html/Show/approvalShow';
 import { OvertimeShow } from './html/Show/OvertimeShow';
-import {useParams} from "react-router-dom";
-import {AlternativeShow} from "./html/Show/AlternativeShow";
+import { useParams } from 'react-router-dom';
+import { AlternativeShow } from './html/Show/AlternativeShow';
 
 export default function DetailUserFormat({
   showEditModal,
@@ -28,8 +33,10 @@ export default function DetailUserFormat({
   handleDelete,
 }) {
   const [reasonText, setReasonText] = useState(null);
-  const {path} = useParams();
+  const [files, setFiles] = useState(product.downloadURL || []);
+  const fileInputRef = useRef(null); // 이 ref는 파일 input 엘리먼트를 가리킵니다.
 
+  const { path } = useParams();
 
   useEffect(() => {
     const fetchReason = async () => {
@@ -40,6 +47,52 @@ export default function DetailUserFormat({
     fetchReason();
   }, [product.id]);
   const allApproved = states?.every((stateItem) => stateItem.state === '승인');
+
+  const deleteFile = async (fileToDelete, index) => {
+    try {
+      await handleFileDelete(product.id, fileToDelete, index);
+
+      const updatedFiles = files.filter(
+        (file, fileIndex) => fileIndex !== index,
+      );
+      setFiles(updatedFiles);
+
+      console.log('File deleted successfully');
+    } catch (error) {
+      console.error('Error during file deletion:', error);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (files.length === 0) {
+      alert('추가할 파일이 없습니다.');
+      return;
+    }
+
+    try {
+      const newDownloadURLs = await handleMultipleFilesUpload(files);
+      console.log(newDownloadURLs);
+
+      const updatedDownloadURLs = await updateProductDownloadURLs(
+        product.id,
+        newDownloadURLs,
+      );
+
+      alert('파일이 성공적으로 추가되었습니다.');
+      // 업로드가 성공하면, 파일 상태를 업데이트하고 파일 input을 초기화합니다.
+      setFiles(updatedDownloadURLs);
+      setModalProduct((prevProduct) => ({
+        ...prevProduct,
+        downloadURL: updatedDownloadURLs,
+      }));
+      // 파일 input을 초기화합니다.
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''; // 이렇게 하면 파일 input의 값이 초기화됩니다.
+      }
+    } catch (error) {
+      console.error('An error occurred while adding files:', error);
+    }
+  };
 
   return (
     <div className="w-full xl:flex">
@@ -64,7 +117,7 @@ export default function DetailUserFormat({
           ) : displayProduct.file === '초과근무사전품의서' ? (
             <OvertimeShow product={displayProduct} />
           ) : displayProduct.file === '대체휴무사용품의서' ? (
-             <AlternativeShow product={displayProduct} />
+            <AlternativeShow product={displayProduct} />
           ) : null}
           <div className="mt-5 mb-3 text-sm">
             <span className="font-bold">수신자:</span>
@@ -107,40 +160,76 @@ export default function DetailUserFormat({
                 </button>
               ) : null}
             </div>
-
           </div>
-          {product.downloadURL && product.downloadURL.length > 0 ? (
-             <div className="mt-3 flex flex-col items-start space-y-1 p-3">
-               <hr className="border-t border-gray-200 w-full" />
-               <h3 className="text-sm font-bold text-gray-700">첨부파일</h3>
-               {product.downloadURL.map((file, index) => (
-                  <div key={index} className="flex items-center space-x-1">
-                    <a
-                       href={file.url}
-                       download
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       className="px-2 py-1 rounded border border-gray-700 text-xs hover:bg-gray-500 hover:text-white transition duration-200 ease-in-out"
-                    >
-                      다운로드 클릭
-                    </a>
-                    <span className="text-gray-700 text-xs">{file.name}</span>
-                  </div>
-               ))}
-             </div>
+          {!isMst ? (
+            <div className="flex justify-end items-center">
+              <div>
+                <p className="text-sm text-gray-500 mt-1">첨부파일 추가하기</p>
+                <input
+                  type="file"
+                  multiple
+                  ref={fileInputRef}
+                  className="text-xs"
+                  onChange={(e) => {
+                    const newFiles = Array.from(e.target.files);
+                    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+                  }}
+                />
+                <button
+                  className="ml-2 bg-gray-500 hover:bg-gray-700 text-white text-xs py-1 px-2 rounded"
+                  onClick={handleSubmit}
+                >
+                  등록
+                </button>
+              </div>
+            </div>
           ) : null}
 
+          {files.length > 0 ? (
+            <div className="flex flex-col items-start space-y-1 p-3">
+              <hr className="border-t border-gray-200 w-full" />
+              <h3 className="text-sm font-bold text-gray-700">첨부파일</h3>
+              {files.map((file, index) => (
+                <div key={index} className="flex items-center space-x-1">
+                  <a
+                    href={file.url}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2 py-1 rounded border border-gray-700 text-xs hover:bg-gray-500 hover:text-white transition duration-200 ease-in-out"
+                  >
+                    다운로드 클릭
+                  </a>
+                  <span className="text-gray-700 text-xs">{file.name}</span>
+                  <button
+                    onClick={() => {
+                      const confirmDelete = window.confirm(
+                        `${file.name} 파일을 삭제하시겠습니까?`,
+                      );
+                      if (confirmDelete) {
+                        deleteFile(file, index);
+                      }
+                    }}
+                    className="text-red-500 hover:text-red-700 ml-2"
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : null}
+          {/* 파일 추가하기 섹션. 첨부파일 섹션 바로 아래에 위치시킵니다. */}
         </div>
         <div className="container mx-auto mt-5 flex w-full justify-end">
           <button
-             onClick={() => {
-               if (window.history.length > 2) {
-                 navigate(-1);
-               } else {
-                 navigate(`/${path}`);
-               }
-             }}
-             className="px-4 py-2 rounded hover:bg-brand-dark border bg-gray-200 border-gray-300"
+            onClick={() => {
+              if (window.history.length > 2) {
+                navigate(-1);
+              } else {
+                navigate(`/${path}`);
+              }
+            }}
+            className="px-4 py-2 rounded hover:bg-brand-dark border bg-gray-200 border-gray-300"
           >
             뒤로 가기
           </button>
