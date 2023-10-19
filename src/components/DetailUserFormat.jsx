@@ -34,9 +34,8 @@ export default function DetailUserFormat({
 }) {
   const [reasonText, setReasonText] = useState(null);
   const [files, setFiles] = useState(product.downloadURL || []);
+  const [tempFiles, setTempFiles] = useState([]); // 사용자가 선택한 파일을 임시로 저장하는 상태
   const fileInputRef = useRef(null);
-  const [tempFiles, setTempFiles] = useState([]); // 임시 파일 상태
-
 
   const { path } = useParams();
 
@@ -64,47 +63,35 @@ export default function DetailUserFormat({
       console.error('Error during file deletion:', error);
     }
   };
-  const handleFileChange = (e) => {
-    const newFiles = Array.from(e.target.files); // 새로운 파일들
-    setTempFiles(newFiles); // 임시 파일 상태 설정
-  };
 
   const handleSubmit = async () => {
     if (tempFiles.length === 0) {
       alert('추가할 파일이 없습니다.');
       return;
     }
-
+    const allFiles = [...files, ...tempFiles];
     try {
-      const newDownloadURLs = await handleMultipleFilesUpload(tempFiles);
+      const newDownloadURLs = await handleMultipleFilesUpload(allFiles);
       console.log(newDownloadURLs);
 
-      setFiles((prevFiles) => [
-        ...prevFiles,
-        ...newDownloadURLs.map((url, index) => ({
-          url,
-          name: tempFiles[index].name,
-        })),
-      ]);
-
-      setModalProduct((prevProduct) => ({
-        ...prevProduct,
-        downloadURL: newDownloadURLs,
-      }));
+      const updatedDownloadURLs = await updateProductDownloadURLs(
+        product.id,
+        newDownloadURLs,
+      );
 
       alert('파일이 성공적으로 추가되었습니다.');
-
-      setTempFiles([]);
-
+      setFiles(updatedDownloadURLs);
+      setModalProduct((prevProduct) => ({
+        ...prevProduct,
+        downloadURL: updatedDownloadURLs,
+      }));
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
     } catch (error) {
       console.error('An error occurred while adding files:', error);
-      alert('파일을 추가하는 중 문제가 발생했습니다.');
     }
   };
-
 
   return (
     <div className="w-full xl:flex">
@@ -178,16 +165,20 @@ export default function DetailUserFormat({
               <div>
                 <p className="text-sm text-gray-500 mt-1">첨부파일 추가하기</p>
                 <input
-                   type="file"
-                   multiple
-                   ref={fileInputRef}
-                   onChange={handleFileChange}
+                  type="file"
+                  multiple
+                  className="text-xm"
+                  ref={fileInputRef}
+                  onChange={(e) => {
+                    const newFiles = Array.from(e.target.files);
+                    setTempFiles(newFiles); // 선택된 파일을 tempFiles에 설정합니다.
+                  }}
                 />
                 <button
                   className="ml-2 bg-gray-500 hover:bg-gray-700 text-white text-xs py-1 px-2 rounded"
                   onClick={handleSubmit}
                 >
-                  등 록
+                  이 버튼을 눌러야 저장됩니다.
                 </button>
               </div>
             </div>

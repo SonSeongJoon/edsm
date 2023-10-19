@@ -271,10 +271,10 @@ export default function Write() {
             </label>
           ))}
           <p className='mt-5 text-xm text-gray-500'>
-            등록할 파일이 없다면 바로 "등록하기" 클릭
+            다중 선택 시, 동일한 위치에서 "ctrl" 버튼을 누른 상태에서 클릭
           </p>
           <input
-             className=""
+             className="text-xm"
              type="file"
              multiple
              onChange={(e) => {
