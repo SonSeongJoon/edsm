@@ -295,10 +295,10 @@ export async function updateProduct(
   }
 }
 
-export async function deleteProduct(productId) {
+export async function deleteProduct(productID) {
   const db = getDatabase();
-  const productRef = ref(db, `products/${productId}`);
-  const adminRef = ref(db, `admins/${productId}`);
+  const productRef = ref(db, `products/${productID}`);
+  const adminRef = ref(db, `admins/${productID}`);
 
   const productSnapshot = await get(productRef);
   if (productSnapshot.exists()) {

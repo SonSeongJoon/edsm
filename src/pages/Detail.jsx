@@ -142,9 +142,11 @@ export default function Detail() {
   }
 
   function handleDelete() {
+    const productID = product.id;
+    const userName = product.name;
     const isConfirmed = window.confirm('정말 삭제하시겠습니까?');
     if (isConfirmed) {
-      deleteProduct(product.id)
+      deleteProduct(product, userName, productID, modalProduct)
         .then(() => {
           alert('삭제되었습니다.');
         })

@@ -169,7 +169,7 @@ export default function DetailUserFormat({
               ) : null}
             </div>
           </div>
-          {!isMst ? (
+          {!isMst && !oneApproved? (
             <div className="flex justify-end items-center">
               <div>
                 <p className="text-sm text-gray-500 mt-1">첨부파일 추가하기</p>
@@ -209,7 +209,7 @@ export default function DetailUserFormat({
                     다운로드 클릭
                   </a>
                   <span className="text-gray-700 text-xs">{file.name}</span>
-                  {!isMst ? (
+                  {!isMst && !oneApproved ? (
                     <button
                       onClick={() => {
                         const confirmDelete = window.confirm(
