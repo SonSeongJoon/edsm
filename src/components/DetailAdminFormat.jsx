@@ -15,6 +15,7 @@ import ApprovalShow from './html/Show/approvalShow';
 import { sendKakaoAgreeProduct } from '../api/kakao';
 import { OvertimeShow } from './html/Show/OvertimeShow';
 import { useParams } from 'react-router-dom';
+import {AlternativeShow} from "./html/Show/AlternativeShow";
 
 const STATE_APPROVED = '승인';
 const STATE_PENDING = '대기';
@@ -25,7 +26,7 @@ const COMPONENT_MAP = {
   휴가계: VacationShow,
   품의서: ApprovalShow,
   초과근무사전품의서: OvertimeShow,
-  대체휴무사용품의서: ApprovalShow,
+  대체휴무사용품의서: AlternativeShow,
 };
 
 export default function DetailAdminFormat({
