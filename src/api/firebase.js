@@ -180,9 +180,9 @@ export async function getProduct(filterState) {
 				if(product.userId !== userId) return false;
 
 				// filterState 값이 주어졌을 때만 state를 확인
-				if(filterState && product.state !== filterState) return false;
+				return !(filterState && product.state !== filterState);
 
-				return true;
+
 			});
 			return filteredProducts.sort((a, b) => {
 				if(a.date < b.date) return 1;
