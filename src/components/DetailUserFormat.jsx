@@ -160,16 +160,16 @@ export default function DetailUserFormat({
                 </button>
               ) : null}
               {isMst ? (
-                 <button
-                    className="bg-brand text-white px-2 py-1 rounded text-sm mr-2 hover:bg-red-700"
-                    onClick={handleDelete}
-                 >
-                   삭제
-                 </button>
+                <button
+                  className="bg-brand text-white px-2 py-1 rounded text-sm mr-2 hover:bg-red-700"
+                  onClick={handleDelete}
+                >
+                  삭제
+                </button>
               ) : null}
             </div>
           </div>
-          {!isMst && !oneApproved? (
+          {!isMst && !oneApproved ? (
             <div className="flex justify-end items-center">
               <div>
                 <p className="text-sm text-gray-500 mt-1">첨부파일 추가하기</p>

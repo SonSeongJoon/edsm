@@ -25,6 +25,7 @@ const COMPONENT_MAP = {
   휴가계: VacationShow,
   품의서: ApprovalShow,
   초과근무사전품의서: OvertimeShow,
+  대체휴무사용품의서: ApprovalShow,
 };
 
 export default function DetailAdminFormat({
