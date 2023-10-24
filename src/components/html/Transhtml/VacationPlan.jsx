@@ -5,6 +5,7 @@ export const vacationPlan = ({
   AttributionYear,
   TotalLeaveDays,
   UsedDays,
+  daysDifference,
   RemainDays,
   startDate,
   endDate,
@@ -25,15 +26,6 @@ export const vacationPlan = ({
       }
     }
   }
-   const calculateDateDifference = (start, end) => {
-      const startDateObj = new Date(start);
-      const endDateObj = new Date(end);
-      const differenceInTime = endDateObj - startDateObj;
-      return parseInt(differenceInTime / (1000 * 60 * 60 * 24)) + 1;
-   };
-
-   const daysDifference = calculateDateDifference(startDate, endDate);
-
   return `<!DOCTYPE html>
 <html lang="ko">
 <head>
