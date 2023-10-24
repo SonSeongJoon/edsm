@@ -128,102 +128,102 @@ export const TableComponent = ({
     <div className="w-full text-xm sm:text-md">
       {isLoading && <p>Loading...</p>}
       {error && <p>Error...</p>}
-        {isMst && (
-          <div className="flex mb-3 m-3">
-            <select
-              onChange={(e) => {
-                setSelectedDept(e.target.value);
-                setSelectedName('전체');
-              }}
-              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            >
-              <option value="전체">전체 부서</option>
-              {Object.keys(deptMembers).map((dept) => (
-                <option key={dept} value={dept}>
-                  {dept}
-                </option>
-              ))}
-            </select>
-            <select
-              onChange={(e) => setSelectedName(e.target.value)}
-              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            >
-              <option value="전체">전체 이름</option>
-              {currentDeptMembers.map((name) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
-              ))}
-            </select>
-            <select
-              onChange={(e) => setSelectedYear(e.target.value)}
-              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            >
-              {uniqueYears.map((year) => (
-                <option key={year} value={year}>
-                  {year}년
-                </option>
-              ))}
-            </select>
-            <select
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            >
-              {uniqueMonths.map((month) => (
-                <option key={month} value={month}>
-                  {month}월
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+      {isMst && (
+        <div className="flex mb-3 m-3">
+          <select
+            onChange={(e) => {
+              setSelectedDept(e.target.value);
+              setSelectedName('전체');
+            }}
+            className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            <option value="전체">전체 부서</option>
+            {Object.keys(deptMembers).map((dept) => (
+              <option key={dept} value={dept}>
+                {dept}
+              </option>
+            ))}
+          </select>
+          <select
+            onChange={(e) => setSelectedName(e.target.value)}
+            className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            <option value="전체">전체 이름</option>
+            {currentDeptMembers.map((name) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
+          <select
+            onChange={(e) => setSelectedYear(e.target.value)}
+            className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            {uniqueYears.map((year) => (
+              <option key={year} value={year}>
+                {year}년
+              </option>
+            ))}
+          </select>
+          <select
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            {uniqueMonths.map((month) => (
+              <option key={month} value={month}>
+                {month}월
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
       <table className="min-w-full bg-white border-t border-b border-gray-300 divide-y divide-gray-300 ">
         <thead>
           <tr>
+            <th className="px-3 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {isAdmins || !isMst ? (
+                '읽음표시'
+              ) : (
+                <select
+                  onChange={(e) => setSelectState(e.target.value)}
+                  className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                >
+                  {uniqueState.map((state) => (
+                    <option key={state} value={state}>
+                      {state}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </th>
             <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               제목
             </th>
             <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               <select
-                 onChange={(e) => setSelectFilename(e.target.value)}
-                 className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400"
-
+                onChange={(e) => setSelectFilename(e.target.value)}
+                className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400"
               >
                 {uniqueFiles.map((file) => (
-                   <option key={file} value={file}>
-                     {file}
-                   </option>
+                  <option key={file} value={file}>
+                    {file}
+                  </option>
                 ))}
               </select>
             </th>
-            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              날짜
-            </th>
-            {isMst ? (
-              <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                부서명
-              </th>
-            ) : null}
             {isAdmins || isMst ? (
               <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 작성자
               </th>
             ) : null}
+
+            {isMst ? (
+              <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                부서명
+              </th>
+            ) : null}
             <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              {isAdmins || !isMst ? (
-                 '읽음표시'
-              ) : (
-                 <select
-                    onChange={(e) => setSelectState(e.target.value)}
-                    className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                 >
-                   {uniqueState.map((state) => (
-                      <option key={state} value={state}>
-                        {state}
-                      </option>
-                   ))}
-                 </select>
-              )}
+              날짜
             </th>
           </tr>
         </thead>
