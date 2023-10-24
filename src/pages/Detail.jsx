@@ -87,7 +87,12 @@ export default function Detail() {
       ? fileFunctionMap[product.file](product)
       : null;
 
-  function htmlToFile(fileExtension, fileName) { // 'fileName' 파라미터를 추가합니다.
+  function htmlToFile(fileExtension, fileName) {
+    if (fileExtension === 'doc') {
+      printHTML(htmlString);
+      return;
+    }
+
     const sourceMap = {
       doc: 'data:application/msword;charset=utf-8,',
       html: 'data:text/html;charset=utf-8,',
@@ -95,11 +100,22 @@ export default function Detail() {
     const source = sourceMap[fileExtension] || sourceMap['html'];
     const fileDownload = document.createElement('a');
     document.body.appendChild(fileDownload);
-    fileDownload.href = source + encodeURIComponent(htmlString); // 'htmlString' 변수는 어디선가 정의되어야 합니다.
-    fileDownload.download = fileName + '.' + fileExtension; // 지정된 파일 이름을 사용합니다.
+    fileDownload.href = source + encodeURIComponent(htmlString);
+    fileDownload.download = fileName + '.' + fileExtension;
     fileDownload.click();
     document.body.removeChild(fileDownload);
   }
+  function printHTML(htmlString) {
+    const printWindow = window.open('', '_blank');
+    printWindow.document.open();
+    printWindow.document.write(htmlString);
+    printWindow.document.close();
+
+    setTimeout(() => {
+      printWindow.print();
+    }, 250);
+  }
+
 
 
   const openEditModal = () => {
