@@ -180,15 +180,15 @@ export const TableComponent = ({
       <table className="min-w-full bg-white border-t border-b border-gray-300 divide-y divide-gray-300 ">
         <thead>
           <tr>
-            <th className="px-3 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               <select
-                 onChange={(e) => setSelectState(e.target.value)}
-                 className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                onChange={(e) => setSelectState(e.target.value)}
+                className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400 border-dotted border-gray-300 border-2"
               >
                 {uniqueState.map((state) => (
-                   <option key={state} value={state}>
-                     {state}
-                   </option>
+                  <option key={state} value={state}>
+                    {state}
+                  </option>
                 ))}
               </select>
             </th>
@@ -198,7 +198,7 @@ export const TableComponent = ({
             <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               <select
                 onChange={(e) => setSelectFilename(e.target.value)}
-                className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400 border-dotted border-gray-300 border-2"
               >
                 {uniqueFiles.map((file) => (
                   <option key={file} value={file}>
