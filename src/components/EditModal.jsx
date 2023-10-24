@@ -4,6 +4,9 @@ import ModalVacation from './html/modal/Modalvacation';
 import ModalApproval from './html/modal/Modalapproval';
 import {ModalOvertime} from "./html/modal/ModalOvertime";
 import {ModalAlternative} from "./html/modal/ModalAlternative";
+import ModalReporterGift from "./html/modal/ModalReporterGift";
+import ModalTravelExpenses from "./html/modal/ModalTravelExpenses";
+import ModalCustomer from "./html/modal/ModalCustomer";
 
 export function EditModal({
   modalProduct,
@@ -71,6 +74,21 @@ export function EditModal({
            />
         ) : modalProduct.file === '대체휴무사용품의서' ? (
            <ModalAlternative
+              modalProduct={modalProduct}
+              handleEditChange={handleEditChange}
+           />
+        ) : modalProduct.file === '기자선물품의서' ? (
+           <ModalReporterGift
+              modalProduct={modalProduct}
+              handleEditChange={handleEditChange}
+           />
+        ) : modalProduct.file === '출장비정산서' ? (
+           <ModalTravelExpenses
+              modalProduct={modalProduct}
+              handleEditChange={handleEditChange}
+           />
+        ) : modalProduct.file === '고객사실비청구서' ? (
+           <ModalCustomer
               modalProduct={modalProduct}
               handleEditChange={handleEditChange}
            />

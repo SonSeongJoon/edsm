@@ -16,6 +16,9 @@ import { sendKakaoAgreeProduct } from '../api/kakao';
 import { OvertimeShow } from './html/Show/OvertimeShow';
 import { useParams } from 'react-router-dom';
 import {AlternativeShow} from "./html/Show/AlternativeShow";
+import ReporterGiftShow from "./html/Show/ReporterGiftShow";
+import TravelExpensesShow from "./html/Show/TravelExpensesShow";
+import CustomerShow from "./html/Show/CustomerShow";
 
 const STATE_APPROVED = '승인';
 const STATE_PENDING = '대기';
@@ -27,6 +30,9 @@ const COMPONENT_MAP = {
   품의서: ApprovalShow,
   초과근무사전품의서: OvertimeShow,
   대체휴무사용품의서: AlternativeShow,
+  기자선물품의서: ReporterGiftShow,
+  출장비정산서: TravelExpensesShow,
+  고객사실비청구서: CustomerShow,
 };
 
 export default function DetailAdminFormat({

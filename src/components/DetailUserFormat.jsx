@@ -14,6 +14,9 @@ import ApprovalShow from './html/Show/approvalShow';
 import { OvertimeShow } from './html/Show/OvertimeShow';
 import { useParams } from 'react-router-dom';
 import { AlternativeShow } from './html/Show/AlternativeShow';
+import ReporterGiftShow from "./html/Show/ReporterGiftShow";
+import TravelExpensesShow from "./html/Show/TravelExpensesShow";
+import CustomerShow from "./html/Show/CustomerShow";
 
 export default function DetailUserFormat({
   showEditModal,
@@ -118,6 +121,12 @@ export default function DetailUserFormat({
             <OvertimeShow product={displayProduct} />
           ) : displayProduct.file === '대체휴무사용품의서' ? (
             <AlternativeShow product={displayProduct} />
+          ) : displayProduct.file === '기자선물품의서' ? (
+             <ReporterGiftShow product={displayProduct} />
+          ) : displayProduct.file === '출장비정산서' ? (
+             <TravelExpensesShow product={displayProduct} />
+          ) : displayProduct.file === '고객사실비청구서' ? (
+             <CustomerShow product={displayProduct} />
           ) : null}
           <div className="mt-5 mb-3 text-sm">
             <span className="font-bold">수신자:</span>

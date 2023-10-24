@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
-import {addNewProduct, handleMultipleFilesUpload} from '../api/firebase';
+import { addNewProduct, handleMultipleFilesUpload } from '../api/firebase';
 import { expenditure } from '../components/html/Transhtml/Expenditure';
 import { vacationPlan } from '../components/html/Transhtml/VacationPlan';
 import { ExpendForm, initExpendForm } from '../components/form/ExpendForm';
@@ -23,6 +23,18 @@ import {
   AlternativeForm,
   initAlternativeForm,
 } from '../components/form/AlternativeForm';
+import {
+  initReportGiftForm,
+  ReporterGiftForm,
+} from '../components/form/ReporterGiftForm';
+import {
+  initTravelForm,
+  TravelExpensesForm,
+} from '../components/form/TravelExpensesForm';
+import {
+  CustomerForm,
+  initCustomerForm,
+} from '../components/form/CustomerForm';
 
 const options = [
   '지출결의서',
@@ -30,6 +42,9 @@ const options = [
   '품의서',
   '초과근무사전품의서',
   '대체휴무사용품의서',
+  '기자선물품의서',
+  '출장비정산서',
+  '고객사실비청구서',
 ];
 const initForms = {
   지출결의서: initExpendForm,
@@ -37,6 +52,9 @@ const initForms = {
   품의서: initApprovalForm,
   초과근무사전품의서: initOvertimeForm,
   대체휴무사용품의서: initAlternativeForm,
+  기자선물품의서: initReportGiftForm,
+  출장비정산서: initTravelForm,
+  고객사실비청구서: initCustomerForm,
 };
 const Forms = {
   지출결의서: ExpendForm,
@@ -44,6 +62,9 @@ const Forms = {
   품의서: ApprovalForm,
   초과근무사전품의서: OvertimeForm,
   대체휴무사용품의서: AlternativeForm,
+  기자선물품의서: ReporterGiftForm,
+  출장비정산서: TravelExpensesForm,
+  고객사실비청구서: CustomerForm,
 };
 const approvers = [
   { name: '서민아 이사', email: 'minah_seo@seoulir.co.kr' },
@@ -63,8 +84,7 @@ export default function Write() {
   const userPhoneNum = user.user.phoneNum;
   const userCorporation = user.user.corporation;
   const currentDate = moment().format('YYYY-MM-DD');
-  const [files, setFiles] = useState([]); // 파일 상태 관리
-  // const file = undefined;
+  const [files, setFiles] = useState([]);
   const [product, setProduct] = useState({
     ...initExpendForm,
     date: currentDate,
@@ -93,7 +113,8 @@ export default function Write() {
     }
     let downloadURL;
 
-    if (files.length > 0) { // 하나 이상의 파일이 있는 경우에만 업로드 처리를 합니다.
+    if (files.length > 0) {
+      // 하나 이상의 파일이 있는 경우에만 업로드 처리를 합니다.
       try {
         downloadURL = await handleMultipleFilesUpload(files); // 파일 배열 전체를 전달합니다.
       } catch (error) {
@@ -270,17 +291,17 @@ export default function Write() {
               </span>
             </label>
           ))}
-          <p className='mt-5 text-xm text-gray-500'>
+          <p className="mt-5 text-xm text-gray-500">
             다중 선택 시, 동일한 위치에서 "ctrl" 버튼을 누른 상태에서 클릭
           </p>
           <input
-             className="text-xm"
-             type="file"
-             multiple
-             onChange={(e) => {
-               const filesArray = Array.from(e.target.files);
-               setFiles(filesArray);
-             }}
+            className="text-xm"
+            type="file"
+            multiple
+            onChange={(e) => {
+              const filesArray = Array.from(e.target.files);
+              setFiles(filesArray);
+            }}
           />
 
           <div className="flex">
