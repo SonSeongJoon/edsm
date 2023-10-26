@@ -16,9 +16,6 @@ import {
   remove,
   set,
   update,
-  orderByChild,
-  equalTo,
-  limitToLast,
 } from 'firebase/database';
 import {
   getStorage,
