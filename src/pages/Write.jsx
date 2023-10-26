@@ -36,6 +36,10 @@ import {
   initCustomerForm,
 } from '../components/form/CustomerForm';
 import { ReporterGift } from '../components/html/Transhtml/ReporterGift';
+import { TravelExpenses } from '../components/html/Transhtml/TravelExpenses';
+import { Customer } from '../components/html/Transhtml/Customer';
+import { Overtime } from '../components/html/Transhtml/Overtime';
+import { Alternative } from '../components/html/Transhtml/Alternative';
 
 const options = [
   '지출결의서',
@@ -229,19 +233,24 @@ export default function Write() {
         } else if (product.file === '품의서') {
           const htmlString = approvalDocument(product);
           htmlToFile(htmlString, 'doc');
+        } else if (product.file === '초과근무사전품의서') {
+          const htmlString = Overtime(product);
+          htmlToFile(htmlString, 'doc');
+        } else if (product.file === '대체휴무사용품의서') {
+          const htmlString = Alternative(product);
+          htmlToFile(htmlString, 'doc');
         } else if (product.file === '기자선물품의서') {
           const htmlString = ReporterGift(product);
           htmlToFile(htmlString, 'doc');
-        } else if (product.file === '초과근무사전품의서') {
-          // const htmlString =
-        } else if (product.file === '대체휴무사용품의서') {
-          // const htmlString =
-
-        } else if (product.file === '대체휴무사용품의서') {
-          // const htmlString =
+        } else if (product.file === '출장비정산서') {
+          const htmlString = TravelExpenses(product);
+          htmlToFile(htmlString, 'doc');
+        } else if (product.file === '고객사실비청구서') {
+          const htmlString = Customer(product);
+          htmlToFile(htmlString, 'doc');
         }
       },
-      text: '워드 다운로드',
+      text: '인 쇄',
       className: 'bg-blue-800 hover:bg-blue-900 focus:ring-blue-300',
     },
   ];

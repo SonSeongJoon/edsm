@@ -8,8 +8,6 @@ const initCustomerForm = {
 	data: '',
 	charge: '',
 	price: '',
-	startDate: '',
-	endDate: '',
 	agree: [],
 	agreeName: [],
 };

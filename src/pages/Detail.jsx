@@ -14,7 +14,10 @@ import DetailAdminFormat from '../components/DetailAdminFormat';
 import { vacationPlan } from '../components/html/Transhtml/VacationPlan';
 import { useQuery } from '@tanstack/react-query';
 import { approvalDocument } from '../components/html/Transhtml/approvalDocument';
-import {ReporterGift} from "../components/html/Transhtml/ReporterGift";
+import { ReporterGift } from '../components/html/Transhtml/ReporterGift';
+import {Overtime} from "../components/html/Transhtml/Overtime";
+import {Customer} from "../components/html/Transhtml/Customer";
+import {TravelExpenses} from "../components/html/Transhtml/TravelExpenses";
 
 export default function Detail() {
   const location = useLocation();
@@ -82,43 +85,15 @@ export default function Detail() {
     휴가계: vacationPlan,
     품의서: approvalDocument,
     기자선물품의서: ReporterGift,
+    초과근무사전품의서: Overtime,
+    고객사실비청구서: Customer,
+    출장비정산서: TravelExpenses,
   };
 
   const htmlString =
     product && product.file && fileFunctionMap[product.file]
       ? fileFunctionMap[product.file](product)
       : null;
-
-  function htmlToFile(fileExtension, fileName) {
-    if (fileExtension === 'doc') {
-      printHTML(htmlString);
-      return;
-    }
-
-    const sourceMap = {
-      doc: 'data:application/msword;charset=utf-8,',
-      html: 'data:text/html;charset=utf-8,',
-    };
-    const source = sourceMap[fileExtension] || sourceMap['html'];
-    const fileDownload = document.createElement('a');
-    document.body.appendChild(fileDownload);
-    fileDownload.href = source + encodeURIComponent(htmlString);
-    fileDownload.download = fileName + '.' + fileExtension;
-    fileDownload.click();
-    document.body.removeChild(fileDownload);
-  }
-  function printHTML(htmlString) {
-    const printWindow = window.open('', '_blank');
-    printWindow.document.open();
-    printWindow.document.write(htmlString);
-    printWindow.document.close();
-
-    setTimeout(() => {
-      printWindow.print();
-    }, 250);
-  }
-
-
 
   const openEditModal = () => {
     if (updatedProduct) {
@@ -175,8 +150,10 @@ export default function Detail() {
   const isAdmin = user?.user?.isAdmin;
   const isReceivePath = currentPath.includes('/receive');
   return (
-     <div className="relative">
-       <div className="flex justify-center items-center h-full mt-5 border-b border-gray-200"> {/* 하단 테두리 추가 */}
+    <div className="relative">
+      <div className="flex justify-center items-center h-full mt-5 border-b border-gray-200">
+        {' '}
+        {/* 하단 테두리 추가 */}
         {isErrorProduct || isErrorAllState ? (
           <p>삭제된 데이터입니다.</p>
         ) : isErrorProduct ? (
@@ -204,7 +181,7 @@ export default function Detail() {
               openEditModal={openEditModal}
               handleDelete={handleDelete}
               navigate={navigate}
-              htmlToFile={htmlToFile}
+              htmlString={htmlString}
               isMst={isMst}
               states={states}
               setModalProduct={setModalProduct}
