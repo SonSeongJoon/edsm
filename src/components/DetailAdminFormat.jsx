@@ -15,10 +15,10 @@ import ApprovalShow from './html/Show/approvalShow';
 import { sendKakaoAgreeProduct } from '../api/kakao';
 import { OvertimeShow } from './html/Show/OvertimeShow';
 import { useParams } from 'react-router-dom';
-import {AlternativeShow} from "./html/Show/AlternativeShow";
-import ReporterGiftShow from "./html/Show/ReporterGiftShow";
-import TravelExpensesShow from "./html/Show/TravelExpensesShow";
-import CustomerShow from "./html/Show/CustomerShow";
+import { AlternativeShow } from './html/Show/AlternativeShow';
+import ReporterGiftShow from './html/Show/ReporterGiftShow';
+import TravelExpensesShow from './html/Show/TravelExpensesShow';
+import CustomerShow from './html/Show/CustomerShow';
 
 const STATE_APPROVED = '승인';
 const STATE_PENDING = '대기';
@@ -195,24 +195,24 @@ export default function DetailAdminFormat({
             </div>
           </div>
           {product.downloadURL && product.downloadURL.length > 0 ? (
-             <div className="mt-3 flex flex-col items-start space-y-1 p-3">
-               <hr className="border-t border-gray-200 w-full" />
-               <h3 className="text-sm font-bold text-gray-700">첨부파일</h3>
-               {product.downloadURL.map((file, index) => (
-                  <div key={index} className="flex items-center space-x-1">
-                    <a
-                       href={file.url}
-                       download
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       className="px-2 py-1 rounded border border-gray-700 text-xs hover:bg-gray-500 hover:text-white transition duration-200 ease-in-out"
-                    >
-                      다운로드 클릭
-                    </a>
-                    <span className="text-gray-700 text-xs">{file.name}</span>
-                  </div>
-               ))}
-             </div>
+            <div className="mt-3 flex flex-col items-start space-y-1 p-3">
+              <hr className="border-t border-gray-200 w-full" />
+              <h3 className="text-sm font-bold text-gray-700">첨부파일</h3>
+              {product.downloadURL.map((file, index) => (
+                <div key={index} className="flex items-center space-x-1">
+                  <a
+                    href={file.url}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2 py-1 rounded border border-gray-700 text-xs hover:bg-gray-500 hover:text-white transition duration-200 ease-in-out"
+                  >
+                    다운로드 클릭
+                  </a>
+                  <span className="text-gray-700 text-xs">{file.name}</span>
+                </div>
+              ))}
+            </div>
           ) : null}
         </div>
 

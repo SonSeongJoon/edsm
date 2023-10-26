@@ -39,7 +39,6 @@ export default function DetailUserFormat({
   const [files, setFiles] = useState(product.downloadURL || []);
   const [tempFiles, setTempFiles] = useState([]); // 사용자가 선택한 파일을 임시로 저장하는 상태
   const fileInputRef = useRef(null);
-
   const { path } = useParams();
 
   useEffect(() => {

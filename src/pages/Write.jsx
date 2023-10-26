@@ -35,6 +35,7 @@ import {
   CustomerForm,
   initCustomerForm,
 } from '../components/form/CustomerForm';
+import { ReporterGift } from '../components/html/Transhtml/ReporterGift';
 
 const options = [
   '지출결의서',
@@ -228,8 +229,14 @@ export default function Write() {
         } else if (product.file === '품의서') {
           const htmlString = approvalDocument(product);
           htmlToFile(htmlString, 'doc');
+        } else if (product.file === '기자선물품의서') {
+          const htmlString = ReporterGift(product);
+          htmlToFile(htmlString, 'doc');
         } else if (product.file === '초과근무사전품의서') {
           // const htmlString =
+        } else if (product.file === '대체휴무사용품의서') {
+          // const htmlString =
+
         } else if (product.file === '대체휴무사용품의서') {
           // const htmlString =
         }
