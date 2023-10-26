@@ -5,7 +5,6 @@ const ReporterGiftShow = ({ product }) => {
 		title,
 		content,
 		startDate,
-		endDate,
 		price,
 		note,
 		dept,
@@ -51,7 +50,7 @@ const ReporterGiftShow = ({ product }) => {
 					<div className="flex items-center mt-1">
 						<h1 className="font-bold mr-2 sm:text-md text-xm">발송일자 : </h1>
 						<p className="text-gray-600 text-sm sm:text-md">
-							{startDate} ~ {endDate}
+							{startDate}
 						</p>
 					</div>
 					<div className="flex items-center mt-1">

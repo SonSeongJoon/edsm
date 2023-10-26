@@ -22,21 +22,11 @@ const ModalReporterGift = ({ modalProduct, handleEditChange }) => {
 				/>
 			</div>
 			<div className="flex items-center mb-1">
-				<h1 className="font-bold mr-1 mb-1">시작 날짜 : </h1>
+				<h1 className="font-bold mr-1 mb-1">발송일 : </h1>
 				<input
 					type="date"
 					name="startDate"
 					value={modalProduct.startDate || ''}
-					onChange={handleEditChange}
-					className="border border-gray-500 p-1 rounded-md shadow-md w-1/2"
-				/>
-			</div>
-			<div className="flex items-center mb-1">
-				<h1 className="font-bold mr-1 mb-1">종료 날짜 : </h1>
-				<input
-					type="date"
-					name="endDate"
-					value={modalProduct.endDate || ''}
 					onChange={handleEditChange}
 					className="border border-gray-500 p-1 rounded-md shadow-md w-1/2"
 				/>
@@ -51,7 +41,7 @@ const ModalReporterGift = ({ modalProduct, handleEditChange }) => {
 				/>
 			</div>
 			<div className="flex items-center mb-1">
-				<h1 className="font-bold mr-1 mb-1">비고 : </h1>
+				<h1 className="font-bold mr-1 mb-1">비 고 : </h1>
 				<input
 					name="note"
 					value={modalProduct.note || ''}

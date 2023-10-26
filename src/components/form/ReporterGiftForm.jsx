@@ -9,7 +9,6 @@ const initReportGiftForm = {
 	price: '',
 	note: '',
 	startDate: '',
-	endDate: '',
 	agree: [],
 	agreeName: [],
 };
@@ -62,14 +61,8 @@ const ReporterGiftForm = ({ product, handleChange }) => {
 								className="w-1/2 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mr-2"
 								onChange={handleChange}
 							/>
-							~
-							<input
-								type="date"
-								name="endDate"
-								value={product.endDate || ''}
-								className="w-1/2 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 ml-2"
-								onChange={handleChange}
-							/>
+							<p>- 발송예정일 기재</p>
+							
 						</div>
 					</div>
 

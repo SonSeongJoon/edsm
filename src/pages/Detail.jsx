@@ -14,6 +14,7 @@ import DetailAdminFormat from '../components/DetailAdminFormat';
 import { vacationPlan } from '../components/html/Transhtml/VacationPlan';
 import { useQuery } from '@tanstack/react-query';
 import { approvalDocument } from '../components/html/Transhtml/approvalDocument';
+import {ReporterGift} from "../components/html/Transhtml/ReporterGift";
 
 export default function Detail() {
   const location = useLocation();
@@ -80,6 +81,7 @@ export default function Detail() {
     지출결의서: expenditure,
     휴가계: vacationPlan,
     품의서: approvalDocument,
+    기자선물품의서: ReporterGift,
   };
 
   const htmlString =
