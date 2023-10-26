@@ -6,9 +6,6 @@ export const TableComponent = ({
   isLoading,
   error,
   currentItems,
-  pageNumbers,
-  currentPage,
-  handlePageClick,
   isAdmins,
   isMst,
 }) => {
@@ -236,18 +233,6 @@ export const TableComponent = ({
           })}
         </tbody>
       </table>
-      <div className="w-full flex justify-center mt-3">
-        {pageNumbers.map((number) => (
-          <button
-            className={`mr-5 text-lg font-bold text-center text-brand w-5 hover:underline 
-      ${currentPage === number ? 'border border-brand rounded-full' : ''}`}
-            key={number}
-            onClick={() => handlePageClick(number)}
-          >
-            {number}
-          </button>
-        ))}
-      </div>
     </div>
   );
 };
