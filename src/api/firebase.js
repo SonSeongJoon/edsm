@@ -239,18 +239,8 @@ export async function getReceive(adminId) {
   });
 }
 
-export async function getAll(radioValue) {
-  let dbQuery = query(child(dbRef, 'products'));
-
-  if (radioValue !== 'all') {
-    dbQuery = query(
-      child(dbRef, 'products'),
-      orderByChild('mstCheck'),
-      equalTo(radioValue === 'verified'),
-      limitToLast(30),
-    );
-  }
-  return get(dbQuery).then((snapshot) => {
+export async function getAll() {
+  return get(child(dbRef, `products`)).then((snapshot) => {
     if (snapshot.exists()) {
       const allEntries = snapshot.val();
       return Object.values(allEntries).sort((a, b) => {
@@ -581,7 +571,6 @@ export async function updateMstCheckInFirebase(productId, checkStatus) {
 	const updates = {
 		mstCheck: checkStatus
 	};
-
 	await update(productRef, updates)
 	.then(() => {
 		console.log("mstCheck updated successfully!");
