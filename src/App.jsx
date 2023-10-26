@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import { Outlet } from 'react-router-dom';
@@ -7,10 +7,41 @@ import { AuthContextProvider } from './context/AuthContext';
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
+
+  const mainContentRef = useRef(null);
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
+
+  const scrollTop = () => {
+    if (mainContentRef.current) {
+      mainContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+  useEffect(() => {
+    const checkScrollTop = () => {
+      if (mainContentRef.current) {
+        // 스크롤 위치가 100보다 크면 버튼을 표시합니다.
+        if (!showScrollToTop && mainContentRef.current.scrollTop > 100) {
+          setShowScrollToTop(true);
+        } else if (showScrollToTop && mainContentRef.current.scrollTop <= 100) {
+          setShowScrollToTop(false);
+        }
+      }
+    };
+
+    const mainElement = mainContentRef.current;
+    if (mainElement) {
+      mainElement.addEventListener('scroll', checkScrollTop);
+    }
+    return () => {
+      if (mainElement) {
+        mainElement.removeEventListener('scroll', checkScrollTop);
+      }
+    };
+  }, [showScrollToTop]);
 
   const queryClient = new QueryClient();
   return (
@@ -28,8 +59,20 @@ function App() {
             <Sidebar toggleSidebar={toggleSidebar} />
           </div>
           <QueryClientProvider client={queryClient}>
-            <main className="flex-grow overflow-y-auto max-h-[calc(100vh-4.2rem)]">
+            <main
+              ref={mainContentRef}
+              className="flex-grow overflow-y-auto max-h-[calc(100vh-4.2rem)]"
+            >
               <Outlet />
+              {showScrollToTop && (
+                <button
+                  className="fixed bottom-5 right-5 p-2 bg-brand text-white rounded-full"
+                  onClick={scrollTop}
+                  title="Go to top"
+                >
+                  Top
+                </button>
+              )}
             </main>
           </QueryClientProvider>
         </div>
