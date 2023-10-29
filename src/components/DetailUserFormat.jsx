@@ -7,6 +7,7 @@ import {
   getRejectReasonProduct,
   handleFileDelete,
   handleMultipleFilesUpload,
+  updateMstCheckInFirebase,
   updateProductDownloadURLs,
 } from '../api/firebase';
 import { VacationShow } from './html/Show/VacationShow';
@@ -17,7 +18,7 @@ import { AlternativeShow } from './html/Show/AlternativeShow';
 import ReporterGiftShow from './html/Show/ReporterGiftShow';
 import TravelExpensesShow from './html/Show/TravelExpensesShow';
 import CustomerShow from './html/Show/CustomerShow';
-import {htmlToFile} from "../js/convertToWord";
+import { htmlToFile } from '../js/convertToWord';
 
 export default function DetailUserFormat({
   showEditModal,
@@ -38,8 +39,9 @@ export default function DetailUserFormat({
 }) {
   const [reasonText, setReasonText] = useState(null);
   const [files, setFiles] = useState(product.downloadURL || []);
-  const [tempFiles, setTempFiles] = useState([]); // 사용자가 선택한 파일을 임시로 저장하는 상태
+  const [tempFiles, setTempFiles] = useState([]);
   const fileInputRef = useRef(null);
+  const [localMstCheck, setLocalMstCheck] = useState(product.mstCheck === '확인');
   const { path } = useParams();
 
   useEffect(() => {
@@ -69,6 +71,7 @@ export default function DetailUserFormat({
   };
 
   const handleSubmit = async () => {
+
     if (tempFiles.length === 0) {
       alert('추가할 파일이 없습니다.');
       return;
@@ -94,6 +97,16 @@ export default function DetailUserFormat({
       }
     } catch (error) {
       console.error('An error occurred while adding files:', error);
+    }
+  };
+
+  const handleChecked = async (event) => {
+    try {
+      const newMstCheckValue = event.target.checked;
+      setLocalMstCheck(newMstCheckValue);
+      await updateMstCheckInFirebase(product.id, newMstCheckValue);
+    } catch (error) {
+      console.error('An error occurred while updating Firebase:', error);
     }
   };
 
@@ -178,6 +191,20 @@ export default function DetailUserFormat({
               ) : null}
             </div>
           </div>
+          <div className="flex justify-end items-center mt-3">
+            <div className="flex items-center">
+              <input
+                 type="checkbox"
+                 id="verifiedPostCheckbox"
+                 checked={localMstCheck}
+                 onChange={handleChecked}
+                 className="form-checkbox h-5 w-5 text-green-600" // Adjust styles as needed
+              />
+              <label htmlFor="verifiedPostCheckbox" className="ml-2 text-sm text-gray-900">
+                {localMstCheck ? '확인된 게시물입니다.' : '확인 하셨으면 클릭!'}
+              </label>
+            </div>
+          </div>
           {!isMst && !oneApproved ? (
             <div className="flex justify-end items-center">
               <div>
@@ -196,7 +223,7 @@ export default function DetailUserFormat({
                   className="ml-2 bg-gray-500 hover:bg-gray-700 text-white text-xs py-1 px-2 rounded"
                   onClick={handleSubmit}
                 >
-                  이 버튼을 눌러야 저장됩니다.
+                  저장
                 </button>
               </div>
             </div>

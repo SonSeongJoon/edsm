@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PaperRow from './PaperRow';
 import { getUsersData } from '../api/firebase';
 
@@ -8,6 +8,7 @@ export const TableComponent = ({
   currentItems,
   isAdmins,
   isMst,
+  onVerificationChange,
 }) => {
   const [selectedDept, setSelectedDept] = useState('전체');
   const [selectedName, setSelectedName] = useState('전체');
@@ -15,6 +16,7 @@ export const TableComponent = ({
   const [selectedMonth, setSelectedMonth] = useState('전체');
   const [selectFilename, setSelectFilename] = useState('전체 구분');
   const [selectState, setSelectState] = useState('전체 상태');
+  const [selectCheck, setSelectCheck] = useState('확인여부');
 
   const [currentDeptMembers, setCurrentDeptMembers] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
@@ -23,6 +25,7 @@ export const TableComponent = ({
   const [uniqueMonths, setUniqueMonths] = useState([]);
   const [uniqueFiles, setUniqueFiles] = useState([]);
   const [uniqueState, setUniqueState] = useState([]);
+  const [uniqueCheck, setUniqueCheck] = useState([]);
 
   const transformData = async () => {
     const usersData = await getUsersData();
@@ -67,10 +70,12 @@ export const TableComponent = ({
 
       const files = [...new Set(currentItems.map((item) => item.file))];
       const states = [...new Set(currentItems.map((item) => item.state))];
+      const checks = [...new Set(currentItems.map((item) => item.mstCheck))];
       setUniqueYears(['전체', ...years]);
       setUniqueMonths(['전체', ...months]);
       setUniqueFiles(['전체 구분', ...files]);
       setUniqueState(['전체 상태', ...states]);
+      setUniqueCheck(['확인여부', ...checks]);
     }
   }, [currentItems]);
 
@@ -108,70 +113,103 @@ export const TableComponent = ({
     if (selectState !== '전체 상태') {
       items = items.filter((item) => item.state === selectState);
     }
+    if (selectCheck !== '확인여부') {
+      items = items.filter((item) => item.mstCheck === selectCheck);
+    }
 
     setFilteredItems(items);
-  }, [
-    selectedName,
-    selectedDept,
-    selectedYear,
-    selectedMonth,
-    currentItems,
-    deptMembers,
-    selectFilename,
-    selectState,
-  ]);
+  }, [selectedName, selectedDept, selectedYear, selectedMonth, currentItems, deptMembers, selectFilename, selectState, selectCheck]);
+
+  const handleRadioChange = useCallback(
+    (event) => {
+      onVerificationChange(event.target.value);
+    },
+    [onVerificationChange],
+  );
 
   return (
     <div className="w-full text-xm sm:text-md">
       {isLoading && <p>Loading...</p>}
       {error && <p>Error...</p>}
       {isMst && (
-        <div className="flex mb-3 m-3">
-          <select
-            onChange={(e) => {
-              setSelectedDept(e.target.value);
-              setSelectedName('전체');
-            }}
-            className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          >
-            <option value="전체">전체 부서</option>
-            {Object.keys(deptMembers).map((dept) => (
-              <option key={dept} value={dept}>
-                {dept}
-              </option>
-            ))}
-          </select>
-          <select
-            onChange={(e) => setSelectedName(e.target.value)}
-            className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          >
-            <option value="전체">전체 이름</option>
-            {currentDeptMembers.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-          <select
-            onChange={(e) => setSelectedYear(e.target.value)}
-            className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          >
-            {uniqueYears.map((year) => (
-              <option key={year} value={year}>
-                {year}년
-              </option>
-            ))}
-          </select>
-          <select
-            onChange={(e) => setSelectedMonth(e.target.value)}
-            className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          >
-            {uniqueMonths.map((month) => (
-              <option key={month} value={month}>
-                {month}월
-              </option>
-            ))}
-          </select>
+        <div className="flex justify-between">
+          <div className="flex mb-3 m-3">
+            <select
+              onChange={(e) => {
+                setSelectedDept(e.target.value);
+                setSelectedName('전체');
+              }}
+              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            >
+              <option value="전체">전체 부서</option>
+              {Object.keys(deptMembers).map((dept) => (
+                <option key={dept} value={dept}>
+                  {dept}
+                </option>
+              ))}
+            </select>
+            <select
+              onChange={(e) => setSelectedName(e.target.value)}
+              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            >
+              <option value="전체">전체 이름</option>
+              {currentDeptMembers.map((name) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))}
+            </select>
+            <select
+              onChange={(e) => setSelectedYear(e.target.value)}
+              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            >
+              {uniqueYears.map((year) => (
+                <option key={year} value={year}>
+                  {year}년
+                </option>
+              ))}
+            </select>
+            <select
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            >
+              {uniqueMonths.map((month) => (
+                <option key={month} value={month}>
+                  {month}월
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center space-x-3 mr-5">
+            <label>
+              <input
+                type="radio"
+                name="verificationStatus"
+                value="unverified"
+                onChange={handleRadioChange}
+                defaultChecked
+              />
+              미확인
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="verificationStatus"
+                value="verified"
+                onChange={handleRadioChange}
+              />
+              확인(최근20개)
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="verificationStatus"
+                value="all"
+                onChange={handleRadioChange}
+              />
+              전체보기
+            </label>
+          </div>
         </div>
       )}
       <table className="min-w-full bg-white border-t border-b border-gray-300 divide-y divide-gray-300 ">
@@ -217,6 +255,18 @@ export const TableComponent = ({
             ) : null}
             <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               날짜
+            </th>
+            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <select
+                 onChange={(e) => setSelectCheck(e.target.value)}
+                 className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400 border-dotted border-gray-300 border-2"
+              >
+                {uniqueCheck.map((check) => (
+                   <option key={check} value={check}>
+                     {check}
+                   </option>
+                ))}
+              </select>
             </th>
           </tr>
         </thead>
