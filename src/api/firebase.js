@@ -16,6 +16,9 @@ import {
   remove,
   set,
   update,
+  orderByChild,
+  equalTo,
+   limitToFirst,
 } from 'firebase/database';
 import {
   getStorage,
@@ -236,8 +239,17 @@ export async function getReceive(adminId) {
   });
 }
 
-export async function getAll() {
-  return get(child(dbRef, `products`)).then((snapshot) => {
+export async function getAll(state) {
+  const dbRef = ref(getDatabase());
+  let dataQuery = child(dbRef, `products`);
+
+  if (state === 'verified') {
+    dataQuery = query(dataQuery, orderByChild('mstCheck'), equalTo('확인'), limitToFirst(20));
+  } else if (state === 'unverified') {
+    dataQuery = query(dataQuery, orderByChild('mstCheck'), equalTo('미확인'));
+  }
+
+  return get(dataQuery).then((snapshot) => {
     if (snapshot.exists()) {
       const allEntries = snapshot.val();
       return Object.values(allEntries).sort((a, b) => {
@@ -560,21 +572,48 @@ export async function updateProductDownloadURLs(productId, newFileURLs) {
     throw error;
   }
 }
-
 export async function updateMstCheckInFirebase(productId, checkStatus) {
-	const db = getDatabase();
-	const productRef = ref(db, 'products/' + productId);
+  const db = getDatabase();
+  const productRef = ref(db, 'products/' + productId);
 
-	const updates = {
-		mstCheck: checkStatus
-	};
-	await update(productRef, updates)
-	.then(() => {
-		console.log("mstCheck updated successfully!");
-	})
-	.catch((error) => {
-		console.error("Error updating mstCheck: ", error);
-	});
+  const statusString = checkStatus ? '확인' : '미확인';
+
+  const updates = {
+    mstCheck: statusString
+  };
+
+  await update(productRef, updates)
+  .then(() => {
+    console.log("mstCheck updated successfully!");
+  })
+  .catch((error) => {
+    console.error("Error updating mstCheck: ", error);
+  });
 }
+
+// export async function setAllMstCheckToVerified() {
+//   const db = getDatabase();
+//   const dbRef = ref(db);
+//
+//   // 모든 'products' 가져오기
+//   try {
+//     const snapshot = await get(child(dbRef, 'products'));
+//
+//     if (snapshot.exists()) {
+//       const products = snapshot.val();
+//       // 각 제품에 대해 'mstCheck'를 '확인'으로 설정
+//       for (const productId in products) {
+//         const productRef = ref(db, 'products/' + productId);
+//         await update(productRef, { mstCheck: '확인' });
+//       }
+//       console.log("All mstCheck updated to '확인' successfully!");
+//     } else {
+//       console.log("No products available!");
+//     }
+//   } catch (error) {
+//     console.error("Error updating mstCheck: ", error);
+//   }
+// }
+
 
 

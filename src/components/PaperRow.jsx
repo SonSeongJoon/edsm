@@ -2,7 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function PaperRow({ product, isAdmins, isMst }) {
-  const { id, title, file, date, displayName, oneState, state, dept } = product;
+  const {
+    id,
+    title,
+    file,
+    date,
+    displayName,
+    oneState,
+    state,
+    dept,
+    mstCheck,
+  } = product;
   const navigate = useNavigate();
   const location = useLocation();
   const basePath = location.pathname.split('/')[1];
@@ -55,6 +65,15 @@ export default function PaperRow({ product, isAdmins, isMst }) {
       ) : null}
       {isMst ? <td className="px-6 py-4 whitespace-nowrap">{dept}</td> : null}
       <td className="px-6 py-4 whitespace-nowrap">{displayDate}</td>
+      <td
+        className={`px-6 py-4 whitespace-nowrap ${
+          mstCheck === '확인'
+            ? 'text-green-600 font-bold'
+            : 'text-gray-500 font-bold'
+        }`}
+      >
+        {mstCheck === '확인' ? '확인' : '미확인'}
+      </td>
     </tr>
   );
 }
