@@ -118,7 +118,17 @@ export const TableComponent = ({
     }
 
     setFilteredItems(items);
-  }, [selectedName, selectedDept, selectedYear, selectedMonth, currentItems, deptMembers, selectFilename, selectState, selectCheck]);
+  }, [
+    selectedName,
+    selectedDept,
+    selectedYear,
+    selectedMonth,
+    currentItems,
+    deptMembers,
+    selectFilename,
+    selectState,
+    selectCheck,
+  ]);
 
   const handleRadioChange = useCallback(
     (event) => {
@@ -132,7 +142,7 @@ export const TableComponent = ({
       {isLoading && <p>Loading...</p>}
       {error && <p>Error...</p>}
       {isMst && (
-        <div className="flex justify-between">
+        <div className="lg:flex lg:justify-between">
           <div className="flex mb-3 m-3">
             <select
               onChange={(e) => {
@@ -180,9 +190,10 @@ export const TableComponent = ({
               ))}
             </select>
           </div>
-          <div className="flex items-center space-x-3 mr-5">
-            <label>
+          <div className="flex items-center space-x-3 sm:mr-5 ml-3 py-1.5">
+            <label className="flex">
               <input
+                className="mr-1"
                 type="radio"
                 name="verificationStatus"
                 value="unverified"
@@ -191,8 +202,9 @@ export const TableComponent = ({
               />
               미확인
             </label>
-            <label>
+            <label className="flex">
               <input
+                className="mr-1"
                 type="radio"
                 name="verificationStatus"
                 value="verified"
@@ -200,8 +212,9 @@ export const TableComponent = ({
               />
               확인(최근20개)
             </label>
-            <label>
+            <label className="flex">
               <input
+                className="mr-1"
                 type="radio"
                 name="verificationStatus"
                 value="all"
@@ -258,13 +271,13 @@ export const TableComponent = ({
             </th>
             <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               <select
-                 onChange={(e) => setSelectCheck(e.target.value)}
-                 className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400 border-dotted border-gray-300 border-2"
+                onChange={(e) => setSelectCheck(e.target.value)}
+                className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400 border-dotted border-gray-300 border-2"
               >
                 {uniqueCheck.map((check) => (
-                   <option key={check} value={check}>
-                     {check}
-                   </option>
+                  <option key={check} value={check}>
+                    {check}
+                  </option>
                 ))}
               </select>
             </th>
