@@ -119,7 +119,7 @@ export async function addNewProduct(
     dept: userDept,
     writerPhonNum: userPhoneNum,
     corporation: userCorporation,
-    mstCheck: false,
+    mstCheck: '미확인',
     ...(downloadURL && { downloadURL: downloadURL }),
   });
   const emails = product.agree;
