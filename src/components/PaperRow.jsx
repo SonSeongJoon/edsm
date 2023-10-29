@@ -28,7 +28,7 @@ export default function PaperRow({ product, isAdmins, isMst }) {
   };
 
   return (
-    <tr key={product.id} className="hover:bg-gray-50" onClick={handleClick}>
+    <tr key={product.id} className="hover:bg-gray-50">
       <td className="px-6 py-4 whitespace-nowrap text-gray-400">
         <span
           className={
@@ -38,11 +38,15 @@ export default function PaperRow({ product, isAdmins, isMst }) {
               ? 'text-red-500 font-bold'
               : ''
           }
+          onClick={handleClick}
         >
           {isAdmins ? oneState : state}
         </span>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap hover:underline cursor-pointer">
+      <td
+        className="px-6 py-4 whitespace-nowrap hover:underline cursor-pointer"
+        onClick={handleClick}
+      >
         {title}
       </td>
       <td className="px-6 py-4 whitespace-nowrap">{file}</td>
