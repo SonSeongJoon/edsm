@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PaperRow from './PaperRow';
 import { getUsersData } from '../api/firebase';
+import { useVerificationStatus } from '../context/VerificationStatusProvider';
 
 export const TableComponent = ({
   isLoading,
@@ -26,6 +27,7 @@ export const TableComponent = ({
   const [uniqueFiles, setUniqueFiles] = useState([]);
   const [uniqueState, setUniqueState] = useState([]);
   const [uniqueCheck, setUniqueCheck] = useState([]);
+  const { verificationStatus, setVerificationStatus } = useVerificationStatus();
 
   const transformData = async () => {
     const usersData = await getUsersData();
@@ -130,11 +132,13 @@ export const TableComponent = ({
     selectCheck,
   ]);
 
+  // This function is triggered when the radio button value changes
   const handleRadioChange = useCallback(
     (event) => {
-      onVerificationChange(event.target.value);
+      // Update the global state with the new value
+      setVerificationStatus(event.target.value);
     },
-    [onVerificationChange],
+    [setVerificationStatus], // Set the function as a dependency so the callback updates if it changes
   );
 
   return (
@@ -197,8 +201,8 @@ export const TableComponent = ({
                 type="radio"
                 name="verificationStatus"
                 value="unverified"
+                checked={verificationStatus === 'unverified'} // <- control the "checked" property
                 onChange={handleRadioChange}
-                defaultChecked
               />
               미확인
             </label>
@@ -208,6 +212,7 @@ export const TableComponent = ({
                 type="radio"
                 name="verificationStatus"
                 value="verified"
+                checked={verificationStatus === 'verified'} // <- control the "checked" property
                 onChange={handleRadioChange}
               />
               확인(최근20개)
@@ -218,6 +223,7 @@ export const TableComponent = ({
                 type="radio"
                 name="verificationStatus"
                 value="all"
+                checked={verificationStatus === 'all'} // <- control the "checked" property
                 onChange={handleRadioChange}
               />
               전체보기
