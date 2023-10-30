@@ -247,7 +247,6 @@ export async function getAll(state) {
 	return get(dataQuery).then((snapshot) => {
 		if(snapshot.exists()) {
 			let allEntries = snapshot.val();
-			console.log(allEntries)
 
 			if(state === 'verified') {
 				allEntries = Object.values(allEntries).filter(entry => entry.mstCheck === '확인');
