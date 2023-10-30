@@ -9,18 +9,11 @@ export const VacationShow = ({ product }) => {
     TotalLeaveDays,
     UsedDays,
     RemainDays,
-    VacationReason,
     dept,
     name,
-     Period,
     corporation,
-    startDate,
-    endDate,
-    daysDifference,
+    Vacations,
   } = product;
-
-
-
 
   return (
     <div>
@@ -58,17 +51,26 @@ export const VacationShow = ({ product }) => {
             <h1 className="font-bold mr-2 sm:text-md text-xm">잔여일수 : </h1>
             <p className="text-gray-600 text-sm sm:text-md">{RemainDays}</p>
           </div>
-          <div className="flex items-center mt-3">
-            <h1 className="font-bold mr-2 sm:text-md text-xm">휴가기간 : </h1>
-            <p className="text-gray-600 text-sm sm:text-md">
-              {Period ? Period : `${startDate} ~ ${endDate} (${daysDifference}일간)`}
-            </p>
-          </div>
         </div>
-        <div className="flex items-center mt-5">
-          <h1 className="font-bold mr-2 sm:text-md text-xm">휴가사유 : </h1>
-          <p className="text-gray-600 text-sm sm:text-md">{VacationReason}</p>
+        <div>
+          {Vacations && Vacations.map((vacation, index) =>(
+             <div className='shadow-lg border border-gray-400 rounded-lg p-2 m-2'>
+               <div key={index}>
+                 <div className="flex items-center">
+                   <h1 className="font-bold mr-2 sm:text-md text-xm">휴가기간 : </h1>
+                   <p className="text-gray-600 text-sm sm:text-md">
+                     {`${vacation.startDate} ~ ${vacation.endDate} (${vacation.daysDifference}일간)`}
+                   </p>
+                 </div>
+                 <div className="flex items-center mt-5">
+                   <h1 className="font-bold mr-2 sm:text-md text-xm">휴가사유 : </h1>
+                   <p className="text-gray-600 text-sm sm:text-md">{vacation.vacationReason}</p>
+                 </div>
+               </div>
+             </div>
+          ))}
         </div>
+
       </div>
     </div>
   );

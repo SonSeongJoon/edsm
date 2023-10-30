@@ -1,45 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 
 const ModalVacation = ({ modalProduct, handleEditChange }) => {
-  // 초기 상태 설정에서 modalProduct.daysDifference 값에 따라 isHalfDay 상태 설정
-  const [isHalfDay, setIsHalfDay] = useState(
-    modalProduct.daysDifference === '0.5',
-  );
-  const [difference, setDifference] = useState(
-    modalProduct.daysDifference || '',
-  );
+  const [vacations, setVacations] = useState(modalProduct?.Vacations);
 
-  const calculateDaysDifference = (startDate, endDate) => {
-    if (startDate && endDate) {
-      const start = moment(startDate);
-      const end = moment(endDate);
-      return end.diff(start, 'days') + 1;
+  const handleVacationChange = (index, field, value) => {
+    const newVacations = [...vacations];
+    newVacations[index][field] = value;
+
+    if (field === 'startDate' || field === 'endDate') {
+      const startDate =
+        field === 'startDate' ? value : newVacations[index].startDate;
+      const endDate = field === 'endDate' ? value : newVacations[index].endDate;
+
+      if (startDate && endDate) {
+        const start = moment(startDate);
+        const end = moment(endDate);
+        const diff = end.diff(start, 'days') + 1;
+        newVacations[index].daysDifference = diff.toString();
+      }
     }
-    return '';
+
+    setVacations(newVacations);
+    handleEditChange({ target: { name: 'Vacations', value: newVacations } });
   };
 
-   useEffect(() => {
-      const data = calculateDaysDifference(
-         modalProduct.startDate,
-         modalProduct.endDate
-      );
-      handleEditChange({
-         target: { name: 'daysDifference', value: String(data) },
-      });
-      setDifference(data);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [modalProduct.startDate, modalProduct.endDate]);
-
-
-
-   const toggleHalfDay = () => {
-    if (difference === 1) {
-      const newDiff = isHalfDay ? '1' : '0.5';
-      setIsHalfDay(!isHalfDay);
-      handleEditChange({
-        target: { name: 'daysDifference', value: newDiff },
-      });
+  const toggleHalfDay = (index) => {
+    const newVacations = [...vacations];
+    if (
+      newVacations[index].daysDifference === '1' ||
+      newVacations[index].daysDifference === '0.5'
+    ) {
+      const newDiff = newVacations[index].isHalfDay ? '1' : '0.5';
+      newVacations[index].isHalfDay = !newVacations[index].isHalfDay;
+      newVacations[index].daysDifference = newDiff;
+      setVacations(newVacations);
+      handleEditChange({ target: { name: 'Vacations', value: newVacations } });
     }
   };
 
@@ -93,50 +89,68 @@ const ModalVacation = ({ modalProduct, handleEditChange }) => {
           className="border border-gray-500 p-1 rounded-md shadow-md w-1/2"
         />
       </div>
-      <div className="flex items-center mb-1">
-        <h1 className="font-bold mr-1 mb-1">휴가 시작일 : </h1>
-        <input
-          type="date"
-          name="startDate"
-          value={modalProduct.startDate || ''}
-          onChange={handleEditChange}
-          className="border border-gray-500 p-1 rounded-md shadow-md w-3/4"
-        />
-      </div>
-      <div className="flex items-center mb-1">
-        <h1 className="font-bold mr-1 mb-1">휴가 종료일 : </h1>
-        <input
-          type="date"
-          name="endDate"
-          value={modalProduct.endDate || ''}
-          onChange={handleEditChange}
-          className="border border-gray-500 p-1 rounded-md shadow-md w-3/4"
-        />
-      </div>
-      <div className="flex items-center mb-1">
-        <h1 className="font-bold mr-1 mb-1">휴가기간 : </h1>
-        <span>
-          {modalProduct.startDate && modalProduct.endDate
-            ? `${modalProduct.startDate} ~ ${modalProduct.endDate} (${modalProduct.daysDifference}일간)`
-            : ''}
-        </span>
-        {difference === 1 && (
-          <button
-            onClick={toggleHalfDay}
-            className="ml-2 px-3 py-1 border rounded bg-gray-500 text-white text-xm"
-          >
-            {isHalfDay ? '반차 취소' : '반차 등록'}
-          </button>
-        )}
-      </div>
-      <div className="flex items-center mb-1">
-        <h1 className="font-bold mr-1 mb-1">휴가사유 : </h1>
-        <textarea
-          name="VacationReason"
-          value={modalProduct.VacationReason || ''}
-          onChange={handleEditChange}
-          className="border border-gray-500 p-1 rounded-md shadow-md w-1/2 h-20"
-        />
+      <div>
+        {modalProduct?.Vacations &&
+          modalProduct.Vacations.map((vacations, index) => (
+            <>
+              <div className="flex items-center mb-1">
+                <h1 className="font-bold mr-1 mb-1">휴가 시작일 : </h1>
+                <input
+                  type="date"
+                  name="startDate"
+                  value={vacations.startDate || ''}
+                  onChange={(e) =>
+                    handleVacationChange(index, 'startDate', e.target.value)
+                  }
+                  className="border border-gray-500 p-1 rounded-md shadow-md w-3/4"
+                />
+              </div>
+              <div className="flex items-center mb-1">
+                <h1 className="font-bold mr-1 mb-1">휴가 종료일 : </h1>
+                <input
+                  type="date"
+                  name="endDate"
+                  value={vacations.endDate || ''}
+                  onChange={(e) =>
+                    handleVacationChange(index, 'endDate', e.target.value)
+                  }
+                  className="border border-gray-500 p-1 rounded-md shadow-md w-3/4"
+                />
+              </div>
+              <div className="flex items-center mb-1">
+                <h1 className="font-bold mr-1 mb-1">휴가기간 : </h1>
+                <span>
+                  {vacations.startDate && vacations.endDate
+                    ? `${vacations.startDate} ~ ${vacations.endDate} (${vacations.daysDifference}일간)`
+                    : ''}
+                </span>
+                {(vacations.daysDifference === '1' ||
+                  vacations.daysDifference === '0.5') && (
+                  <button
+                    onClick={() => toggleHalfDay(index)}
+                    className="ml-2 px-2 py-1 border rounded bg-gray-500 text-white text-xm"
+                  >
+                    {vacations.isHalfDay ? '취소' : '반차'}
+                  </button>
+                )}
+              </div>
+              <div className="flex items-center mb-1">
+                <h1 className="font-bold mr-1 mb-1">휴가사유 : </h1>
+                <textarea
+                  name="VacationReason"
+                  value={vacations.vacationReason || ''}
+                  onChange={(e) =>
+                    handleVacationChange(
+                      index,
+                      'vacationReason',
+                      e.target.value,
+                    )
+                  }
+                  className="border border-gray-500 p-1 rounded-md shadow-md w-1/2 h-20"
+                />
+              </div>
+            </>
+          ))}
       </div>
     </div>
   );
