@@ -191,7 +191,7 @@ export default function DetailUserFormat({
               ) : null}
             </div>
           </div>
-          <div className="flex justify-end items-center mt-3">
+          {isMst ? (<div className="flex justify-end items-center mt-3">
             <div className="flex items-center">
               <input
                  type="checkbox"
@@ -204,7 +204,8 @@ export default function DetailUserFormat({
                 {localMstCheck ? '확인된 게시물입니다.' : '확인 하셨으면 클릭!'}
               </label>
             </div>
-          </div>
+          </div>) : null}
+
           {!isMst && !oneApproved ? (
             <div className="flex justify-end items-center">
               <div>

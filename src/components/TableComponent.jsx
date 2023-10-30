@@ -275,18 +275,20 @@ export const TableComponent = ({
             <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               날짜
             </th>
-            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <select
-                onChange={(e) => setSelectCheck(e.target.value)}
-                className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400 border-dotted border-gray-300 border-2"
-              >
-                {uniqueCheck.map((check) => (
-                  <option key={check} value={check}>
-                    {check}
-                  </option>
-                ))}
-              </select>
-            </th>
+            {isMst ? (
+              <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <select
+                  onChange={(e) => setSelectCheck(e.target.value)}
+                  className="bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400 border-dotted border-gray-300 border-2"
+                >
+                  {uniqueCheck.map((check) => (
+                    <option key={check} value={check}>
+                      {check}
+                    </option>
+                  ))}
+                </select>
+              </th>
+            ) : null}
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-300">
