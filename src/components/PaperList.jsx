@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getAll, getProduct, getReceive } from '../api/firebase';
 import { TableComponent } from './TableComponent';
+import {useVerificationStatus} from "../context/VerificationStatusProvider";
 
 export default function PaperList({ category, state, adminData, MstData }) {
-  const [verificationStatus, setVerificationStatus] = useState('unverified');
+  const { verificationStatus, setVerificationStatus } = useVerificationStatus();
   const handleVerificationChange = (newStatus) => {
     setVerificationStatus(newStatus);
   };
