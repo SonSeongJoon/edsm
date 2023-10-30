@@ -110,10 +110,20 @@ export default function Detail() {
     setShowEditModal(false);
   };
 
-  const handleEditChange = (e) => {
+  const handleEditChange = (e, index) => {
     const { name, value } = e.target;
-    setModalProduct((prev) => ({ ...prev, [name]: value }));
+
+    if (index !== undefined && modalProduct.Vacations) {
+      const newVacations = [...modalProduct.Vacations];
+      const adjustedName = name.replace(index, '');
+      newVacations[index][adjustedName] = value;
+      setModalProduct(prev => ({ ...prev, Vacations: newVacations }));
+    }
+    else {
+      setModalProduct((prev) => ({ ...prev, [name]: value }));
+    }
   };
+
 
   const handleItemValue = (idx, updatedItem) => {
     console.log('Before Update:', modalProduct);
