@@ -90,7 +90,7 @@ export default function Detail() {
     고객사실비청구서: Customer,
     출장비정산서: TravelExpenses,
     대체휴무사용품의서: Alternative,
-  };0
+  };
 
   const htmlString =
     product && product.file && fileFunctionMap[product.file]
