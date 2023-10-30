@@ -18,6 +18,7 @@ import { ReporterGift } from '../components/html/Transhtml/ReporterGift';
 import {Overtime} from "../components/html/Transhtml/Overtime";
 import {Customer} from "../components/html/Transhtml/Customer";
 import {TravelExpenses} from "../components/html/Transhtml/TravelExpenses";
+import {Alternative} from "../components/html/Transhtml/Alternative";
 
 export default function Detail() {
   const location = useLocation();
@@ -88,7 +89,8 @@ export default function Detail() {
     초과근무사전품의서: Overtime,
     고객사실비청구서: Customer,
     출장비정산서: TravelExpenses,
-  };
+    대체휴무사용품의서: Alternative,
+  };0
 
   const htmlString =
     product && product.file && fileFunctionMap[product.file]
