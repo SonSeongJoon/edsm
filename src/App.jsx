@@ -68,7 +68,7 @@ function App() {
               <Outlet />
               {showScrollToTop && (
                 <button
-                  className="fixed bottom-5 right-5 p-2 bg-brand text-white rounded-full"
+                  className="fixed top-20 right-5 p-2 bg-brand text-white font-bold rounded-full"
                   onClick={scrollTop}
                   title="Go to top"
                 >
