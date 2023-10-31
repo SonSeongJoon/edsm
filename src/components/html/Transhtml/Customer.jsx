@@ -15,13 +15,24 @@ export const Customer = ({
 
   if (admitMember) {
     keys = Object.keys(admitMember);
+
+    // '한현석'을 마지막으로 이동
     if (keys.includes('한현석')) {
-      if (keys.length === 1) {
-        keys.unshift('');
-      } else {
-        keys = keys.filter((key) => key !== '한현석');
-        keys.push('한현석');
-      }
+      keys = keys.filter((key) => key !== '한현석');
+      keys.push('한현석');
+    }
+
+    // '김연재' 또는 '윤홍민'을 첫 번째 위치로 이동
+    if (keys.includes('김연재') || keys.includes('윤홍민')) {
+      const name = keys.includes('김연재') ? '김연재' : '윤홍민';
+      keys = keys.filter((key) => key !== name);
+      keys.unshift(name);
+    }
+
+    // '권미경'을 세 번째 위치로 이동
+    if (keys.includes('권미경')) {
+      keys = keys.filter((key) => key !== '권미경');
+      keys.splice(2, 0, '권미경');  // 세 번째 위치에 '권미경' 추가
     }
   }
 
@@ -64,14 +75,19 @@ export const Customer = ({
             <tr>
                 <td style="width: 23%;">품 의 일 자</td>
                 <td style="width: 23%;">${date}</td>
+                <td style="width: 18%;">디자인/영상본부</td>
+                <td style="width: 18%;">경영지원팀</td>
                 <td style="width: 18%;">본부장</td>
                 <td style="width: 18%;">대표이사</td>
+
             </tr>
             <tr>
                 <td>부 서</td>
                 <td colspan="1">${dept}</td>
                 <td rowspan="2">${keys[0] ? '전자승인' : ''}</td>
                 <td rowspan="2">${keys[1] ? '전자승인' : ''}</td>
+                <td rowspan="2">${keys[2] ? '전자승인' : ''}</td>
+                <td rowspan="2">${keys[3] ? '전자승인' : ''}</td>
             </tr>
             <tr>
                 <td>품 의 자</td>
@@ -79,13 +95,13 @@ export const Customer = ({
             </tr>
             <tr>
                 <td>제 목</td>
-                <td colspan="4" style="text-align: left;">${title}</td>
+                <td colspan="6" style="text-align: left;">${title}</td>
             </tr>
             <tr>
-                <td colspan="4">청 구 내 역</td>
+                <td colspan="6">청 구 내 역</td>
             </tr>
             <tr style="height: 500px;">
-                <td colspan="4" style="text-align: left;" >
+                <td colspan="6" style="text-align: left;" >
                     <p>회사명: ${formattedContent}</p> 
                     <p>청구내역: ${data}</p> 
                     <p>사후정산수수료 적용 여부: ${charge}</p>
@@ -93,7 +109,7 @@ export const Customer = ({
                 </td>
             </tr>
             <tr>
-                <td colspan="4" style="text-align: left;">
+                <td colspan="6" style="text-align: left;">
                     <p>상기와 같이 청구서 확인을 요청 하오니 결재를 바랍니다.</p>
                 </td>
             </tr>
