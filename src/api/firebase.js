@@ -7,8 +7,8 @@ import {
 	signOut,
 	updateProfile,
 } from 'firebase/auth';
-import {child, get, getDatabase, limitToLast, orderByChild, query, ref, remove, set, update,} from 'firebase/database';
-import {deleteObject, getDownloadURL, getStorage, ref as Ref, uploadBytesResumable,} from 'firebase/storage';
+import {child, get, getDatabase, limitToLast, orderByChild, query, ref, remove, set, update, equalTo} from 'firebase/database';
+import {deleteObject, getDownloadURL, getStorage, ref as Ref, uploadBytesResumable} from 'firebase/storage';
 
 import {v4 as uuid} from 'uuid';
 import moment from 'moment';
@@ -51,12 +51,8 @@ async function getUserDetails(user) {
 	return get(usersQuery).then((snapshot) => {
 		if(snapshot.exists()) {
 			const users = snapshot.val();
-			const isAdmin = Object.keys(users).some(
-				(uid) => users[uid].role === '부서장&대표' && uid === user.uid,
-			);
-			const isMst = Object.keys(users).some(
-				(uid) => users[uid].department === '경영지원팀' && uid === user.uid,
-			);
+			const isAdmin = Object.keys(users).some((uid) => users[uid].role === '부서장&대표' && uid === user.uid);
+			const isMst = Object.keys(users).some((uid) => users[uid].department === '경영지원팀' && uid === user.uid);
 
 			const userDepartment = users[user.uid]?.department;
 			const userPhoneNum = users[user.uid]?.phoneNum;
@@ -75,14 +71,7 @@ async function getUserDetails(user) {
 	});
 }
 
-export async function addNewProduct(
-	product,
-	userName,
-	userDept,
-	userPhoneNum,
-	userCorporation,
-	downloadURL,
-) {
+export async function addNewProduct(product, userName, userDept, userPhoneNum, userCorporation, downloadURL) {
 	const userId = auth.currentUser?.uid;
 	if(!userId) {
 		throw new Error('User is not authenticated');
@@ -225,13 +214,13 @@ export async function getReceive(adminId) {
 	});
 }
 
-export async function getAll(state) {
+export async function getAll(state, yearMonth) {
 	const db = getDatabase();
 	const productsRef = ref(db, 'products');
 	let dataQuery;
 
 	if(state === 'all') {
-		dataQuery = query(productsRef, orderByChild('timestamp'));
+		dataQuery = query(productsRef, orderByChild('yearMonth'), equalTo(`${yearMonth}`));
 	} else {
 		dataQuery = query(productsRef, orderByChild('timestamp'), limitToLast(20));
 	}
@@ -243,9 +232,9 @@ export async function getAll(state) {
 		let allEntries = snapshot.val();
 
 		if(state === 'verified') {
-			allEntries = Object.values(allEntries).filter(entry => entry.mstCheck === '확인');
+			allEntries = Object.values(allEntries).filter((entry) => entry.mstCheck === '확인');
 		} else if(state === 'unverified') {
-			allEntries = Object.values(allEntries).filter(entry => entry.mstCheck === '미확인');
+			allEntries = Object.values(allEntries).filter((entry) => entry.mstCheck === '미확인');
 		}
 
 		// all 상태일 때도 포함하여 정렬
@@ -259,13 +248,7 @@ export async function getAll(state) {
 	return [];
 }
 
-
-export async function updateProduct(
-	product,
-	userName,
-	productID,
-	updatedProduct,
-) {
+export async function updateProduct(product, userName, productID, updatedProduct) {
 	const emails = product.agree;
 	const usersRef = ref(db, 'userdata');
 	const snapshot = await get(usersRef);
@@ -273,9 +256,7 @@ export async function updateProduct(
 	if(snapshot.exists()) {
 		const usersData = snapshot.val();
 
-		await set(ref(db, `products/${product.id}`), updatedProduct).catch(
-			console.error,
-		);
+		await set(ref(db, `products/${product.id}`), updatedProduct).catch(console.error);
 
 		await Promise.all(
 			emails.map(async (email) => {
@@ -329,11 +310,7 @@ export async function deleteProduct(productID) {
 //Email 회원가입
 export const signupEmail = async (formData) => {
 	try {
-		const userCredential = await createUserWithEmailAndPassword(
-			auth,
-			formData.email,
-			formData.password,
-		);
+		const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
 		const user = userCredential.user;
 		await updateProfile(user, {
 			displayName: formData.name,
@@ -364,14 +341,9 @@ export async function setOneState(adminId, fileId, desiredState) {
 		throw new Error('Invalid state provided');
 	}
 
-	const currentStateSnapshot = await get(
-		child(dbRef, `admins/${fileId}/${adminId}/oneState`),
-	);
+	const currentStateSnapshot = await get(child(dbRef, `admins/${fileId}/${adminId}/oneState`));
 
-	if(
-		currentStateSnapshot.exists() &&
-		currentStateSnapshot.val() === desiredState
-	) {
+	if(currentStateSnapshot.exists() && currentStateSnapshot.val() === desiredState) {
 		return desiredState;
 	}
 
@@ -381,13 +353,11 @@ export async function setOneState(adminId, fileId, desiredState) {
 }
 
 export async function getOneState(adminId, fileId) {
-	return get(child(dbRef, `admins/${fileId}/${adminId}/oneState`)).then(
-		(snapshot) => {
-			if(snapshot.exists()) {
-				return snapshot.val();
-			}
-		},
-	);
+	return get(child(dbRef, `admins/${fileId}/${adminId}/oneState`)).then((snapshot) => {
+		if(snapshot.exists()) {
+			return snapshot.val();
+		}
+	});
 }
 
 // 반려사유등록하기
@@ -422,14 +392,12 @@ export async function getRejectReasonProduct(fileId) {
 }
 
 export async function getRejectReasonAdmin(userId, fileId) {
-	return get(child(dbRef, `admins/${fileId}/${userId}/reason`)).then(
-		(snapshot) => {
-			if(snapshot.exists()) {
-				return snapshot.val();
-			}
-			return null;
-		},
-	);
+	return get(child(dbRef, `admins/${fileId}/${userId}/reason`)).then((snapshot) => {
+		if(snapshot.exists()) {
+			return snapshot.val();
+		}
+		return null;
+	});
 }
 
 export async function setAdmit(fileId, userName) {
@@ -501,8 +469,7 @@ export const handleMultipleFilesUpload = async (files) => {
 			uploadTask.on(
 				'state_changed',
 				(snapshot) => {
-					const progress =
-						(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+					const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 					console.log('Upload is ' + progress + '% done');
 				},
 				(error) => {
@@ -578,15 +545,15 @@ export async function updateMstCheckInFirebase(productId, checkStatus) {
 	const statusString = checkStatus ? '확인' : '미확인';
 
 	const updates = {
-		mstCheck: statusString
+		mstCheck: statusString,
 	};
 
 	await update(productRef, updates)
 	.then(() => {
-		console.log("mstCheck updated successfully!");
+		console.log('mstCheck updated successfully!');
 	})
 	.catch((error) => {
-		console.error("Error updating mstCheck: ", error);
+		console.error('Error updating mstCheck: ', error);
 	});
 }
 
@@ -613,7 +580,6 @@ export async function updateMstCheckInFirebase(productId, checkStatus) {
 //     console.error("Error updating mstCheck: ", error);
 //   }
 // }
-
 
 // export async function addTimestamps() {
 // 	const db = getDatabase();
@@ -651,7 +617,7 @@ export async function addYearMonth() {
 
 		for (const [productId, product] of Object.entries(products)) {
 			// date 값을 파싱하여 yearMonth 생성
-			const dateStr = product.date;  // 예: "23.10.31 | 11:40"
+			const dateStr = product.date; // 예: "23.10.31 | 11:40"
 			const [year, month] = dateStr.split(' | ')[0].split('.');
 
 			// yearMonth 값을 생성합니다.

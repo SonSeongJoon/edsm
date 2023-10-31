@@ -4,7 +4,14 @@ import { getUsersData } from '../api/firebase';
 import { useVerificationStatus } from '../context/VerificationStatusProvider';
 import moment from 'moment'; // moment 라이브러리를 임포트
 
-export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst }) => {
+export const TableComponent = ({
+  isLoading,
+  error,
+  currentItems,
+  isAdmins,
+  isMst,
+  onYearMonthChange,
+}) => {
   const [selectedDept, setSelectedDept] = useState('전체');
   const [selectedName, setSelectedName] = useState('전체');
   const [selectedYear, setSelectedYear] = useState(moment().format('YY')); // 현재 연도
@@ -116,6 +123,15 @@ export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst
     },
     [setVerificationStatus],
   );
+  
+  useEffect(() => {
+    const handleYearMonthChange = () => {
+      const yearMonth = `${selectedYear}${selectedMonth}`; // 연도와 월을 합쳐서 문자열 생성
+      onYearMonthChange(yearMonth); // yearMonth 상태 업데이트
+    };
+    
+    handleYearMonthChange();
+  }, [selectedYear, selectedMonth, onYearMonthChange]);
 
   return (
     <div className="w-full text-xm sm:text-md">
@@ -149,28 +165,32 @@ export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst
                 </option>
               ))}
             </select>
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            >
-              {uniqueYears.map((year) => (
-                <option key={year} value={year}>
-                  {year} 년
-                </option>
-              ))}
-            </select>
-            <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            >
-              {uniqueMonths.map((month) => (
-                <option key={month} value={month}>
-                  {month} 월
-                </option>
-              ))}
-            </select>
+            {verificationStatus === 'all' && (
+               <>
+                 <select
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                    className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                 >
+                   {uniqueYears.map((year) => (
+                      <option key={year} value={year}>
+                        {year} 년
+                      </option>
+                   ))}
+                 </select>
+                 <select
+                    value={selectedMonth}
+                    onChange={(e) => setSelectedMonth(e.target.value)}
+                    className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                 >
+                   {uniqueMonths.map((month) => (
+                      <option key={month} value={month}>
+                        {month} 월
+                      </option>
+                   ))}
+                 </select>
+               </>
+            )}
           </div>
           <div className="flex items-center space-x-3 sm:mr-5 ml-3 py-1.5">
             <label className="flex">

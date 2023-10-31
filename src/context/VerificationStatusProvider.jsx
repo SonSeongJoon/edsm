@@ -13,7 +13,6 @@ export const VerificationStatusProvider = ({ children }) => {
   );
 };
 
-// custom hook을 사용하여 context에 접근하기 쉽게 만듭니다.
 export const useVerificationStatus = () => {
   const context = useContext(VerificationStatusContext);
   if (!context) {
