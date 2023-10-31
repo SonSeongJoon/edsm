@@ -1,18 +1,14 @@
 export const vacationPlan = ({
   file,
-  VacationReason,
   dept,
   AttributionYear,
   TotalLeaveDays,
   UsedDays,
-  daysDifference,
   RemainDays,
-  startDate,
-  endDate,
   name,
   admitMember,
   corporation,
-  Vacations, // Vacations를 직접 가져옵니다.
+  Vacations,
 }) => {
   let keys = [];
 
@@ -27,7 +23,6 @@ export const vacationPlan = ({
       }
     }
   }
-  // Vacations 데이터를 기반으로 휴가 항목을 생성합니다.
   const vacationItems = Vacations.map(vacation => `
     <tr>
       <td>휴가기간</td>

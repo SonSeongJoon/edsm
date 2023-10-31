@@ -1,24 +1,21 @@
-import moment from 'moment';
-
 export const ReporterGift = ({
-	                                 file,
-	                                 name,
-	                                 content,
-	                                 dept,
-	                                 title,
-	                                 startDate,
-	                                 price,
-	                                 note,
-	                                 admitMember,
-	                                 corporation,
-                                 }) => {
-	const date = moment().format('YYYY.MM.DD');
+	                             file,
+	                             name,
+	                             content,
+	                             dept,
+	                             title,
+	                             startDate,
+	                             price,
+	                             note,
+	                             admitMember,
+	                             corporation,
+	                             date,
+                             }) => {
 	let keys = [];
-
-	if (admitMember) {
+	if(admitMember) {
 		keys = Object.keys(admitMember);
-		if (keys.includes('한현석')) {
-			if (keys.length === 1) {
+		if(keys.includes('한현석')) {
+			if(keys.length === 1) {
 				keys.unshift('');
 			} else {
 				keys = keys.filter((key) => key !== '한현석');
