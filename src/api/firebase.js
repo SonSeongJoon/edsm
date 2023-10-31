@@ -242,7 +242,6 @@ export async function getAll(state) {
 	const db = getDatabase();
 	const productsRef = ref(db, 'products');
 	let dataQuery;
-	console.log(state);
 
 	if (state === 'all') {
 		dataQuery = query(productsRef, orderByChild('timestamp'));

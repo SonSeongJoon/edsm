@@ -2,19 +2,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PaperRow from './PaperRow';
 import { getUsersData } from '../api/firebase';
 import { useVerificationStatus } from '../context/VerificationStatusProvider';
+import moment from 'moment'; // moment 라이브러리를 임포트
 
-export const TableComponent = ({
-  isLoading,
-  error,
-  currentItems,
-  isAdmins,
-  isMst,
-  onVerificationChange,
-}) => {
+export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst }) => {
   const [selectedDept, setSelectedDept] = useState('전체');
   const [selectedName, setSelectedName] = useState('전체');
-  const [selectedYear, setSelectedYear] = useState('전체');
-  const [selectedMonth, setSelectedMonth] = useState('전체');
+  const [selectedYear, setSelectedYear] = useState(moment().format('YY')); // 현재 연도
+  const [selectedMonth, setSelectedMonth] = useState(moment().format('MM')); // 현재 월
+
   const [selectFilename, setSelectFilename] = useState('전체 구분');
   const [selectState, setSelectState] = useState('전체 상태');
   const [selectCheck, setSelectCheck] = useState('확인여부');
@@ -55,26 +50,14 @@ export const TableComponent = ({
 
   useEffect(() => {
     if (currentItems.length > 0) {
-      const years = [
-        ...new Set(
-          currentItems.map(
-            (item) => item.date.split('|')[0].trim().split('.')[0],
-          ),
-        ),
-      ];
-      const months = [
-        ...new Set(
-          currentItems.map(
-            (item) => item.date.split('|')[0].trim().split('.')[1],
-          ),
-        ),
-      ];
+      const years = [...new Set(currentItems.map((item) => item.date.split('|')[0].trim().split('.')[0]))];
+      const months = [...new Set(currentItems.map((item) => item.date.split('|')[0].trim().split('.')[1]))];
 
       const files = [...new Set(currentItems.map((item) => item.file))];
       const states = [...new Set(currentItems.map((item) => item.state))];
       const checks = [...new Set(currentItems.map((item) => item.mstCheck))];
-      setUniqueYears(['전체', ...years]);
-      setUniqueMonths(['전체', ...months]);
+      setUniqueYears([...years]);
+      setUniqueMonths([...months]);
       setUniqueFiles(['전체 구분', ...files]);
       setUniqueState(['전체 상태', ...states]);
       setUniqueCheck(['확인여부', ...checks]);
@@ -97,16 +80,11 @@ export const TableComponent = ({
     }
 
     if (selectedYear !== '전체') {
-      items = items.filter(
-        (item) => item.date.split('|')[0].trim().split('.')[0] === selectedYear,
-      );
+      items = items.filter((item) => item.date.split('|')[0].trim().split('.')[0] === selectedYear);
     }
 
     if (selectedMonth !== '전체') {
-      items = items.filter(
-        (item) =>
-          item.date.split('|')[0].trim().split('.')[1] === selectedMonth,
-      );
+      items = items.filter((item) => item.date.split('|')[0].trim().split('.')[1] === selectedMonth);
     }
 
     if (selectFilename !== '전체 구분') {
@@ -172,16 +150,18 @@ export const TableComponent = ({
               ))}
             </select>
             <select
+              value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
               className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             >
               {uniqueYears.map((year) => (
                 <option key={year} value={year}>
-                  {year} 연도
+                  {year}년
                 </option>
               ))}
             </select>
             <select
+              value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
               className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             >
@@ -215,7 +195,7 @@ export const TableComponent = ({
               />
               확인(최근)
             </label>
-            <label className="flex">
+            <label className="flex text-gray-500 text-xm">
               <input
                 className="mr-1"
                 type="radio"
@@ -224,7 +204,7 @@ export const TableComponent = ({
                 checked={verificationStatus === 'all'}
                 onChange={handleRadioChange}
               />
-              전체보기
+              전체(필요시에만..)
             </label>
           </div>
         </div>
@@ -290,20 +270,17 @@ export const TableComponent = ({
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-300">
-        {filteredItems.length > 0 ? (
-           filteredItems.map((product) => (
-              <PaperRow
-                 key={product.id}
-                 product={product}
-                 isAdmins={isAdmins}
-                 isMst={isMst}
-              />
-           ))
-        ) : (
-           <tr>
-             <td colSpan="100%" className="text-center py-3">자료가 없습니다</td>
-           </tr>
-        )}
+          {filteredItems.length > 0 ? (
+            filteredItems.map((product) => (
+              <PaperRow key={product.id} product={product} isAdmins={isAdmins} isMst={isMst} />
+            ))
+          ) : (
+            <tr>
+              <td colSpan="100%" className="text-center py-3">
+                자료가 없습니다
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
