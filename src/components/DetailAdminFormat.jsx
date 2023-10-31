@@ -188,7 +188,7 @@ export default function DetailAdminFormat({displayProduct, product, navigate, st
 				<button
 					className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded ml-2"
 					onClick={() => {
-						alert("승인하셨습니다. 확인버튼을 눌러 미확인 결재를 확인하세요");
+						alert("승인완료! 확인(닫기)버튼 클릭시 미확인 결재확인");
 						handleAdmitAction(STATE_APPROVED);
 						window.location.href = `/${path}`;
 					}}
