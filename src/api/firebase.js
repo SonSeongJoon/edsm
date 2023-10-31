@@ -7,25 +7,8 @@ import {
 	signOut,
 	updateProfile,
 } from 'firebase/auth';
-import {
-	child,
-	get,
-	getDatabase,
-	query,
-	ref,
-	remove,
-	set,
-	update,
-	limitToLast,
-	orderByChild,
-} from 'firebase/database';
-import {
-	getStorage,
-	ref as Ref,
-	uploadBytesResumable,
-	getDownloadURL,
-	deleteObject,
-} from 'firebase/storage';
+import {child, get, getDatabase, limitToLast, orderByChild, query, ref, remove, set, update,} from 'firebase/database';
+import {deleteObject, getDownloadURL, getStorage, ref as Ref, uploadBytesResumable,} from 'firebase/storage';
 
 import {v4 as uuid} from 'uuid';
 import moment from 'moment';
@@ -107,6 +90,8 @@ export async function addNewProduct(
 	const id = uuid();
 	let now = moment();
 	let dateTime = now.format('YY.MM.DD | HH:mm');
+	const timestamp = now.valueOf();
+	const yearMonth = now.format('YYMM');
 
 	await set(ref(db, `products/${id}`), {
 		...product,
@@ -118,6 +103,8 @@ export async function addNewProduct(
 		dept         : userDept,
 		writerPhonNum: userPhoneNum,
 		corporation  : userCorporation,
+		timestamp    : timestamp,
+		yearMonth    : yearMonth,
 		mstCheck     : '미확인',
 		...(downloadURL && {downloadURL: downloadURL}),
 	});
@@ -243,7 +230,7 @@ export async function getAll(state) {
 	const productsRef = ref(db, 'products');
 	let dataQuery;
 
-	if (state === 'all') {
+	if(state === 'all') {
 		dataQuery = query(productsRef, orderByChild('timestamp'));
 	} else {
 		dataQuery = query(productsRef, orderByChild('timestamp'), limitToLast(20));
@@ -252,27 +239,25 @@ export async function getAll(state) {
 	// 데이터 쿼리 실행
 	const snapshot = await get(dataQuery);
 
-	if (snapshot.exists()) {
+	if(snapshot.exists()) {
 		let allEntries = snapshot.val();
 
-		if (state === 'verified') {
+		if(state === 'verified') {
 			allEntries = Object.values(allEntries).filter(entry => entry.mstCheck === '확인');
-		} else if (state === 'unverified') {
+		} else if(state === 'unverified') {
 			allEntries = Object.values(allEntries).filter(entry => entry.mstCheck === '미확인');
 		}
 
 		// all 상태일 때도 포함하여 정렬
 		return Object.values(allEntries).sort((a, b) => {
-			if (a.date < b.date) return 1;
-			if (a.date > b.date) return -1;
+			if(a.date < b.date) return 1;
+			if(a.date > b.date) return -1;
 			return 0;
 		});
 	}
 
 	return [];
 }
-
-
 
 
 export async function updateProduct(
@@ -630,7 +615,6 @@ export async function updateMstCheckInFirebase(productId, checkStatus) {
 // }
 
 
-
 // export async function addTimestamps() {
 // 	const db = getDatabase();
 // 	const productsRef = ref(db, 'products');
@@ -655,3 +639,27 @@ export async function updateMstCheckInFirebase(productId, checkStatus) {
 // 		}
 // 	}
 // }
+
+export async function addYearMonth() {
+	const db = getDatabase();
+	const productsRef = ref(db, 'products');
+
+	// 데이터베이스에서 products 데이터를 가져옴
+	const snapshot = await get(productsRef);
+	if(snapshot.exists()) {
+		const products = snapshot.val();
+
+		for (const [productId, product] of Object.entries(products)) {
+			// date 값을 파싱하여 yearMonth 생성
+			const dateStr = product.date;  // 예: "23.10.31 | 11:40"
+			const [year, month] = dateStr.split(' | ')[0].split('.');
+
+			// yearMonth 값을 생성합니다.
+			const yearMonth = `${year}${month}`;
+
+			// yearMonth 값을 데이터베이스에 업데이트
+			const productRef = ref(db, `products/${productId}`);
+			await update(productRef, {yearMonth});
+		}
+	}
+}

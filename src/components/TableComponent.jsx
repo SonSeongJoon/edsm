@@ -156,7 +156,7 @@ export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst
             >
               {uniqueYears.map((year) => (
                 <option key={year} value={year}>
-                  {year}년
+                  {year} 년
                 </option>
               ))}
             </select>
