@@ -86,7 +86,6 @@ export default function DetailAdminFormat({ displayProduct, product, navigate, s
 
         setData(updatedState);
 
-        // Ensure that the admit is set or removed before proceeding
         if (updatedState === STATE_APPROVED) {
           await setAdmit(product.id, user.user.displayName);
         } else {
