@@ -290,16 +290,20 @@ export const TableComponent = ({
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-300">
-          {filteredItems.map((product) => {
-            return (
+        {filteredItems.length > 0 ? (
+           filteredItems.map((product) => (
               <PaperRow
-                key={product.id}
-                product={product}
-                isAdmins={isAdmins}
-                isMst={isMst}
+                 key={product.id}
+                 product={product}
+                 isAdmins={isAdmins}
+                 isMst={isMst}
               />
-            );
-          })}
+           ))
+        ) : (
+           <tr>
+             <td colSpan="100%" className="text-center py-3">자료가 없습니다</td>
+           </tr>
+        )}
         </tbody>
       </table>
     </div>
