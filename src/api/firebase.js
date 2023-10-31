@@ -431,8 +431,14 @@ export async function getAllOneState(fileId) {
 }
 
 export async function setState(fileId, state) {
-	return set(ref(db, `products/${fileId}/state`), state);
+	try {
+		await set(ref(db, `products/${fileId}/state`), state);
+		console.log('State updated successfully');
+	} catch (error) {
+		console.error('Error updating state: ', error);
+	}
 }
+
 
 export async function getUsersData() {
 	return get(child(dbRef, `userdata`)).then((snapshot) => {

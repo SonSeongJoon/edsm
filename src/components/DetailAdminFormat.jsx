@@ -67,7 +67,7 @@ export default function DetailAdminFormat({displayProduct, product, navigate, st
 
 	const handleAdmitAction = useCallback(async (actionState) => {
 		try {
-			if(data === STATE_REJECTED && isChildSubmitted) {
+			if (data === STATE_REJECTED && isChildSubmitted) {
 				alert('사유를 먼저 삭제하세요');
 				return;
 			}
@@ -75,33 +75,40 @@ export default function DetailAdminFormat({displayProduct, product, navigate, st
 			const updatedState = await setOneState(uid, product.id, actionState);
 
 			// Check if the returned state indicates it's already selected
-			if(updatedState === actionState && data === updatedState) {
+			if (updatedState === actionState && data === updatedState) {
 				alert('이미 선택된 상태입니다.'); // Optional alert to notify the user
 				return; // Exit the function
 			}
 
 			setData(updatedState);
 
-			if(updatedState === STATE_APPROVED) {
+			// Ensure that the admit is set or removed before proceeding
+			if (updatedState === STATE_APPROVED) {
 				await setAdmit(product.id, user.user.displayName);
 			} else {
 				await removeAdmit(product.id, user.user.displayName);
 			}
 
+			// Get all states and update the local state
 			const allState = await getAllOneState(product.id);
 			const updatedStates = allState
 			.filter((stateItem) => stateItem.id === product.id)
 			.map((stateItem) => ({
-				name: stateItem.name, state: stateItem.state,
+				name: stateItem.name,
+				state: stateItem.state,
 			}));
+
 			setStates(updatedStates);
 
+			// Determine and set the final state
 			const resultState = determineState(updatedStates.map((stateItem) => stateItem.state));
 			await setState(product.id, resultState);
+
 		} catch (error) {
 			console.error('Error handling admit: ', error);
 		}
-	}, [data, isChildSubmitted, uid, product.id, determineState, user.user.displayName],);
+	}, [data, isChildSubmitted, uid, product.id, determineState, user.user.displayName]);
+
 
 	useEffect(() => {
 		const fetchData = async () => {
