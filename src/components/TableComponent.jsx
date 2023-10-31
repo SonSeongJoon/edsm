@@ -132,13 +132,11 @@ export const TableComponent = ({
     selectCheck,
   ]);
 
-  // This function is triggered when the radio button value changes
   const handleRadioChange = useCallback(
     (event) => {
-      // Update the global state with the new value
       setVerificationStatus(event.target.value);
     },
-    [setVerificationStatus], // Set the function as a dependency so the callback updates if it changes
+    [setVerificationStatus],
   );
 
   return (
@@ -201,7 +199,7 @@ export const TableComponent = ({
                 type="radio"
                 name="verificationStatus"
                 value="unverified"
-                checked={verificationStatus === 'unverified'} // <- control the "checked" property
+                checked={verificationStatus === 'unverified'}
                 onChange={handleRadioChange}
               />
               미확인
@@ -212,10 +210,10 @@ export const TableComponent = ({
                 type="radio"
                 name="verificationStatus"
                 value="verified"
-                checked={verificationStatus === 'verified'} // <- control the "checked" property
+                checked={verificationStatus === 'verified'}
                 onChange={handleRadioChange}
               />
-              확인(최근20개)
+              확인(최근)
             </label>
             <label className="flex">
               <input
@@ -223,7 +221,7 @@ export const TableComponent = ({
                 type="radio"
                 name="verificationStatus"
                 value="all"
-                checked={verificationStatus === 'all'} // <- control the "checked" property
+                checked={verificationStatus === 'all'}
                 onChange={handleRadioChange}
               />
               전체보기

@@ -45,6 +45,7 @@ function App() {
   }, [showScrollToTop]);
 
   const queryClient = new QueryClient();
+
   return (
      <VerificationStatusProvider>
      <AuthContextProvider>

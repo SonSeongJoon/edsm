@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 export const approvalDocument = ({
   file,
   name,
@@ -12,8 +10,8 @@ export const approvalDocument = ({
   note,
   admitMember,
   corporation,
+   date,
 }) => {
-  const date = moment().format('YYYY.MM.DD');
   let keys = [];
 
   if (admitMember) {

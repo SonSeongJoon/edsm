@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 export const Customer = ({
   file,
   name,
@@ -11,8 +9,8 @@ export const Customer = ({
   price,
   admitMember,
   corporation,
+  date,
 }) => {
-  const date = moment().format('YYYY.MM.DD');
   let keys = [];
 
   if (admitMember) {

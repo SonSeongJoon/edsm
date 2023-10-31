@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 export const Alternative = ({
   file,
   name,
@@ -11,8 +9,8 @@ export const Alternative = ({
   whenTime,
   admitMember,
   corporation,
+  date,
 }) => {
-  const date = moment().format('YYYY.MM.DD');
   let keys = [];
 
   if (admitMember) {

@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 export const Overtime = ({
   file,
   name,
@@ -10,8 +8,8 @@ export const Overtime = ({
   useWhen,
   admitMember,
   corporation,
+   date
 }) => {
-  const date = moment().format('YYYY.MM.DD');
   let keys = [];
 
   if (admitMember) {

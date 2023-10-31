@@ -1,31 +1,40 @@
-export const expenditure = ({ file, dept, deel, title, items, date, name, admitMember, corporation}) => {
-	let keys = [];
+export const expenditure = ({
+  file,
+  dept,
+  deel,
+  title,
+  items,
+  date,
+  name,
+  admitMember,
+  corporation,
+}) => {
+  let keys = [];
 
-	if (admitMember) {
-		keys = Object.keys(admitMember);
-		if (keys.includes("한현석")) {
-			if (keys.length === 1) {
-				keys.unshift('');  // 한현석만 있으면 앞에 빈 값을 추가
-			} else {
-				keys = keys.filter(key => key !== "한현석");
-				keys.push("한현석");
-			}
-		}
-	}
+  if (admitMember) {
+    keys = Object.keys(admitMember);
+    if (keys.includes('한현석')) {
+      if (keys.length === 1) {
+        keys.unshift(''); // 한현석만 있으면 앞에 빈 값을 추가
+      } else {
+        keys = keys.filter((key) => key !== '한현석');
+        keys.push('한현석');
+      }
+    }
+  }
 
+  const totalAmount = items.reduce((sum, item) => {
+    if (item && item.amount) {
+      // 쉼표 제거 후 정수로 변환
+      const amount = parseInt(item.amount.replace(/,/g, '')) || 0;
+      return sum + amount;
+    }
+    return sum;
+  }, 0);
 
-	const totalAmount = items.reduce((sum, item) => {
-		if (item && item.amount) {
-			// 쉼표 제거 후 정수로 변환
-			const amount = parseInt(item.amount.replace(/,/g, '')) || 0;
-			return sum + amount;
-		}
-		return sum;
-	}, 0);
+  const formattedTotalAmount = totalAmount.toLocaleString();
 
-	const formattedTotalAmount = totalAmount.toLocaleString();
-
-	return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -93,42 +102,48 @@ export const expenditure = ({ file, dept, deel, title, items, date, name, admitM
                 <td style="width: 100px; padding: 10px;">비&nbsp;&nbsp;고</td>
             </tr>
             <tr>
-                <td style="width: 100px; height: 30px; font-size: 13px;">${items[0].title}</td>
-                <td style="width: 100px; height: 30px; font-size: 13px;">${items[0].amount}</td>
-                <td style="width: 100px; height: 30px; font-size: 13px;">${items[0].note}</td>
+                <td style="width: 100px; height: 30px; font-size: 13px;">${
+                  items[0].title
+                }</td>
+                <td style="width: 100px; height: 30px; font-size: 13px;">${
+                  items[0].amount
+                }</td>
+                <td style="width: 100px; height: 30px; font-size: 13px;">${
+                  items[0].note
+                }</td>
             </tr>
             <tr>
                 <td style="width: 100px; height: 30px; font-size: 13px;">${
-		items[1] ? items[1].title : ''
-	}</td>
+                  items[1] ? items[1].title : ''
+                }</td>
                 <td class="amount" style="width: 100px; height: 30px; font-size: 13px;">${
-		items[1] ? items[1].amount : ''
-	}</td>
+                  items[1] ? items[1].amount : ''
+                }</td>
                 <td style="width: 100px; height: 30px; font-size: 13px;">${
-		items[1] ? items[1].note : ''
-	}</td>
+                  items[1] ? items[1].note : ''
+                }</td>
             </tr>
             <tr>
                 <td style="width: 100px; height: 30px; font-size: 13px;">${
-		items[2] ? items[2].title : ''
-	}</td>
+                  items[2] ? items[2].title : ''
+                }</td>
                 <td class="amount" style="width: 100px; height: 30px; font-size: 13px;">${
-		items[2] ? items[2].amount : ''
-	}</td>
+                  items[2] ? items[2].amount : ''
+                }</td>
                 <td style="width: 100px; height: 30px; font-size: 13px;">${
-		items[2] ? items[2].note : ''
-	}</td>
+                  items[2] ? items[2].note : ''
+                }</td>
             </tr>
             <tr>
                 <td style="width: 100px; height: 30px; font-size: 13px;">${
-		items[3] ? items[3].title : ''
-	}</td>
+                  items[3] ? items[3].title : ''
+                }</td>
                 <td class="amount" style="width: 100px; height: 30px; font-size: 13px;">${
-		items[3] ? items[3].amount : ''
-	}</td>
+                  items[3] ? items[3].amount : ''
+                }</td>
                 <td style="width: 100px; height: 30px; font-size: 13px;">${
-		items[3] ? items[3].note : ''
-	}</td>
+                  items[3] ? items[3].note : ''
+                }</td>
             </tr>
             <tr style="background-color: #E6EEF7;">
                 <td style="width: 100px; height: 30px; font-size: 13px;">계</td>

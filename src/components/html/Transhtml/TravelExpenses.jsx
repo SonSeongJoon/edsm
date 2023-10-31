@@ -13,10 +13,8 @@ export const TravelExpenses = ({ file, dept, deel, title, items, date, name, adm
 		}
 	}
 
-
 	const totalAmount = items.reduce((sum, item) => {
 		if (item && item.amount) {
-			// 쉼표 제거 후 정수로 변환
 			const amount = parseInt(item.amount.replace(/,/g, '')) || 0;
 			return sum + amount;
 		}
