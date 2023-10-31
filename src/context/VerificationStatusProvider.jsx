@@ -5,7 +5,6 @@ const VerificationStatusContext = createContext();
 
 export const VerificationStatusProvider = ({ children }) => {
   const [verificationStatus, setVerificationStatus] = useState('unverified');
-  console.log(verificationStatus)
 
   return (
      <VerificationStatusContext.Provider value={{ verificationStatus, setVerificationStatus }}>

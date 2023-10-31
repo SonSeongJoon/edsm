@@ -21,7 +21,6 @@ export default function PaperList({ category, state, adminData, MstData }) {
     queryFunction = () => getAll(verificationStatus);
   }
 
-
   const {
     isLoading,
     error,
@@ -29,6 +28,7 @@ export default function PaperList({ category, state, adminData, MstData }) {
   } = useQuery(queryKey, queryFunction);
 
   const currentItems = products ? products : [];
+  console.log(error)
 
   return (
     <TableComponent

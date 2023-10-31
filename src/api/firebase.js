@@ -17,6 +17,8 @@ import {
 	set,
 	update,
 	limitToLast,
+	orderByChild,
+	equalTo,
 } from 'firebase/database';
 import {
 	getStorage,
@@ -238,31 +240,42 @@ export async function getReceive(adminId) {
 }
 
 export async function getAll(state) {
-	const dbRef = ref(getDatabase());
-	let dataQuery = query(
-		child(dbRef, `products`),
-		limitToLast(30)
-	);
+	const db = getDatabase();
+	const productsRef = ref(db, 'products');
+	let dataQuery;
+	console.log(state);
 
-	return get(dataQuery).then((snapshot) => {
-		if(snapshot.exists()) {
-			let allEntries = snapshot.val();
+	if (state === 'all') {
+		dataQuery = query(productsRef, orderByChild('timestamp'));
+	} else {
+		dataQuery = query(productsRef, orderByChild('timestamp'), limitToLast(20));
+	}
 
-			if(state === 'verified') {
-				allEntries = Object.values(allEntries).filter(entry => entry.mstCheck === '확인');
-			} else if(state === 'unverified') {
-				allEntries = Object.values(allEntries).filter(entry => entry.mstCheck === '미확인');
-			}
+	// 데이터 쿼리 실행
+	const snapshot = await get(dataQuery);
 
-			return allEntries.sort((a, b) => {
-				if(a.date < b.date) return 1;
-				if(a.date > b.date) return -1;
-				return 0;
-			});
+	if (snapshot.exists()) {
+		let allEntries = snapshot.val();
+
+		if (state === 'verified') {
+			allEntries = Object.values(allEntries).filter(entry => entry.mstCheck === '확인');
+		} else if (state === 'unverified') {
+			allEntries = Object.values(allEntries).filter(entry => entry.mstCheck === '미확인');
 		}
-		return [];
-	});
+
+		// all 상태일 때도 포함하여 정렬
+		return Object.values(allEntries).sort((a, b) => {
+			if (a.date < b.date) return 1;
+			if (a.date > b.date) return -1;
+			return 0;
+		});
+	}
+
+	return [];
 }
+
+
+
 
 export async function updateProduct(
 	product,
@@ -620,3 +633,27 @@ export async function updateMstCheckInFirebase(productId, checkStatus) {
 
 
 
+// export async function addTimestamps() {
+// 	const db = getDatabase();
+// 	const productsRef = ref(db, 'products');
+//
+// 	// 데이터베이스에서 products 데이터를 가져옴
+// 	const snapshot = await get(productsRef);
+// 	if (snapshot.exists()) {
+// 		const products = snapshot.val();
+//
+// 		for (const [productId, product] of Object.entries(products)) {
+// 			// date 값을 파싱하여 timestamp 생성
+// 			const dateStr = product.date;  // 예: "23.10.31 | 11:40"
+// 			const [year, month, day] = dateStr.split(' | ')[0].split('.').map(str => parseInt(str, 10));
+// 			const [hour, minute] = dateStr.split(' | ')[1].split(':').map(str => parseInt(str, 10));
+//
+// 			// 여기서 연도는 2000을 더해줘야 합니다. 예를 들어, 23 -> 2023
+// 			const timestamp = new Date(year + 2000, month - 1, day, hour, minute).getTime();
+//
+// 			// timestamp 값을 데이터베이스에 업데이트
+// 			const productRef = ref(db, `products/${productId}`);
+// 			await update(productRef, { timestamp });
+// 		}
+// 	}
+// }
