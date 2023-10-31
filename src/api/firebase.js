@@ -18,7 +18,6 @@ import {
 	update,
 	limitToLast,
 	orderByChild,
-	equalTo,
 } from 'firebase/database';
 import {
 	getStorage,
