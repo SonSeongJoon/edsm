@@ -224,7 +224,7 @@ export const TableComponent = ({
                 checked={verificationStatus === 'all'}
                 onChange={handleRadioChange}
               />
-              전체(필요시에만..)
+              전체
             </label>
           </div>
         </div>
