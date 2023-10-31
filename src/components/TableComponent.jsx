@@ -177,7 +177,7 @@ export const TableComponent = ({
             >
               {uniqueYears.map((year) => (
                 <option key={year} value={year}>
-                  {year}년
+                  {year} 연도
                 </option>
               ))}
             </select>
@@ -187,7 +187,7 @@ export const TableComponent = ({
             >
               {uniqueMonths.map((month) => (
                 <option key={month} value={month}>
-                  {month}월
+                  {month} 월
                 </option>
               ))}
             </select>
