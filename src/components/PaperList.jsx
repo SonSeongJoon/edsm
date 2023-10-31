@@ -2,10 +2,12 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getAll, getProduct, getReceive } from '../api/firebase';
 import { TableComponent } from './TableComponent';
-import {useVerificationStatus} from "../context/VerificationStatusProvider";
+import { useVerificationStatus } from '../context/VerificationStatusProvider';
+import { useYearMonthContext } from '../context/YearMonthContext';
 
 export default function PaperList({ category, state, adminData, MstData }) {
   const { verificationStatus, setVerificationStatus } = useVerificationStatus();
+  const { yearMonth, setYearMonth} = useYearMonthContext();
   const handleVerificationChange = (newStatus) => {
     setVerificationStatus(newStatus);
   };
@@ -18,17 +20,12 @@ export default function PaperList({ category, state, adminData, MstData }) {
   } else if (adminData && !MstData) {
     queryFunction = () => getReceive(state);
   } else if (MstData) {
-    queryFunction = () => getAll(verificationStatus);
+    queryFunction = () => getAll(verificationStatus, yearMonth);
   }
 
-  const {
-    isLoading,
-    error,
-    data: products,
-  } = useQuery(queryKey, queryFunction);
+  const { isLoading, error, data: products } = useQuery(queryKey, queryFunction);
 
   const currentItems = products ? products : [];
-  console.log(error)
 
   return (
     <TableComponent
@@ -38,6 +35,7 @@ export default function PaperList({ category, state, adminData, MstData }) {
       isAdmins={adminData}
       isMst={MstData}
       onVerificationChange={handleVerificationChange}
+      onYearMonthChange={setYearMonth}
     />
   );
 }

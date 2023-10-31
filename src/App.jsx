@@ -4,7 +4,8 @@ import Sidebar from './components/Sidebar';
 import { Outlet } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthContextProvider } from './context/AuthContext';
-import {VerificationStatusProvider} from "./context/VerificationStatusProvider";
+import { VerificationStatusProvider } from './context/VerificationStatusProvider';
+import { YearMonthContextProvider } from './context/YearMonthContext';
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -47,41 +48,40 @@ function App() {
   const queryClient = new QueryClient();
 
   return (
-     <VerificationStatusProvider>
-     <AuthContextProvider>
-      <div className="flex flex-col h-screen">
-        <header>
-          <Header toggleSidebar={toggleSidebar} />
-        </header>
-        <div className="flex-grow flex relative">
-          <div
-            className={`${
-              isSidebarOpen ? '' : 'hidden'
-            } md:block  md:static top-0 left-0 h-[calc(100vh - 4rem)] flex-shrink-0 flex-basis-1/6 bg-red-50 border-r border-r-gray-300`}
-          >
-            <Sidebar toggleSidebar={toggleSidebar} />
+    <VerificationStatusProvider>
+      <YearMonthContextProvider>
+        <AuthContextProvider>
+          <div className="flex flex-col h-screen">
+            <header>
+              <Header toggleSidebar={toggleSidebar} />
+            </header>
+            <div className="flex-grow flex relative">
+              <div
+                className={`${
+                  isSidebarOpen ? '' : 'hidden'
+                } md:block  md:static top-0 left-0 h-[calc(100vh - 4rem)] flex-shrink-0 flex-basis-1/6 bg-red-50 border-r border-r-gray-300`}
+              >
+                <Sidebar toggleSidebar={toggleSidebar} />
+              </div>
+              <QueryClientProvider client={queryClient}>
+                <main ref={mainContentRef} className="flex-grow overflow-y-auto max-h-[calc(100vh-4.2rem)]">
+                  <Outlet />
+                  {showScrollToTop && (
+                    <button
+                      className="fixed top-20 right-5 p-2 bg-brand text-white font-bold rounded-full"
+                      onClick={scrollTop}
+                      title="Go to top"
+                    >
+                      Top
+                    </button>
+                  )}
+                </main>
+              </QueryClientProvider>
+            </div>
           </div>
-          <QueryClientProvider client={queryClient}>
-            <main
-              ref={mainContentRef}
-              className="flex-grow overflow-y-auto max-h-[calc(100vh-4.2rem)]"
-            >
-              <Outlet />
-              {showScrollToTop && (
-                <button
-                  className="fixed top-20 right-5 p-2 bg-brand text-white font-bold rounded-full"
-                  onClick={scrollTop}
-                  title="Go to top"
-                >
-                  Top
-                </button>
-              )}
-            </main>
-          </QueryClientProvider>
-        </div>
-      </div>
-    </AuthContextProvider>
-     </VerificationStatusProvider>
+        </AuthContextProvider>
+      </YearMonthContextProvider>
+    </VerificationStatusProvider>
   );
 }
 
