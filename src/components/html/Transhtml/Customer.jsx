@@ -22,10 +22,11 @@ export const Customer = ({
       keys.push('한현석');
     }
 
-    // '김연재'를 첫 번째 위치로 이동
+    // '김연재' 또는 '윤홍민'을 첫 번째 위치로 이동
     if (keys.includes('김연재') || keys.includes('윤홍민')) {
-      keys = keys.filter((key) => key !== '김연재');
-      keys.unshift('김연재');
+      const name = keys.includes('김연재') ? '김연재' : '윤홍민';
+      keys = keys.filter((key) => key !== name);
+      keys.unshift(name);
     }
 
     // '권미경'을 세 번째 위치로 이동
