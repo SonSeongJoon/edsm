@@ -7,13 +7,13 @@ import { useYearMonthContext } from '../context/YearMonthContext';
 
 export default function PaperList({ category, state, adminData, MstData }) {
   const { verificationStatus, setVerificationStatus } = useVerificationStatus();
-  const { yearMonth, setYearMonth} = useYearMonthContext();
+  const { yearMonth, setYearMonth } = useYearMonthContext();
   const handleVerificationChange = (newStatus) => {
     setVerificationStatus(newStatus);
   };
 
   let queryFunction;
-  const queryKey = [category, state, verificationStatus, adminData, MstData];
+  const queryKey = [category, state, verificationStatus, adminData, MstData, yearMonth];
 
   if (!adminData && !MstData) {
     queryFunction = () => getProduct(state);
