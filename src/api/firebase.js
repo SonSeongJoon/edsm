@@ -220,6 +220,7 @@ export async function getAll(state, yearMonth) {
 	let dataQuery;
 
 	if(state === 'all') {
+		console.log(yearMonth)
 		dataQuery = query(productsRef, orderByChild('yearMonth'), equalTo(`${yearMonth}`));
 	} else {
 		dataQuery = query(productsRef, orderByChild('timestamp'), limitToLast(20));

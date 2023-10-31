@@ -2,20 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PaperRow from './PaperRow';
 import { getUsersData } from '../api/firebase';
 import { useVerificationStatus } from '../context/VerificationStatusProvider';
-import moment from 'moment'; // moment 라이브러리를 임포트
+import moment from 'moment';
 
-export const TableComponent = ({
-  isLoading,
-  error,
-  currentItems,
-  isAdmins,
-  isMst,
-  onYearMonthChange,
-}) => {
+export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst, onYearMonthChange }) => {
   const [selectedDept, setSelectedDept] = useState('전체');
   const [selectedName, setSelectedName] = useState('전체');
-  const [selectedYear, setSelectedYear] = useState(moment().format('YY')); // 현재 연도
-  const [selectedMonth, setSelectedMonth] = useState(moment().format('MM')); // 현재 월
+  const [selectedYear, setSelectedYear] = useState(moment().format('YY'));
+  const [selectedMonth, setSelectedMonth] = useState(moment().format('MM'));
 
   const [selectFilename, setSelectFilename] = useState('전체 구분');
   const [selectState, setSelectState] = useState('전체 상태');
@@ -24,12 +17,17 @@ export const TableComponent = ({
   const [currentDeptMembers, setCurrentDeptMembers] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [deptMembers, setDeptMembers] = useState({});
-  const [uniqueYears, setUniqueYears] = useState([]);
-  const [uniqueMonths, setUniqueMonths] = useState([]);
   const [uniqueFiles, setUniqueFiles] = useState([]);
   const [uniqueState, setUniqueState] = useState([]);
   const [uniqueCheck, setUniqueCheck] = useState([]);
   const { verificationStatus, setVerificationStatus } = useVerificationStatus();
+
+  const currentYear = moment().year(); // 현재 연도를 얻기
+  const startYear = 2023; // 서비스 시작 연도
+  const years = Array.from({ length: currentYear - startYear + 1 }, (_, i) => (startYear + i).toString().slice(-2));
+
+
+
 
   const transformData = async () => {
     const usersData = await getUsersData();
@@ -57,14 +55,9 @@ export const TableComponent = ({
 
   useEffect(() => {
     if (currentItems.length > 0) {
-      const years = [...new Set(currentItems.map((item) => item.date.split('|')[0].trim().split('.')[0]))];
-      const months = [...new Set(currentItems.map((item) => item.date.split('|')[0].trim().split('.')[1]))];
-
       const files = [...new Set(currentItems.map((item) => item.file))];
       const states = [...new Set(currentItems.map((item) => item.state))];
       const checks = [...new Set(currentItems.map((item) => item.mstCheck))];
-      setUniqueYears([...years]);
-      setUniqueMonths([...months]);
       setUniqueFiles(['전체 구분', ...files]);
       setUniqueState(['전체 상태', ...states]);
       setUniqueCheck(['확인여부', ...checks]);
@@ -86,14 +79,6 @@ export const TableComponent = ({
       items = items.filter((item) => item.displayName === selectedName);
     }
 
-    if (selectedYear !== '전체') {
-      items = items.filter((item) => item.date.split('|')[0].trim().split('.')[0] === selectedYear);
-    }
-
-    if (selectedMonth !== '전체') {
-      items = items.filter((item) => item.date.split('|')[0].trim().split('.')[1] === selectedMonth);
-    }
-
     if (selectFilename !== '전체 구분') {
       items = items.filter((item) => item.file === selectFilename);
     }
@@ -105,17 +90,7 @@ export const TableComponent = ({
     }
 
     setFilteredItems(items);
-  }, [
-    selectedName,
-    selectedDept,
-    selectedYear,
-    selectedMonth,
-    currentItems,
-    deptMembers,
-    selectFilename,
-    selectState,
-    selectCheck,
-  ]);
+  }, [selectedName, selectedDept, selectedYear, currentItems, deptMembers, selectFilename, selectState, selectCheck]);
 
   const handleRadioChange = useCallback(
     (event) => {
@@ -123,13 +98,13 @@ export const TableComponent = ({
     },
     [setVerificationStatus],
   );
-  
+
   useEffect(() => {
     const handleYearMonthChange = () => {
       const yearMonth = `${selectedYear}${selectedMonth}`; // 연도와 월을 합쳐서 문자열 생성
       onYearMonthChange(yearMonth); // yearMonth 상태 업데이트
     };
-    
+
     handleYearMonthChange();
   }, [selectedYear, selectedMonth, onYearMonthChange]);
 
@@ -166,30 +141,30 @@ export const TableComponent = ({
               ))}
             </select>
             {verificationStatus === 'all' && (
-               <>
-                 <select
-                    value={selectedYear}
-                    onChange={(e) => setSelectedYear(e.target.value)}
-                    className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                 >
-                   {uniqueYears.map((year) => (
-                      <option key={year} value={year}>
-                        {year} 년
-                      </option>
-                   ))}
-                 </select>
-                 <select
-                    value={selectedMonth}
-                    onChange={(e) => setSelectedMonth(e.target.value)}
-                    className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                 >
-                   {uniqueMonths.map((month) => (
-                      <option key={month} value={month}>
-                        {month} 월
-                      </option>
-                   ))}
-                 </select>
-               </>
+              <>
+                <select
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                >
+                  {years.map((year) => (
+                    <option key={year} value={year}>
+                      {year} 년
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                >
+                  {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+                    <option key={month} value={month}>
+                      {month} 월
+                    </option>
+                  ))}
+                </select>
+              </>
             )}
           </div>
           <div className="flex items-center space-x-3 sm:mr-5 ml-3 py-1.5">
