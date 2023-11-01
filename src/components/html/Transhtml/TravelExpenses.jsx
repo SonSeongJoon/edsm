@@ -74,7 +74,7 @@ export const TravelExpenses = ({ file, dept, deel, title, items, date, name, adm
             </tr>
             <tr>
                 <td style="width: 50px; background-color: #E6EEF7;">제&nbsp;&nbsp;목</td>
-                <td style="width: 100px">${title}</td>
+                <td style="width: 100px" style="text-align: left">${title}</td>
                 <td style="width: 50px; background-color: #E6EEF7;">금&nbsp;&nbsp;액</td>
                 <td style="width: 100px">${formattedTotalAmount}</td>
             </tr>
