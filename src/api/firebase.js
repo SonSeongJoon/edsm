@@ -431,7 +431,6 @@ export async function getAllOneState(fileId) {
 }
 
 export async function setState(fileId, state) {
-	console.log(state)
 	try {
 		await set(ref(db, `products/${fileId}/state`), state);
 		console.log('State updated successfully');
