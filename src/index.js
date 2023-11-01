@@ -16,6 +16,7 @@ import Receive from './pages/Receive';
 import ProtectRoute from './components/ProtectRoute';
 import MstPage from './pages/MstPage';
 import Reject from './pages/Reject';
+import ForgotPassword from "./pages/ForgotPassword";
 
 const routes = [
   { path: 'dashboard', component: Home },
@@ -55,6 +56,11 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: '/forgotPassword',
+    element: <ForgotPassword />,
     errorElement: <NotFound />,
   },
 ]);
