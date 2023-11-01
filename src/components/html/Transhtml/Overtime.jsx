@@ -76,7 +76,7 @@ export const Overtime = ({
             </tr>
             <tr>
                 <td>제 목</td>
-                <td colspan="4">${title}</td>
+                <td colspan="4" style="text-align: left">${title}</td>
             </tr>
             <tr>
                 <td colspan="5">내 용</td>
