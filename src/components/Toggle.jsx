@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
 
 const list = [
+  { key: 0, name: '대시보드', path: 'dashboard' },
   { key: 1, name: '전체', path: 'total' },
   { key: 2, name: '대기', path: 'wait' },
   { key: 3, name: '반려', path: 'reject' },
@@ -27,7 +28,7 @@ export default function Toggle({ toggleSidebar }) {
   return (
     <div className="w-[200px]">
       <div className="flex items-center">
-        <h3 className="text-md sm:text-lg font-bold">결재 문서</h3>
+        <h3 className="text-md sm:text-lg font-bold">Menu</h3>
       </div>
        <ul className="mt-1">
           {list.filter(item => shouldRenderItem(item, user)).map(item => (

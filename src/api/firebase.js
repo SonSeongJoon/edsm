@@ -7,7 +7,19 @@ import {
 	signOut,
 	updateProfile,
 } from 'firebase/auth';
-import {child, get, getDatabase, limitToLast, orderByChild, query, ref, remove, set, update, equalTo} from 'firebase/database';
+import {
+	child,
+	equalTo,
+	get,
+	getDatabase,
+	limitToLast,
+	orderByChild,
+	query,
+	ref,
+	remove,
+	set,
+	update
+} from 'firebase/database';
 import {deleteObject, getDownloadURL, getStorage, ref as Ref, uploadBytesResumable} from 'firebase/storage';
 
 import {v4 as uuid} from 'uuid';
@@ -497,8 +509,6 @@ export const handleMultipleFilesUpload = async (files) => {
 		uploadPromises.push(uploadPromise);
 	});
 
-	// Promise.all을 사용하여 모든 업로드 작업이 완료될 때까지 기다립니다.
-	// 모든 프로미스가 해결되면, 각 파일에 대한 다운로드 URL과 파일명을 포함하는 객체의 배열이 반환됩니다.
 	return Promise.all(uploadPromises);
 };
 
@@ -564,75 +574,59 @@ export async function updateMstCheckInFirebase(productId, checkStatus) {
 	});
 }
 
-// export async function setAllMstCheckToVerified() {
-//   const db = getDatabase();
-//   const dbRef = ref(db);
-//
-//   // 모든 'products' 가져오기
-//   try {
-//     const snapshot = await get(child(dbRef, 'products'));
-//
-//     if (snapshot.exists()) {
-//       const products = snapshot.val();
-//       // 각 제품에 대해 'mstCheck'를 '확인'으로 설정
-//       for (const productId in products) {
-//         const productRef = ref(db, 'products/' + productId);
-//         await update(productRef, { mstCheck: '확인' });
-//       }
-//       console.log("All mstCheck updated to '확인' successfully!");
-//     } else {
-//       console.log("No products available!");
-//     }
-//   } catch (error) {
-//     console.error("Error updating mstCheck: ", error);
-//   }
-// }
-
-// export async function addTimestamps() {
-// 	const db = getDatabase();
-// 	const productsRef = ref(db, 'products');
-//
-// 	// 데이터베이스에서 products 데이터를 가져옴
-// 	const snapshot = await get(productsRef);
-// 	if (snapshot.exists()) {
-// 		const products = snapshot.val();
-//
-// 		for (const [productId, product] of Object.entries(products)) {
-// 			// date 값을 파싱하여 timestamp 생성
-// 			const dateStr = product.date;  // 예: "23.10.31 | 11:40"
-// 			const [year, month, day] = dateStr.split(' | ')[0].split('.').map(str => parseInt(str, 10));
-// 			const [hour, minute] = dateStr.split(' | ')[1].split(':').map(str => parseInt(str, 10));
-//
-// 			// 여기서 연도는 2000을 더해줘야 합니다. 예를 들어, 23 -> 2023
-// 			const timestamp = new Date(year + 2000, month - 1, day, hour, minute).getTime();
-//
-// 			// timestamp 값을 데이터베이스에 업데이트
-// 			const productRef = ref(db, `products/${productId}`);
-// 			await update(productRef, { timestamp });
-// 		}
-// 	}
-// }
-
-export async function addYearMonth() {
+export async function getPersonalData(userId) {
 	const db = getDatabase();
 	const productsRef = ref(db, 'products');
+	const dataQuery = query(productsRef, orderByChild('userId'), equalTo(userId));
+	const snapshot = await get(dataQuery);
 
-	// 데이터베이스에서 products 데이터를 가져옴
-	const snapshot = await get(productsRef);
-	if(snapshot.exists()) {
-		const products = snapshot.val();
+	if (snapshot.exists()) {
+		const allEntries = snapshot.val();
 
-		for (const [productId, product] of Object.entries(products)) {
-			// date 값을 파싱하여 yearMonth 생성
-			const dateStr = product.date; // 예: "23.10.31 | 11:40"
-			const [year, month] = dateStr.split(' | ')[0].split('.');
+		// 모든 항목에서 state 값만 추출
+		return Object.values(allEntries).map(entry => entry.state);
+	} else {
+		console.warn("No data found for userId:", userId);
+		return null;
+	}
+}
 
-			// yearMonth 값을 생성합니다.
-			const yearMonth = `${year}${month}`;
 
-			// yearMonth 값을 데이터베이스에 업데이트
-			const productRef = ref(db, `products/${productId}`);
-			await update(productRef, {yearMonth});
+export async function getPersonalReceive(adminId) {
+	const adminsRef = ref(db, 'admins');
+	const snapshot = await get(adminsRef);
+
+	if (!snapshot.exists()) {
+		console.log('No admins data found.');
+		return [];
+	}
+
+	const allAdminsData = snapshot.val();
+	let userEntries = [];
+
+	for (let fileId in allAdminsData) {
+		const userData = allAdminsData[fileId][adminId];
+
+		if (userData) {
+			userEntries.push({
+				...userData,
+				fileId: fileId,
+			});
 		}
 	}
+
+	const augmentedEntriesPromises = userEntries.map(async (entry) => {
+		const productSnapshot = await get(ref(db, `products/${entry.fileId}`));
+		if (productSnapshot.exists()) {
+			const productData = productSnapshot.val();
+			return {
+				...entry,
+				...productData,
+			};
+		}
+		return entry;
+	});
+
+	const augmentedEntries = await Promise.all(augmentedEntriesPromises);
+	return augmentedEntries.map(entry => entry.state);
 }
