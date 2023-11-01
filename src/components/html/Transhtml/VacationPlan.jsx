@@ -9,6 +9,7 @@ export const vacationPlan = ({
   admitMember,
   corporation,
   Vacations,
+  date,
 }) => {
   let keys = [];
 
@@ -23,7 +24,8 @@ export const vacationPlan = ({
       }
     }
   }
-  const vacationItems = Vacations.map(vacation => `
+  const vacationItems = Vacations.map(
+    (vacation) => `
     <tr>
       <td>휴가기간</td>
       <td colSpan="3">${vacation.startDate} ~ ${vacation.endDate} (${vacation.daysDifference}일간)</td>
@@ -32,7 +34,8 @@ export const vacationPlan = ({
       <th>휴가사유</th>
       <td colspan="3">${vacation.vacationReason}</td>
     </tr>
-  `).join('');
+  `,
+  ).join('');
 
   return `<!DOCTYPE html>
 <html lang="ko">
@@ -101,7 +104,7 @@ export const vacationPlan = ({
                     <p style="text-align: end;">위 신청인 ${name}(인)</p>
                     <br>
                     <p style="text-align: center;">서울아이알 대표이사  귀하</p>
-                    <br>
+                    <p style="text-align: center;">${date}</p>
                     <p>* 휴가자는 사유가 있을시 이를 증명할 사본을 제출함. (예 : 예비군훈련 등..)</p>
                 </td>
             </tr>
