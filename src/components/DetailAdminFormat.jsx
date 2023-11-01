@@ -78,10 +78,9 @@ export default function DetailAdminFormat({ displayProduct, product, navigate, s
 
         const updatedState = await setOneState(uid, product.id, actionState);
 
-        // Check if the returned state indicates it's already selected
         if (updatedState === actionState && data === updatedState) {
-          alert('이미 선택된 상태입니다.'); // Optional alert to notify the user
-          return; // Exit the function
+          alert('이미 선택된 상태입니다.');
+          return;
         }
 
         setData(updatedState);
@@ -92,7 +91,6 @@ export default function DetailAdminFormat({ displayProduct, product, navigate, s
           await removeAdmit(product.id, user.user.displayName);
         }
 
-        // Get all states and update the local state
         const allState = await getAllOneState(product.id);
         const updatedStates = allState
           .filter((stateItem) => stateItem.id === product.id)
@@ -100,10 +98,8 @@ export default function DetailAdminFormat({ displayProduct, product, navigate, s
             name: stateItem.name,
             state: stateItem.state,
           }));
-
         setStates(updatedStates);
 
-        // Determine and set the final state
         const resultState = determineState(updatedStates.map((stateItem) => stateItem.state));
         await setState(product.id, resultState);
       } catch (error) {
@@ -214,7 +210,7 @@ export default function DetailAdminFormat({ displayProduct, product, navigate, s
               try {
                 alert('승인완료! 확인(닫기)버튼 클릭시 미확인 결재확인');
                 await handleAdmitAction(STATE_APPROVED);
-                window.location.href = `/${path}`;
+                navigate(`/${path}`);
               } catch (error) {
                 console.error('Error:', error);
               }
