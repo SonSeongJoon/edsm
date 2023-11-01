@@ -80,7 +80,7 @@ export default function Home() {
             >
               <span className="flex text-lg items-end font-bold">
                 <span className="text-indigo-500 mr-2">{receivedStatusCounts['대기'] || 0}</span>
-                <p className="text-gray-600 text-md font-medium">건의 결재가 아직 남아있습니다.</p>
+                <p className="text-gray-600 text-md font-medium">건의 결재가 남아있습니다.</p>
               </span>
             </div>
           </div>
