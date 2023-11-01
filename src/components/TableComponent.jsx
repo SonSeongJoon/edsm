@@ -109,7 +109,7 @@ export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst
   }, [selectedYear, selectedMonth, onYearMonthChange]);
 
   return (
-    <div className="w-full text-xm sm:text-md">
+    <div className="w-full text-xm sm:text-md bg-white">
       {isLoading && <p>Loading...</p>}
       {error && <p>Error...</p>}
       {isMst && (

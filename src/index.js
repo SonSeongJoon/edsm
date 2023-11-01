@@ -18,6 +18,7 @@ import MstPage from './pages/MstPage';
 import Reject from './pages/Reject';
 
 const routes = [
+  { path: 'dashboard', component: Home },
   { path: 'total', component: Total },
   { path: 'wait', component: Wait },
   { path: 'reject', component: Reject },
