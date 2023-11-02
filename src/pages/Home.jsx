@@ -25,7 +25,7 @@ export default function Home() {
   if (isLoadingPersonalData || (isAdmin && isLoadingReceivedData)) {
     return (
       <div className="h-full flex justify-center items-center">
-        <span>Loading...</span>
+         <img src="/seoulir.png" alt="seoulir" className="w-[300px]" />
       </div>
     );
   }

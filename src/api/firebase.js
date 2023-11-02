@@ -6,6 +6,7 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 	updateProfile,
+	sendPasswordResetEmail
 } from 'firebase/auth';
 import {
 	child,
@@ -630,3 +631,32 @@ export async function getPersonalReceive(adminId) {
 	const augmentedEntries = await Promise.all(augmentedEntriesPromises);
 	return augmentedEntries.map(entry => entry.state);
 }
+
+export function resetPassword(email) {
+	const auth = getAuth();
+
+	return sendPasswordResetEmail(auth, email);
+}
+
+
+export async function isUserValid(email, inputName) {
+	const usersRef = ref(db, 'userdata');
+
+	const snapshot = await get(usersRef);
+
+	if (snapshot.exists()) {
+		const users = snapshot.val();
+		for (const userId in users) {
+			const userData = users[userId];
+			if (userData.email === email && userData.name === inputName) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
+
+
+
