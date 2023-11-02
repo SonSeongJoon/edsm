@@ -52,9 +52,9 @@ export default function Home() {
   const statuses = ['대기', '반려', '승인'];
 
   return (
-    <div className="h-full flex flex-col justify-center items-center bg-gray-50 py-10">
+    <div className="h-full flex flex-col justify-center items-center bg-gray-50 py-10 px-2">
       <h1 className="font-bold text-2xl mb-5 text-gray-700">결재 현황</h1>
-      <div className="grid grid-cols-3 gap-4 mb-6 w-full max-w-md">
+      <div className="grid grid-cols-3 gap-4 mb-6 w-full max-w-md sm:px-0 px-3">
         {statuses.map((status) => (
           <div
             key={status}
