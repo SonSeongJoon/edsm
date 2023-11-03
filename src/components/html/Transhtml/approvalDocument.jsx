@@ -64,29 +64,29 @@ export const approvalDocument = ({
         <table style="text-align: center;">
             <tr>
                 <td style="width: 23%;">품 의 일 자</td>
-                <td style="width: 23%;">${date}</td>
+                <td style="text-align: left;">${date}</td>
                 <td style="width: 18%;">본부장</td>
                 <td style="width: 18%;">대표이사</td>
             </tr>
             <tr>
                 <td>부 서</td>
-                <td colspan="1">${dept}</td>
+                <td colspan="1" style="text-align: left;">${dept}</td>
                 <td rowspan="2">${keys[0] ? '전자승인' : ''}</td>
                 <td rowspan="2">${keys[1] ? '전자승인' : ''}</td>
             </tr>
             <tr>
                 <td>품 의 자</td>
-                <td colspan="1">${name}</td>
+                <td colspan="1" style="text-align: left;">${name}</td>
             </tr>
             <tr>
                 <td>제 목</td>
-                <td colspan="4" style="text-align: left">${title}</td>
+                <td colspan="3" style="text-align: left">${title}</td>
             </tr>
             <tr>
-                <td colspan="5">내 용</td>
+                <td colspan="4">내 용</td>
             </tr>
             <tr style="height: 500px;">
-                <td colspan="5" style="text-align: left;" >
+                <td colspan="4" style="text-align: left;" >
                     <p>항 목</p> 
                     <p>${formattedContent}</p>
                     <p>기 간: ${startDate} ~ ${endDate}</p> 
@@ -95,7 +95,7 @@ export const approvalDocument = ({
                 </td>
             </tr>
             <tr>
-                <td colspan="5" style="text-align: left;">
+                <td colspan="4" style="text-align: left;">
                     <p>상기와 같이 의뢰하오니 결재를 바랍니다.</p>
                 </td>
             </tr>
