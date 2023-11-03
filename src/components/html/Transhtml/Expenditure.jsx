@@ -64,7 +64,7 @@ export const expenditure = ({
     <div style="text-align: right;">
     <table style="width: 30%;">
         <tr>
-            <th style="width: 70px;">&nbsp;본부장&nbsp;</th>
+            <th style="width: 70px;" >&nbsp;본부장&nbsp;</th>
             <th style="width: 70px;">&nbsp;대표이사&nbsp;</th>
         </tr>
         <tr>
@@ -79,15 +79,15 @@ export const expenditure = ({
     <table style="width: 100%; text-align: center;">
             <tr>
                 <td style="width: 50px; background-color: #E6EEF7;">부&nbsp;&nbsp;서</td>
-                <td style="width: 100px">${dept}</td>
+                <td style="width: 100px; text-align: left;">${dept}</td>
                 <td style="width: 50px; background-color: #E6EEF7;"">담&nbsp;&nbsp;당</td>
-                <td style="width: 100px">${name}</td>
+                <td style="width: 100px; text-align: left;">${name}</td>
             </tr>
             <tr>
                 <td style="width: 50px; background-color: #E6EEF7;">제&nbsp;&nbsp;목</td>
-                <td style="width: 100px" style="text-align: left">${title}</td>
+                <td style="width: 100px; text-align: left;">${title}</td>
                 <td style="width: 50px; background-color: #E6EEF7;">금&nbsp;&nbsp;액</td>
-                <td style="width: 100px">${formattedTotalAmount}</td>
+                <td style="width: 100px; text-align: left;">${formattedTotalAmount}</td>
             </tr>
       </table>
      </div>

@@ -74,7 +74,7 @@ export const Customer = ({
         <table style="text-align: center;">
             <tr>
                 <td style="width: 23%;">품 의 일 자</td>
-                <td style="width: 23%;">${date}</td>
+                <td style="width: 23%; text-align: left;">${date}</td>
                 <td style="width: 18%;">디자인/영상본부</td>
                 <td style="width: 18%;">경영지원팀</td>
                 <td style="width: 18%;">본부장</td>
@@ -83,7 +83,7 @@ export const Customer = ({
             </tr>
             <tr>
                 <td>부 서</td>
-                <td colspan="1">${dept}</td>
+                <td colspan="1" style="text-align: left">${dept}</td>
                 <td rowspan="2">${keys[0] ? '전자승인' : ''}</td>
                 <td rowspan="2">${keys[1] ? '전자승인' : ''}</td>
                 <td rowspan="2">${keys[2] ? '전자승인' : ''}</td>
@@ -91,7 +91,7 @@ export const Customer = ({
             </tr>
             <tr>
                 <td>품 의 자</td>
-                <td colspan="1">${name}</td>
+                <td colspan="1" style="text-align: left">${name}</td>
             </tr>
             <tr>
                 <td>제 목</td>
