@@ -365,7 +365,7 @@ export default function Write() {
             className='border-dashed border-2 p-2 rounded flex flex-col items-center justify-center h-20'
           >
             <input {...getInputProps()} />
-            <p>파일을 여기로 드래그하거나 클릭하여 업로드하세요</p>
+            <p className='lg:text-sm'>파일을 여기로 드래그하거나 클릭하여 업로드하세요</p>
             <p className='text-sm text-gray-500'>다중 첨부 가능</p>
           </div>
           <ul className='mt-2'>
