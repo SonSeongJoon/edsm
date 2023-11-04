@@ -362,7 +362,7 @@ export default function Write() {
           {/*/>*/}
           <div
             {...getRootProps()}
-            className='border-dashed border-2 p-2 rounded flex flex-col items-center justify-center h-20'
+            className='border-dashed border-2 p-2 rounded flex flex-col items-center justify-center h-20 cursor-pointer'
           >
             <input {...getInputProps()} />
             <p className='lg:text-sm'>파일을 여기로 드래그하거나 클릭하여 업로드하세요</p>
