@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function PaperRow({ product, isAdmins, isMst }) {
   const { id, title, file, date, displayName, oneState, state, dept, mstCheck } = product;
+
   const navigate = useNavigate();
   const location = useLocation();
   const basePath = location.pathname.split('/')[1];
@@ -32,17 +33,20 @@ export default function PaperRow({ product, isAdmins, isMst }) {
       <td className="px-6 py-4 whitespace-nowrap text-gray-400">
         <span
           className={
-            (isAdmins ? oneState : state) === '승인'
+            (isAdmins || oneState === '참조' ? oneState : state) === '승인'
               ? 'text-green-600 font-bold'
-              : (isAdmins ? oneState : state) === '반려'
+              : (isAdmins || oneState === '참조' ? oneState : state) === '반려'
               ? 'text-red-500 font-bold'
+              : (isAdmins || oneState === '참조' ? oneState : state) === '참조'
+              ? 'text-yellow-600 font-bold' // 진한 노란색으로 표시
               : ''
           }
           onClick={handleClick}
         >
-          {isAdmins ? oneState : state}
+          {isAdmins || oneState === '참조' ? oneState : state}
         </span>
       </td>
+
       <td className="px-6 py-4 whitespace-nowrap hover:underline cursor-pointer" onClick={handleClick}>
         {title}
       </td>

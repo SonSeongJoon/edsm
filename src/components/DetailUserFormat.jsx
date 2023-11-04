@@ -18,6 +18,7 @@ import ReporterGiftShow from './html/Show/ReporterGiftShow';
 import TravelExpensesShow from './html/Show/TravelExpensesShow';
 import CustomerShow from './html/Show/CustomerShow';
 import {htmlToFile} from '../js/convertToWord';
+import {useAuthContext} from "../context/AuthContext";
 
 export default function DetailUserFormat({
 	                                         showEditModal,
@@ -37,7 +38,19 @@ export default function DetailUserFormat({
 	                                         htmlString,
                                          }) {
 	const [reasonText, setReasonText] = useState(null);
+	const {user} = useAuthContext()
+
 	const [files, setFiles] = useState(product.downloadURL || []);
+	const [isReferenced, setIsReferenced] = useState(false);
+	const userId = user?.uid
+	useEffect(() => {
+		const referenceList = product.referenceList || [];
+		const referenceIdList = referenceList.map(item => item.id);
+		setIsReferenced(referenceIdList.includes(userId));
+	}, [product, userId]);
+
+
+
 	const [tempFiles, setTempFiles] = useState([]);
 	const fileInputRef = useRef(null);
 	const [localMstCheck, setLocalMstCheck] = useState(product.mstCheck === '확인');
@@ -56,7 +69,7 @@ export default function DetailUserFormat({
 
 	const deleteFile = async (fileToDelete, index) => {
 		try {
-			await handleFileDelete(product.id, fileToDelete, index);
+			await handleFileDelete(product.id, fileToDelete, index, product.userId);
 
 			const updatedFiles = files.filter((file, fileIndex) => fileIndex !== index);
 			setFiles(updatedFiles);
@@ -77,7 +90,7 @@ export default function DetailUserFormat({
 			const newDownloadURLs = await handleMultipleFilesUpload(allFiles);
 			console.log(newDownloadURLs);
 
-			const updatedDownloadURLs = await updateProductDownloadURLs(product.id, newDownloadURLs);
+			const updatedDownloadURLs = await updateProductDownloadURLs(product.id, newDownloadURLs, product.userId);
 
 			alert('파일이 성공적으로 추가되었습니다.');
 			setFiles(updatedDownloadURLs);
@@ -156,7 +169,7 @@ export default function DetailUserFormat({
 					</div>
 					<div className="flex justify-between items-end mt-3">
 						<div>
-							{!isMst && !oneApproved ? (
+							{!isMst && !oneApproved && !isReferenced ? (
 								<button
 									className="bg-gray-500 text-white px-2 py-1 rounded text-sm mr-2 hover:bg-gray-600"
 									onClick={openEditModal}
@@ -166,7 +179,7 @@ export default function DetailUserFormat({
 							) : null}
 						</div>
 						<div>
-							{!isMst && !oneApproved ? (
+							{!isMst && !oneApproved && !isReferenced ? (
 								<button
 									className="bg-brand text-white px-2 py-1 rounded text-sm mr-2 hover:bg-red-700"
 									onClick={handleDelete}
@@ -201,7 +214,7 @@ export default function DetailUserFormat({
 						</div>
 					) : null}
 
-					{!isMst && !oneApproved ? (
+					{!isMst && !oneApproved  && !isReferenced ? (
 						<div className="flex justify-end items-center">
 							<div>
 								<p className="text-sm text-gray-500 mt-1">첨부파일 추가하기</p>
