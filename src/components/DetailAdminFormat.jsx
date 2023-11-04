@@ -101,12 +101,12 @@ export default function DetailAdminFormat({ displayProduct, product, navigate, s
         setStates(updatedStates);
 
         const resultState = determineState(updatedStates.map((stateItem) => stateItem.state));
-        await setState(product.id, resultState);
+        await setState(product.id, resultState, product.userId);
       } catch (error) {
         console.error('Error handling admit: ', error);
       }
     },
-    [data, isChildSubmitted, uid, product.id, determineState, user.user.displayName],
+    [data, isChildSubmitted, uid, product.id, product.userId, determineState, user.user.displayName],
   );
 
   useEffect(() => {
