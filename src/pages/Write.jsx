@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
-import { addNewProduct, getUsersName, handleMultipleFilesUpload } from '../api/firebase';
+import {addNewProduct, getUsersName, handleMultipleFilesUpload} from '../api/firebase';
 import { expenditure } from '../components/html/Transhtml/Expenditure';
 import { vacationPlan } from '../components/html/Transhtml/VacationPlan';
 import { ExpendForm, initExpendForm } from '../components/form/ExpendForm';

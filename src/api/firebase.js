@@ -98,122 +98,120 @@ export async function addNewProduct(
   if (!userId) {
     throw new Error('User is not authenticated');
   }
-  const id = uuid();
-  const now = moment();
-  const dateTime = now.format('YY.MM.DD | HH:mm');
-  const timestamp = now.valueOf();
-  const yearMonth = now.format('YYMM');
 
-  // Product 저장
-  const productRef = set(ref(db, `products/${id}`), {
-    ...product,
-    id,
-    userId,
-    date: dateTime,
-    state: '대기',
-    displayName: userName,
-    dept: userDept,
-    writerPhonNum: userPhoneNum,
-    corporation: userCorporation,
-    timestamp: timestamp,
-    yearMonth: yearMonth,
-    mstCheck: '미확인',
-    referenceList: referenceList,
-    ...(downloadURL && { downloadURL: downloadURL }),
-  });
-  const newProductRef = set(ref(db, `newProducts/${userId}/${id}`), {
-    ...product,
-    id,
-    date: dateTime,
-    state: '대기',
-    displayName: userName,
-    dept: userDept,
-    writerPhonNum: userPhoneNum,
-    corporation: userCorporation,
-    timestamp: timestamp,
-    yearMonth: yearMonth,
-    mstCheck: '미확인',
-    referenceList: referenceList,
-    ...(downloadURL && { downloadURL: downloadURL }),
-  });
+  try {
+    const id = uuid();
+    const now = moment();
+    const dateTime = now.format('YY.MM.DD | HH:mm');
+    const timestamp = now.valueOf();
+    const yearMonth = now.format('YYMM');
 
-  const usersRef = ref(db, 'userdata');
-  const snapshot = await get(usersRef);
+    // Create common product data
+    const commonProductData = {
+      ...product,
+      id,
+      userId,
+      date: dateTime,
+      state: '대기',
+      displayName: userName,
+      dept: userDept,
+      writerPhoneNum: userPhoneNum,
+      corporation: userCorporation,
+      timestamp: timestamp,
+      yearMonth: yearMonth,
+      mstCheck: '미확인',
+      referenceList: referenceList,
+      ...(downloadURL && { downloadURL: downloadURL }),
+    };
 
+    // Save product data to products and newProducts
+    const productRef = set(ref(db, `products/${id}`), commonProductData);
+    const newProductRef = set(ref(db, `newProducts/${userId}/${id}`), commonProductData);
 
-  if (snapshot.exists()) {
-    const usersData = snapshot.val();
-    const referenceUserIds = referenceList.map((userInfo) => userInfo.id);
-    const emails = product.agree;
+    const usersRef = ref(db, 'userdata');
+    const snapshot = await get(usersRef);
 
-    // 참조자 저장 작업
-    const referenceTasks = referenceUserIds.map(async (uid) => {
-      const matchedUser = {
-        matchedUserId: uid,
-        name: usersData[uid].name,
-        phoneNum: usersData[uid].phoneNum,
-      };
-      if (matchedUser.matchedUserId && referenceUserIds.includes(uid)) {
-        return set(ref(db, `referenced/${uid}/${id}`), {
-          id,
-          ...product,
-          oneState: '참조',
-          date: dateTime,
-          writeUser: userId,
-          writeName: matchedUser.name,
-        });
-      }
-    });
-    const emailTasks = emails.map(async (email) => {
-      let matchedUser;
-      for (const [userId, userData] of Object.entries(usersData)) {
-        if (userData.email === email) {
-          matchedUser = {
-            matchedUserId: userId,
-            name: userData.name,
-            phoneNum: userData.phoneNum,
-          };
-          break;
-        }
-      }
-      if (matchedUser.matchedUserId) {
-        const adminTask = set(ref(db, `admins/${id}/${matchedUser.matchedUserId}`), {
-          id,
-          oneState: '대기',
-          date: dateTime,
-          writeUser: userId,
-          ...product,
-          isAdmin: true,
-          displayName: userName,
-          admitName: matchedUser.name,
-        });
+    if (snapshot.exists()) {
+      const usersData = snapshot.val();
+      const referenceUserIds = referenceList.map((userInfo) => userInfo.id);
+      const emails = product.agree;
 
-        const link = `https://seouliredsm.netlify.app/receive/detail/${id}`;
-        const encodeLink = encodeURIComponent(link);
-        const kakaoData = {
-          name: userName,
-          phoneNum: matchedUser.phoneNum,
-          file: product.file,
-          link: encodeLink,
+      // Save reference users
+      const referenceTasks = referenceUserIds.map(async (uid) => {
+        const matchedUser = {
+          matchedUserId: uid,
+          name: usersData[uid].name,
+          phoneNum: usersData[uid].phoneNum,
         };
+        if (matchedUser.matchedUserId && referenceUserIds.includes(uid)) {
+          return set(ref(db, `referenced/${uid}/${id}`), {
+            id,
+            ...product,
+            oneState: '참조',
+            date: dateTime,
+            writeUser: userId,
+            writeName: matchedUser.name,
+          });
+        }
+      });
 
-        const kakaoTask = sendKakaoCreateProduct(kakaoData);
+      // Handle email tasks
+      const emailTasks = emails.map(async (email) => {
+        let matchedUser;
+        for (const [userId, userData] of Object.entries(usersData)) {
+          if (userData.email === email) {
+            matchedUser = {
+              matchedUserId: userId,
+              name: userData.name,
+              phoneNum: userData.phoneNum,
+            };
+            break;
+          }
+        }
+        if (matchedUser.matchedUserId) {
+          const adminTask = set(ref(db, `admins/${id}/${matchedUser.matchedUserId}`), {
+            id,
+            oneState: '대기',
+            date: dateTime,
+            writeUser: userId,
+            ...product,
+            isAdmin: true,
+            displayName: userName,
+            admitName: matchedUser.name,
+          });
 
-        return Promise.all([adminTask, kakaoTask]);
-      } else {
-        console.log('No matching user found for email:', email);
-      }
-    });
+          const link = `https://seouliredsm.netlify.app/receive/detail/${id}`;
+          const encodeLink = encodeURIComponent(link);
+          const kakaoData = {
+            name: userName,
+            phoneNum: matchedUser.phoneNum,
+            file: product.file,
+            link: encodeLink,
+          };
 
-    await Promise.all([productRef, newProductRef, ...referenceTasks, ...emailTasks]);
-  } else {
-    console.log('No users found in the database.');
+          const kakaoTask = sendKakaoCreateProduct(kakaoData);
+
+          return Promise.all([adminTask, kakaoTask]);
+        } else {
+          console.log('No matching user found for email:', email);
+        }
+      });
+
+      // Wait for all tasks to complete
+      await Promise.all([productRef, newProductRef, ...referenceTasks, ...emailTasks]);
+    } else {
+      console.log('No users found in the database.');
+    }
+  } catch (error) {
+    console.error('An error occurred:', error);
   }
 }
+
 
 // 해결
 export async function getProduct(filterState) {
   const userId = auth.currentUser?.uid;
+  console.log(userId)
   if (!userId) {
     throw new Error('User is not authenticated');
   }
@@ -797,6 +795,8 @@ export async function getUsersName() {
   });
 }
 
+
+
 // export async function migrateProducts() {
 //   const db = getDatabase();
 //
@@ -828,3 +828,4 @@ export async function getUsersName() {
 //     console.log('No products found');
 //   }
 // }
+
