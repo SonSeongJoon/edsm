@@ -20,12 +20,14 @@ export default function Home() {
     isLoading: isLoadingReceivedData,
     error: errorReceivedData,
     data: receivedData,
-  } = useQuery(['receivedData'], () => getPersonalReceive(userId), { enabled: isAdmin });
+  } = useQuery(['receivedData'], () => getPersonalReceive(userId), {
+    enabled: !!userId,
+  });
 
   if (isLoadingPersonalData || (isAdmin && isLoadingReceivedData)) {
     return (
       <div className="h-full flex justify-center items-center">
-         <img src="/seoulir.png" alt="seoulir" className="w-[300px]" />
+        <img src="/seoulir.png" alt="seoulir" className="w-[300px]" />
       </div>
     );
   }

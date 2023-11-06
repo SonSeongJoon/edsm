@@ -5,7 +5,7 @@ import { TableComponent } from './TableComponent';
 import { useVerificationStatus } from '../context/VerificationStatusProvider';
 import { useYearMonthContext } from '../context/YearMonthContext';
 
-export default function PaperList({ category, state, adminData, MstData }) {
+export default function PaperList({ category, state, adminData, MstData}) {
   const { verificationStatus, setVerificationStatus } = useVerificationStatus();
   const { yearMonth, setYearMonth } = useYearMonthContext();
   const handleVerificationChange = (newStatus) => {
@@ -24,7 +24,7 @@ export default function PaperList({ category, state, adminData, MstData }) {
   }
 
   const { isLoading, error, data: products } = useQuery(queryKey, queryFunction);
-
+  console.log(products)
   const currentItems = products ? products : [];
 
   return (

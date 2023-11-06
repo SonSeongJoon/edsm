@@ -27,6 +27,7 @@ export default function Detail() {
   const { id } = useParams();
   const [states, setStates] = useState([]);
 
+
   const currentPath = location.pathname;
   const [showEditModal, setShowEditModal] = useState(false);
   const [modalProduct, setModalProduct] = useState(null);

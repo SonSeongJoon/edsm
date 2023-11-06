@@ -101,12 +101,12 @@ export default function DetailAdminFormat({ displayProduct, product, navigate, s
         setStates(updatedStates);
 
         const resultState = determineState(updatedStates.map((stateItem) => stateItem.state));
-        await setState(product.id, resultState);
+        await setState(product.id, resultState, product.userId);
       } catch (error) {
         console.error('Error handling admit: ', error);
       }
     },
-    [data, isChildSubmitted, uid, product.id, determineState, user.user.displayName],
+    [data, isChildSubmitted, uid, product.id, product.userId, determineState, user.user.displayName],
   );
 
   useEffect(() => {
@@ -166,6 +166,19 @@ export default function DetailAdminFormat({ displayProduct, product, navigate, s
                   {index !== state.length - 1 && ','}
                 </span>
               ))}
+              {/* 참조자 섹션 추가 */}
+              {displayProduct.referenceList && displayProduct.referenceList.length > 0 && (
+                 <>
+                   <br />
+                   <span className='font-bold'>참조자:</span>
+                   {displayProduct.referenceList.map((reference, index) => (
+                      <span key={index} className='ml-2'>
+          {reference.name}
+                        {index !== displayProduct.referenceList.length - 1 && ','}
+        </span>
+                   ))}
+                 </>
+              )}
             </div>
           </div>
           {product.downloadURL && product.downloadURL.length > 0 ? (
