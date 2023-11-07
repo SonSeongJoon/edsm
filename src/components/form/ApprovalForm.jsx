@@ -12,6 +12,7 @@ const initApprovalForm = {
   endDate: '',
   agree: [],
   agreeName: [],
+  memo: '',
 };
 
 const ApprovalForm = ({ product, handleChange }) => {
@@ -88,7 +89,7 @@ const ApprovalForm = ({ product, handleChange }) => {
           </div>
 
           {/* Note Section */}
-          <div>
+          <div className='mb-3'>
             <div className="font-bold">비고</div>
             <input
               name="note"
@@ -96,6 +97,16 @@ const ApprovalForm = ({ product, handleChange }) => {
               placeholder="예시) 법인카드 사용"
               className="w-full px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
               onChange={handleChange}
+            />
+          </div>
+          <div>
+            <div className="font-bold">Note</div>
+            <textarea
+               name="memo"
+               value={product.memo || ''}
+               placeholder="부연설명"
+               className="w-full px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+               onChange={handleChange}
             />
           </div>
         </div>
