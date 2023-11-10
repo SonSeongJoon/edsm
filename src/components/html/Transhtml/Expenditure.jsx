@@ -46,6 +46,7 @@ export const expenditure = ({
             border: 1px solid black;
             border-collapse: collapse;
             padding: 8px;
+            text-align: center;
         }
         .corporation-text {
             text-align: center;

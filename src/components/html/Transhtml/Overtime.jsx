@@ -60,29 +60,29 @@ export const Overtime = ({
         <table style="text-align: center;">
             <tr>
                 <td style="width: 23%;">품 의 일 자</td>
-                <td style="width: 23%;">${date}</td>
+                <td style="width: 23%; text-align: left;" >${date}</td>
                 <td style="width: 18%;">본부장</td>
                 <td style="width: 18%;">대표이사</td>
             </tr>
             <tr>
                 <td>부 서</td>
-                <td colspan="1">${dept}</td>
+                <td colspan="1" style="text-align: left;">${dept}</td>
                 <td rowspan="2">${keys[0] ? '전자승인' : ''}</td>
                 <td rowspan="2">${keys[1] ? '전자승인' : ''}</td>
             </tr>
             <tr>
                 <td>품 의 자</td>
-                <td colspan="1">${name}</td>
+                <td colspan="1" style="text-align: left;">${name}</td>
             </tr>
             <tr>
                 <td>제 목</td>
-                <td colspan="4" style="text-align: left">${title}</td>
+                <td colspan="3" style="text-align: left">${title}</td>
             </tr>
             <tr>
-                <td colspan="5">내 용</td>
+                <td colspan="4">내 용</td>
             </tr>
             <tr style="height: 500px;">
-                <td colspan="5" style="text-align: left;" >
+                <td colspan="4" style="text-align: left;" >
                     <p>근무자: ${name}</p> 
                     <p>초과근무 예정 일시: ${period}</p> 
                     <p>사 유: ${overReason}</p>
@@ -90,7 +90,7 @@ export const Overtime = ({
                 </td>
             </tr>
             <tr>
-                <td colspan="5" style="text-align: left;">
+                <td colspan="4" style="text-align: left;">
                   <ul>
                       <li>초과 근무는 1일 4시간 이내로 제한합니다. (4시간 이상은 금지)</li>
                       <li>초과근무의 최소 시간은 1시간입니다. (식사 시간 제외)</li>
