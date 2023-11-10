@@ -19,6 +19,8 @@ import TravelExpensesShow from './html/Show/TravelExpensesShow';
 import CustomerShow from './html/Show/CustomerShow';
 import { htmlToFile } from '../js/convertToWord';
 import { useAuthContext } from '../context/AuthContext';
+import {LimitExcessForm} from "./form/LimitExcessForm";
+import LimitExcessShow from "./html/Show/LimitExcessShow";
 
 export default function DetailUserFormat({
   showEditModal,
@@ -144,6 +146,8 @@ export default function DetailUserFormat({
             <TravelExpensesShow product={displayProduct} />
           ) : displayProduct.file === '고객사실비청구서' ? (
             <CustomerShow product={displayProduct} />
+          ) : displayProduct.file === '한도초과사전승인품의서' ? (
+             <LimitExcessShow product={displayProduct} />
           ) : null}
           <div className='mt-5 mb-3 text-sm'>
             <span className='font-bold'>수신자:</span>

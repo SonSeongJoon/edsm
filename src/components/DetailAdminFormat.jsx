@@ -12,6 +12,7 @@ import { AlternativeShow } from './html/Show/AlternativeShow';
 import ReporterGiftShow from './html/Show/ReporterGiftShow';
 import TravelExpensesShow from './html/Show/TravelExpensesShow';
 import CustomerShow from './html/Show/CustomerShow';
+import LimitExcessShow from "./html/Show/LimitExcessShow";
 
 const STATE_APPROVED = '승인';
 const STATE_PENDING = '대기';
@@ -26,6 +27,7 @@ const COMPONENT_MAP = {
   기자선물품의서: ReporterGiftShow,
   출장비정산서: TravelExpensesShow,
   고객사실비청구서: CustomerShow,
+  한도초과사전승인품의서: LimitExcessShow,
 };
 
 export default function DetailAdminFormat({ displayProduct, product, navigate, states }) {
