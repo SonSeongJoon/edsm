@@ -35,6 +35,7 @@ export const TravelExpenses = ({ file, dept, deel, title, items, date, name, adm
             border: 1px solid black;
             border-collapse: collapse;
             padding: 8px;
+            text-align: center;
         }
         .corporation-text {
             text-align: center;
@@ -65,18 +66,18 @@ export const TravelExpenses = ({ file, dept, deel, title, items, date, name, adm
 
     <div style="margin-top: 15px; text-align: left;">날짜 : ${date}</div>
     <div style="margin-bottom: 70px;">
-    <table style="width: 100%; text-align: center;">
+    <table style="width: 100%;">
             <tr>
                 <td style="width: 50px; background-color: #E6EEF7;">부&nbsp;&nbsp;서</td>
-                <td style="width: 100px">${dept}</td>
+                <td style="width: 100px; text-align: left;">${dept}</td>
                 <td style="width: 50px; background-color: #E6EEF7;"">담&nbsp;&nbsp;당</td>
-                <td style="width: 100px">${name}</td>
+                <td style="width: 100px; text-align: left;">${name}</td>
             </tr>
             <tr>
                 <td style="width: 50px; background-color: #E6EEF7;">제&nbsp;&nbsp;목</td>
-                <td style="width: 100px" style="text-align: left">${title}</td>
+                <td style="width: 100px; text-align: left;">${title}</td>
                 <td style="width: 50px; background-color: #E6EEF7;">금&nbsp;&nbsp;액</td>
-                <td style="width: 100px">${formattedTotalAmount}</td>
+                <td style="width: 100px; text-align: left;">${formattedTotalAmount}</td>
             </tr>
       </table>
      </div>
