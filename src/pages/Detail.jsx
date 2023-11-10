@@ -19,6 +19,7 @@ import {Overtime} from "../components/html/Transhtml/Overtime";
 import {Customer} from "../components/html/Transhtml/Customer";
 import {TravelExpenses} from "../components/html/Transhtml/TravelExpenses";
 import {Alternative} from "../components/html/Transhtml/Alternative";
+import {LimitExcess} from "../components/html/Transhtml/LimitExcess";
 
 export default function Detail() {
   const location = useLocation();
@@ -91,6 +92,7 @@ export default function Detail() {
     고객사실비청구서: Customer,
     출장비정산서: TravelExpenses,
     대체휴무사용품의서: Alternative,
+    한도초과사전승인품의서: LimitExcess,
   };
 
   const htmlString =
