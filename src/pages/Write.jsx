@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
-import {addNewProduct, getUsersName, handleMultipleFilesUpload} from '../api/firebase';
+import { addNewProduct, getUsersName, handleMultipleFilesUpload } from '../api/firebase';
 import { expenditure } from '../components/html/Transhtml/Expenditure';
 import { vacationPlan } from '../components/html/Transhtml/VacationPlan';
 import { ExpendForm, initExpendForm } from '../components/form/ExpendForm';
@@ -20,7 +20,8 @@ import { TravelExpenses } from '../components/html/Transhtml/TravelExpenses';
 import { Customer } from '../components/html/Transhtml/Customer';
 import { Overtime } from '../components/html/Transhtml/Overtime';
 import { Alternative } from '../components/html/Transhtml/Alternative';
-import { useDropzone } from 'react-dropzone'; // New import
+import { useDropzone } from 'react-dropzone';
+import { initLimitExcessForm, LimitExcessForm } from '../components/form/LimitExcessForm'; // New import
 
 const options = [
   '지출결의서',
@@ -31,6 +32,7 @@ const options = [
   '기자선물품의서',
   '출장비정산서',
   '고객사실비청구서',
+  '한도초과사전승인품의서',
 ];
 const initForms = {
   지출결의서: initExpendForm,
@@ -41,6 +43,7 @@ const initForms = {
   기자선물품의서: initReportGiftForm,
   출장비정산서: initTravelForm,
   고객사실비청구서: initCustomerForm,
+  한도초과사전승인품의서: initLimitExcessForm,
 };
 const Forms = {
   지출결의서: ExpendForm,
@@ -51,6 +54,7 @@ const Forms = {
   기자선물품의서: ReporterGiftForm,
   출장비정산서: TravelExpensesForm,
   고객사실비청구서: CustomerForm,
+  한도초과사전승인품의서: LimitExcessForm,
 };
 const approvers = [
   { name: '서민아 이사', email: 'minah_seo@seoulir.co.kr' },
@@ -90,7 +94,8 @@ export default function Write() {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: 'image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    accept:
+      'image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   });
 
   useEffect(() => {

@@ -7,6 +7,7 @@ import {ModalAlternative} from "./html/modal/ModalAlternative";
 import ModalReporterGift from "./html/modal/ModalReporterGift";
 import ModalTravelExpenses from "./html/modal/ModalTravelExpenses";
 import ModalCustomer from "./html/modal/ModalCustomer";
+import ModalLimitExcess from "./html/modal/ModalLimitExcess";
 
 export function EditModal({
   modalProduct,
@@ -89,6 +90,11 @@ export function EditModal({
            />
         ) : modalProduct.file === '고객사실비청구서' ? (
            <ModalCustomer
+              modalProduct={modalProduct}
+              handleEditChange={handleEditChange}
+           />
+        ) : modalProduct.file === '한도초과사전승인품의서' ? (
+           <ModalLimitExcess
               modalProduct={modalProduct}
               handleEditChange={handleEditChange}
            />
