@@ -1,32 +1,21 @@
-export const LimitExcess = ({
-	                                 file,
-	                                 name,
-	                                 content,
-	                                 dept,
-	                                 title,
-	                                 startDate,
-	                                 price,
-	                                 admitMember,
-	                                 corporation,
-	                                 date,
-                                 }) => {
-	let keys = [];
+export const LimitExcess = ({ file, name, content, dept, title, startDate, price, admitMember, corporation, date }) => {
+  let keys = [];
 
-	if (admitMember) {
-		keys = Object.keys(admitMember);
-		if (keys.includes('한현석')) {
-			if (keys.length === 1) {
-				keys.unshift('');
-			} else {
-				keys = keys.filter((key) => key !== '한현석');
-				keys.push('한현석');
-			}
-		}
-	}
+  if (admitMember) {
+    keys = Object.keys(admitMember);
+    if (keys.includes('한현석')) {
+      if (keys.length === 1) {
+        keys.unshift('');
+      } else {
+        keys = keys.filter((key) => key !== '한현석');
+        keys.push('한현석');
+      }
+    }
+  }
 
-	const formattedContent = content.replace(/\n/g, '<br>');
+  const formattedContent = content.replace(/\n/g, '<br>');
 
-	return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -85,7 +74,7 @@ export const LimitExcess = ({
             </tr>
             <tr style="height: 500px;">
                 <td colspan="4" style="text-align: left;" >
-                            <p>이번 달 개인 경비 한도 초과로 인해 아래와 같이 경비지출 사전 승인을 요청합니다.</p>
+                    <p>이번 달 개인 경비 한도 초과로 인해 아래와 같이 경비지출 사전 승인을 요청합니다.</p>
                     <p>기 간: ${startDate}</p> 
                     <p>지출사유: ${formattedContent}</p> 
                     <p>예상비용 : ${price}</p>
