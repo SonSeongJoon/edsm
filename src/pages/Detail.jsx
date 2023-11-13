@@ -48,6 +48,7 @@ export default function Detail() {
     isError: isErrorProduct,
     error: errorProduct,
   } = useQuery(['product', id], () => getData(id));
+  console.log(product)
 
   useEffect(() => {
     if (product) {
