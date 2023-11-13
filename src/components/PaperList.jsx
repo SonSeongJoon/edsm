@@ -24,7 +24,6 @@ export default function PaperList({ category, state, adminData, MstData}) {
   }
 
   const { isLoading, error, data: products } = useQuery(queryKey, queryFunction);
-  console.log(products)
   const currentItems = products ? products : [];
 
   return (
