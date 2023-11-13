@@ -24,7 +24,7 @@ export const sendKakaoModifyProduct = async (data) => {
 
 export const sendKakaoAgreeProduct = async (data, state) => {
 	try {
-		const phoneNum = data.writerPhoneNum || data.writePhoneNum;
+		const phoneNum = data.writerPhoneNum || data.writerPhonNum;
 
 		const response = await axios.get(
 			`https://port-0-kakaoapi-euegqv2blnfy3ekc.sel5.cloudtype.app/send_kakao_agree/name/${data.name}/phoneNum/${phoneNum}/title/${data.title}/state/${state}/link/${data.id}`,
