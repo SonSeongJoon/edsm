@@ -603,24 +603,28 @@ export const handleMultipleFilesUpload = async (files) => {
 
     const uploadPromise = new Promise((resolve, reject) => {
       uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
-        },
-        (error) => {
-          console.log(error);
-          reject(error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
-            resolve({
-              url: downloadURL,
-              name: file.name,
-            });
-          });
-        },
+         'state_changed',
+         (snapshot) => {
+           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+           console.log('Upload is ' + progress + '% done');
+           if (progress === 100) {
+             console.log('Upload of ' + file.name + ' is complete.');
+           }
+         },
+         (error) => {
+           console.error('Upload failed for ' + file.name + ':', error);
+           alert('Upload failed for ' + file.name + ': ' + error.message);
+           reject(error);
+         },
+         () => {
+           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+             console.log('File available at', downloadURL);
+             resolve({
+               url: downloadURL,
+               name: file.name,
+             });
+           });
+         },
       );
     });
     uploadPromises.push(uploadPromise);
@@ -628,6 +632,7 @@ export const handleMultipleFilesUpload = async (files) => {
 
   return Promise.all(uploadPromises);
 };
+
 
 // 해결
 export const handleFileDelete = async (productId, file, index, userId) => {
