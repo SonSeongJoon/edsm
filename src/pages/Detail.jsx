@@ -4,7 +4,7 @@ import { expenditure } from '../components/html/Transhtml/Expenditure';
 import {
   deleteProduct,
   getAllOneState,
-  getData,
+  getData, setAllStatesToWaiting,
   updateProduct,
 } from '../api/firebase';
 import { getDatabase, ref, onValue, off } from 'firebase/database';
@@ -141,14 +141,22 @@ export default function Detail() {
   function handleSave() {
     const userName = product.name;
     const productID = product.id;
+
+    // 먼저 updateProduct 함수를 호출하여 제품 정보를 업데이트합니다.
     updateProduct(product, userName, productID, modalProduct)
-      .then(() => {
-        setShowEditModal(false);
-      })
-      .catch((error) => {
-        console.error('Failed to update product:', error);
-      });
+    .then(() => {
+      // 업데이트가 성공하면 모든 상태를 "대기"로 업데이트합니다.
+      return setAllStatesToWaiting(productID);
+    })
+    .then(() => {
+      // 모든 상태 업데이트가 완료되면 모달을 닫습니다.
+      setShowEditModal(false);
+    })
+    .catch((error) => {
+      console.error('Failed to update product:', error);
+    });
   }
+
 
   function handleDelete() {
     const isConfirmed = window.confirm('정말 삭제하시겠습니까?');

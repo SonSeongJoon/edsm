@@ -800,37 +800,33 @@ export async function getUsersName() {
   });
 }
 
+export async function setAllStatesToWaiting(fileId) {
+  const userId = auth.currentUser?.uid;
+
+  const adminsRef = ref(db, `admins/${fileId}`);
+
+  try {
+    const adminsSnapshot = await get(adminsRef);
+
+    if (!adminsSnapshot.exists()) {
+      console.log('No matching documents found.');
+      return;
+    }
+
+    const updates = {};
+    adminsSnapshot.forEach((admin) => {
+      const userId = admin.key;
+      const userData = admin.val();
+      updates[userId] = { ...userData, oneState: '대기' };
+    });
+
+    await set(adminsRef, updates);
+    await setState(fileId, '대기', userId);
+    console.log('모든 상태를 "대기"로 업데이트했습니다.');
+  } catch (error) {
+    console.error('상태 업데이트 중 오류 발생:', error);
+  }
+}
 
 
-// export async function migrateProducts() {
-//   const db = getDatabase();
-//
-//   const productsRef = ref(db, 'products');
-//   const snapshot = await get(productsRef);
-//
-//   if (snapshot.exists()) {
-//     const oldProducts = snapshot.val();
-//     const newProducts = {};
-//
-//     // 기존 데이터를 새로운 구조로 변환
-//     for (const [productId, product] of Object.entries(oldProducts)) {
-//       const userId = product.userId;
-//
-//       if (!newProducts[userId]) {
-//         newProducts[userId] = {};
-//       }
-//
-//       // 기존 product 객체를 그대로 복사
-//       newProducts[userId][productId] = product;
-//     }
-//
-//     // 새로운 구조의 데이터를 데이터베이스에 저장
-//     const newUserProductsRef = ref(db, 'newProducts');
-//     await set(newUserProductsRef, newProducts);
-//
-//     console.log('Migration complete');
-//   } else {
-//     console.log('No products found');
-//   }
-// }
 
