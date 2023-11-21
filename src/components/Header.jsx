@@ -32,7 +32,6 @@ export default function Header({ toggleSidebar }) {
 
             <p className="text-md sm:text-xl items-end">전자결재</p>
          </div>
-
       </div>
       <div className="flex items-center">
         {user && <User user={user} />}

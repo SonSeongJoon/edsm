@@ -63,8 +63,7 @@ export default function DetailUserFormat({
 
     fetchReason();
   }, [product.id]);
-  // const allApproved = states?.every((stateItem) => stateItem.state === '승인');
-  const oneApproved = states?.some((stateItem) => stateItem.state === '승인');
+  const oneApproved = states?.every((stateItem) => stateItem.state === '승인');
 
   const deleteFile = async (fileToDelete, index) => {
     try {
