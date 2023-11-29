@@ -12,28 +12,37 @@ export const Customer = ({
   date,
 }) => {
   let keys = [];
+  let keys_1 = [];
+  let keys_2 = [];
+  let keys_3 = [];
+  let keys_4 = [];
 
   if (admitMember) {
     keys = Object.keys(admitMember);
 
-    // '한현석'을 마지막으로 이동
+    // '한현식'을 마지막으로 이동
     if (keys.includes('한현석')) {
-      keys = keys.filter((key) => key !== '한현석');
-      keys.push('한현석');
+      keys_4.push('한현석'); // '한현식'을 배열의 마지막에 추가
     }
 
     // '김연재' 또는 '윤홍민'을 첫 번째 위치로 이동
     if (keys.includes('김연재') || keys.includes('윤홍민')) {
-      const name = keys.includes('김연재') ? '김연재' : '윤홍민';
-      keys = keys.filter((key) => key !== name);
-      keys.unshift(name);
+      const nameToAdd = keys.includes('김연재') ? '김연재' : '윤홍민';
+      keys = keys.filter((key) => key !== nameToAdd);
+      keys_1.unshift(nameToAdd); // 해당 이름을 배열의 첫 번째로 추가
     }
 
-    // '권미경'을 세 번째 위치로 이동
+    // '권미경'을 두 번째 위치로 이동
     if (keys.includes('권미경')) {
-      keys = keys.filter((key) => key !== '권미경');
-      keys.splice(2, 0, '권미경');  // 세 번째 위치에 '권미경' 추가
+      keys_2.push('권미경');
     }
+
+    // 나머지 이름은 keys_3 배열에 추가
+    keys.forEach((key) => {
+      if (key !== '한현석' && key !== '김연재' && key !== '윤홍민' && key !== '권미경') {
+        keys_3.push(key);
+      }
+    });
   }
 
   const formattedContent = content.replace(/\n/g, '<br>');
@@ -84,10 +93,10 @@ export const Customer = ({
             <tr>
                 <td>부 서</td>
                 <td colspan="1" style="text-align: left">${dept}</td>
-                <td rowspan="2">${keys[0] ? '전자승인' : ''}</td>
-                <td rowspan="2">${keys[1] ? '전자승인' : ''}</td>
-                <td rowspan="2">${keys[2] ? '전자승인' : ''}</td>
-                <td rowspan="2">${keys[3] ? '전자승인' : ''}</td>
+                <td rowspan="2">${keys_1[0] ? '전자승인' : ''}</td>
+                <td rowspan="2">${keys_2[0] ? '전자승인' : ''}</td>
+                <td rowspan="2">${keys_3[0] ? '전자승인' : ''}</td>
+                <td rowspan="2">${keys_4[0] ? '전자승인' : ''}</td>
             </tr>
             <tr>
                 <td>품 의 자</td>
