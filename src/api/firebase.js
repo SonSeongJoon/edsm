@@ -151,6 +151,8 @@ export async function addNewProduct(
             date: dateTime,
             writeUser: userId,
             writeName: matchedUser.name,
+            yearMonth: yearMonth,
+
           });
         }
       });
@@ -169,7 +171,7 @@ export async function addNewProduct(
           }
         }
         if (matchedUser.matchedUserId) {
-          const adminTask = set(ref(db, `admins/${id}/${matchedUser.matchedUserId}`), {
+          const adminTask = set(ref(db, `new_admin/${matchedUser.matchedUserId}/${id}`), {
             id,
             oneState: '대기',
             date: dateTime,
@@ -178,6 +180,7 @@ export async function addNewProduct(
             isAdmin: true,
             displayName: userName,
             admitName: matchedUser.name,
+            yearMonth: yearMonth,
           });
 
           const link = `https://seouliredsm.netlify.app/receive/detail/${id}`;
@@ -209,43 +212,39 @@ export async function addNewProduct(
 
 
 // 해결
-export async function getProduct(filterState) {
+export async function getProduct(filterState, yearMonth) {
   const userId = auth.currentUser?.uid;
-  console.log(userId)
   if (!userId) {
     throw new Error('User is not authenticated');
   }
 
-  // userId 기반으로 경로 설정
-  const userProductsRef = child(dbRef, `newProducts/${userId}`);
-  const referencedProductsRef = child(dbRef, `referenced/${userId}`);
+  const db = getDatabase();
 
-  // userProducts와 referencedProducts 데이터를 동시에 가져오기
+  const userProductsRef = child(ref(db), `newProducts/${userId}`);
+  const referencedProductsRef = child(ref(db), `referenced/${userId}`);
+
+  const userProductsQuery = query(userProductsRef, orderByChild('yearMonth'), equalTo(yearMonth));
+  const referencedProductsQuery = query(referencedProductsRef, orderByChild('yearMonth'), equalTo(yearMonth));
+
   const [userProductsSnapshot, referencedProductsSnapshot] = await Promise.all([
-    get(userProductsRef),
-    get(referencedProductsRef),
+    get(userProductsQuery),
+    get(referencedProductsQuery),
   ]);
 
   let allProducts = [];
 
-  // newProducts에서 데이터 가져오기
   if (userProductsSnapshot.exists()) {
-    const userProducts = userProductsSnapshot.val();
-    allProducts.push(...Object.values(userProducts));
+    allProducts.push(...Object.values(userProductsSnapshot.val()));
   }
 
-  // referenced에서 데이터 가져오기
   if (referencedProductsSnapshot.exists()) {
-    const referencedProducts = referencedProductsSnapshot.val();
-    allProducts.push(...Object.values(referencedProducts));
+    allProducts.push(...Object.values(referencedProductsSnapshot.val()));
   }
 
-  // 필터링 조건에 맞는 상품만 선택
   const filteredProducts = allProducts.filter((product) => {
-    return !(filterState && product.state !== filterState);
+    return !filterState || product.state === filterState;
   });
 
-  // 날짜 기준으로 정렬
   return filteredProducts.sort((a, b) => {
     if (a.date < b.date) return 1;
     if (a.date > b.date) return -1;
@@ -254,33 +253,33 @@ export async function getProduct(filterState) {
 }
 
 
-// 해결
-export async function getReceive(adminId) {
-  const adminsRef = ref(db, 'admins');
-  const snapshot = await get(adminsRef);
 
-  if(!snapshot.exists()) {
-    console.log('No admins data found.');
+// 해결
+export async function getReceive(adminId, yearMonth) {
+  const newAdminRef = ref(db, `new_admin/${adminId}`);
+  const queryRef = query(newAdminRef, orderByChild('yearMonth'), equalTo(yearMonth));
+  const snapshot = await get(queryRef);
+
+  if (!snapshot.exists()) {
+    console.log('No data found for the given yearMonth.');
     return [];
   }
 
-  const allAdminsData = snapshot.val();
+  const adminsData = snapshot.val();
   let userEntries = [];
 
-  for (let fileId in allAdminsData) {
-    const userData = allAdminsData[fileId][adminId];
+  for (let fileId in adminsData) {
+    const userData = adminsData[fileId];
 
-    if(userData) {
-      userEntries.push({
-        ...userData,
-        fileId: fileId,
-      });
-    }
+    userEntries.push({
+      ...userData,
+      fileId: fileId,
+    });
   }
 
   const augmentedEntriesPromises = userEntries.map(async (entry) => {
     const productSnapshot = await get(ref(db, `products/${entry.fileId}`));
-    if(productSnapshot.exists()) {
+    if (productSnapshot.exists()) {
       const productData = productSnapshot.val();
       return {
         ...entry,
@@ -293,11 +292,12 @@ export async function getReceive(adminId) {
   const augmentedEntries = await Promise.all(augmentedEntriesPromises);
 
   return augmentedEntries.sort((a, b) => {
-    if(a.date < b.date) return 1;
-    if(a.date > b.date) return -1;
+    if (a.date < b.date) return 1;
+    if (a.date > b.date) return -1;
     return 0;
   });
 }
+
 
 
 //해결
@@ -387,11 +387,10 @@ export async function updateProduct(product, userName, productID, updatedProduct
 export async function deleteProduct(productID) {
   const db = getDatabase();
   const productRef = ref(db, `products/${productID}`);
-  const adminRef = ref(db, `admins/${productID}`);
+  const newProductSnapshot = await get(productRef);
 
-  const productSnapshot = await get(productRef);
-  if (productSnapshot.exists()) {
-    const productData = productSnapshot.val();
+  if (newProductSnapshot.exists()) {
+    const productData = newProductSnapshot.val();
     const userId = productData.userId;
     const referList = productData.referenceList || [];
     const referenceIdList = referList.map(item => item.id);
@@ -403,28 +402,35 @@ export async function deleteProduct(productID) {
       return remove(referencedProductRef);
     });
 
+    // Storage에서 관련 파일 삭제 작업 (만약 downloadURL 필드가 존재하고, 배열 형태인 경우)
     if (productData.downloadURL && Array.isArray(productData.downloadURL)) {
       const storage = getStorage();
-      const promises = productData.downloadURL.map((file) => {
+      const storageDeleteTasks = productData.downloadURL.map((file) => {
         const url = new URL(file.url);
-        const fileRef = Ref(storage, url);
-
+        const fileRef = ref(storage, url.pathname);
         return deleteObject(fileRef);
       });
-      await Promise.all(promises);
+      await Promise.all(storageDeleteTasks);
     }
 
-    // products, admins, newProducts, 및 referenced에서 product 데이터 삭제
+    // new_admin 경로에서 관련 데이터 삭제 작업
+    const newAdminDeleteTasks = referenceIdList.map((referId) => {
+      const newAdminProductRef = ref(db, `new_admin/${referId}/${productID}`);
+      return remove(newAdminProductRef);
+    });
+
+    // products, newProducts, referenced, new_admin에서 product 데이터 삭제
     await Promise.all([
       remove(productRef),
-      remove(adminRef),
       remove(newProductRef),
-      ...referencedDeleteTasks
+      ...referencedDeleteTasks,
+      ...newAdminDeleteTasks,
     ]);
   } else {
     console.log('No product found with the given ID:', productID);
   }
 }
+
 
 
 //Email 회원가입
@@ -461,42 +467,51 @@ export async function setOneState(adminId, fileId, desiredState) {
     throw new Error('Invalid state provided');
   }
 
-  const currentStateSnapshot = await get(child(dbRef, `admins/${fileId}/${adminId}/oneState`));
+  // new_admin 경로에서 현재 상태 가져오기
+  const currentStateSnapshot = await get(ref(db, `new_admin/${adminId}/${fileId}/oneState`));
 
   if (currentStateSnapshot.exists() && currentStateSnapshot.val() === desiredState) {
-    return desiredState;
+    return desiredState; // 상태가 이미 원하는 상태와 일치하는 경우 바로 반환
   }
 
-  await set(ref(db, `admins/${fileId}/${adminId}/oneState`), desiredState);
+  // new_admin 경로에 상태 업데이트
+  await set(ref(db, `new_admin/${adminId}/${fileId}/oneState`), desiredState);
 
   return desiredState;
 }
 
+
 export async function getOneState(adminId, fileId) {
-  return get(child(dbRef, `admins/${fileId}/${adminId}/oneState`)).then((snapshot) => {
+  return get(ref(db, `new_admin/${adminId}/${fileId}/oneState`)).then((snapshot) => {
     if (snapshot.exists()) {
       return snapshot.val();
+    } else {
+      console.log('No state found for the given adminId and fileId');
+      return null;
     }
   });
 }
 
+
 // 반려사유등록하기
 export async function setRejectReason(fileId, reasonText, userName, userId) {
-  // 첫 번째 경로에 저장
+  // 첫 번째 경로에 저장 (products)
   const firstPath = ref(db, `products/${fileId}/reason/${userName}`);
 
-  const secondPath = ref(db, `admins/${fileId}/${userId}/reason`);
+  // 두 번째 경로에 저장 (new_admin)
+  const secondPath = ref(db, `new_admin/${userId}/${fileId}/reason`);
 
   await Promise.all([set(firstPath, reasonText), set(secondPath, reasonText)]);
 
   return true;
 }
 
+
 // 반려사유 삭제하기
 export async function removeRejectReason(fileId, userName, userId) {
   const firstPath = ref(db, `products/${fileId}/reason/${userName}`);
 
-  const secondPath = ref(db, `admins/${fileId}/${userId}/reason`);
+  const secondPath = ref(db, `new_admin/${userId}/${fileId}/reason`);
 
   await Promise.all([remove(firstPath), remove(secondPath)]);
   return true;
@@ -512,13 +527,14 @@ export async function getRejectReasonProduct(fileId) {
 }
 
 export async function getRejectReasonAdmin(userId, fileId) {
-  return get(child(dbRef, `admins/${fileId}/${userId}/reason`)).then((snapshot) => {
+  return get(ref(db, `new_admin/${userId}/${fileId}/reason`)).then((snapshot) => {
     if (snapshot.exists()) {
       return snapshot.val();
     }
-    return null;
+    return null; // 거절 사유가 없는 경우 null 반환
   });
 }
+
 
 export async function setAdmit(fileId, userName) {
   return set(ref(db, `products/${fileId}/admitMember/${userName}`), true);
@@ -529,25 +545,28 @@ export async function removeAdmit(fileId, userName) {
 }
 
 export async function getAllOneState(fileId) {
-  const adminsRef = ref(db, `admins/${fileId}`);
-  const snapshot = await get(adminsRef);
-  const data = snapshot.val();
+  const newAdminRef = ref(db, `new_admin`);
+  const snapshot = await get(newAdminRef);
+  const allAdminsData = snapshot.val();
 
-  if (!data) {
+  if (!allAdminsData) {
     console.log('No matching documents found.');
     return [];
   }
 
   let oneStates = [];
-  for (let userId in data) {
-    oneStates.push({
-      id: data[userId].id,
-      state: data[userId].oneState,
-      name: data[userId].admitName,
-    });
+  for (let userId in allAdminsData) {
+    if (allAdminsData[userId][fileId]) {
+      oneStates.push({
+        id: allAdminsData[userId][fileId].id,
+        state: allAdminsData[userId][fileId].oneState,
+        name: allAdminsData[userId][fileId].admitName,
+      });
+    }
   }
   return oneStates;
 }
+
 
 //해결
 export async function setState(fileId, state, userId) {
@@ -729,19 +748,19 @@ export async function getPersonalData(userId) {
 
 // 해결
 export async function getPersonalReceive(adminId) {
-  const adminsRef = ref(db, 'admins');
-  const snapshot = await get(adminsRef);
+  const newAdminsRef = ref(db, `new_admin/${adminId}`);
+  const snapshot = await get(newAdminsRef);
 
   if (!snapshot.exists()) {
-    console.log('No admins data found.');
+    console.log('No data found for adminId:', adminId);
     return [];
   }
 
-  const allAdminsData = snapshot.val();
+  const adminData = snapshot.val();
   let userEntries = [];
 
-  for (let fileId in allAdminsData) {
-    const userData = allAdminsData[fileId][adminId];
+  for (let fileId in adminData) {
+    const userData = adminData[fileId];
 
     if (userData) {
       const productSnapshot = await get(ref(db, `newProducts/${adminId}/${fileId}`));
@@ -758,6 +777,7 @@ export async function getPersonalReceive(adminId) {
 
   return userEntries.map((entry) => entry.state);
 }
+
 
 export function resetPassword(email) {
   const auth = getAuth();
@@ -800,31 +820,74 @@ export async function getUsersName() {
 
 export async function setAllStatesToWaiting(fileId) {
   const userId = auth.currentUser?.uid;
-
-  const adminsRef = ref(db, `admins/${fileId}`);
+  const newAdminRef = ref(db, `new_admin`);
 
   try {
-    const adminsSnapshot = await get(adminsRef);
+    const newAdminSnapshot = await get(newAdminRef);
 
-    if (!adminsSnapshot.exists()) {
+    if (!newAdminSnapshot.exists()) {
       console.log('No matching documents found.');
       return;
     }
 
     const updates = {};
-    adminsSnapshot.forEach((admin) => {
-      const userId = admin.key;
-      const userData = admin.val();
-      updates[userId] = { ...userData, oneState: '대기' };
+    newAdminSnapshot.forEach((userSnapshot) => {
+      userSnapshot.forEach((fileSnapshot) => {
+        if (fileSnapshot.key === fileId) {
+          updates[`new_admin/${userSnapshot.key}/${fileId}/oneState`] = '대기';
+        }
+      });
     });
 
-    await set(adminsRef, updates);
+    await update(ref(db), updates);
     await setState(fileId, '대기', userId);
     console.log('모든 상태를 "대기"로 업데이트했습니다.');
   } catch (error) {
     console.error('상태 업데이트 중 오류 발생:', error);
   }
 }
+
+
+export async function reorganizeAdminData() {
+  const db = getDatabase();
+  const adminsRef = ref(db, 'admins');
+  const newAdminsRef = ref(db, 'new_admin');
+
+  try {
+    const snapshot = await get(adminsRef);
+
+    if (!snapshot.exists()) {
+      console.log('No admins data found.');
+      return;
+    }
+
+    const adminsData = snapshot.val();
+    const newAdminsData = {};
+
+    for (const id in adminsData) {
+      for (const matchedUserId in adminsData[id]) {
+        const userData = adminsData[id][matchedUserId];
+
+        if (!newAdminsData[matchedUserId]) {
+          newAdminsData[matchedUserId] = {};
+        }
+
+        // Copy data under the matchedUserId
+        newAdminsData[matchedUserId][id] = userData;
+      }
+    }
+
+    // Save the reorganized data to new_admin
+    await set(newAdminsRef, newAdminsData);
+    console.log('Admin data reorganized successfully.');
+  } catch (error) {
+    console.error('Error reorganizing admin data:', error);
+    throw error;
+  }
+}
+
+
+
 
 
 
