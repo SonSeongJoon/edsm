@@ -392,44 +392,36 @@ export async function deleteProduct(productID) {
   if (newProductSnapshot.exists()) {
     const productData = newProductSnapshot.val();
     const userId = productData.userId;
-    const referList = productData.referenceList || [];
-    const referenceIdList = referList.map(item => item.id);
+
     const newProductRef = ref(db, `newProducts/${userId}/${productID}`);
+    const newAdminProductRef = ref(db, `new_admin/${userId}/${productID}`);
 
     // referenced에서 product 데이터 삭제 작업
-    const referencedDeleteTasks = referenceIdList.map((referId) => {
-      const referencedProductRef = ref(db, `referenced/${referId}/${productID}`);
+    const referencedDeleteTasks = productData.referenceList?.map(({ id }) => {
+      const referencedProductRef = ref(db, `referenced/${id}/${productID}`);
       return remove(referencedProductRef);
-    });
+    }) || [];
 
-    // Storage에서 관련 파일 삭제 작업 (만약 downloadURL 필드가 존재하고, 배열 형태인 경우)
-    if (productData.downloadURL && Array.isArray(productData.downloadURL)) {
-      const storage = getStorage();
-      const storageDeleteTasks = productData.downloadURL.map((file) => {
-        const url = new URL(file.url);
-        const fileRef = ref(storage, url.pathname);
-        return deleteObject(fileRef);
-      });
-      await Promise.all(storageDeleteTasks);
-    }
+    // Storage에서 관련 파일 삭제 작업 (downloadURL 필드가 존재하고, 배열 형태인 경우)
+    const storageDeleteTasks = productData.downloadURL?.map((file) => {
+      const url = new URL(file.url);
+      const fileRef = ref(getStorage(), url.pathname);
+      return deleteObject(fileRef);
+    }) || [];
 
-    // new_admin 경로에서 관련 데이터 삭제 작업
-    const newAdminDeleteTasks = referenceIdList.map((referId) => {
-      const newAdminProductRef = ref(db, `new_admin/${referId}/${productID}`);
-      return remove(newAdminProductRef);
-    });
-
-    // products, newProducts, referenced, new_admin에서 product 데이터 삭제
+    // products, newProducts, new_admin에서 product 데이터 삭제
     await Promise.all([
       remove(productRef),
       remove(newProductRef),
+      remove(newAdminProductRef),
       ...referencedDeleteTasks,
-      ...newAdminDeleteTasks,
+      ...storageDeleteTasks
     ]);
   } else {
     console.log('No product found with the given ID:', productID);
   }
 }
+
 
 
 
