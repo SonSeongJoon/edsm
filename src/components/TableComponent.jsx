@@ -204,6 +204,32 @@ export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst
           </div>
         </div>
       )}
+      {!isMst && (
+         <div className='m-2'>
+                <select
+                   value={selectedYear}
+                   onChange={(e) => setSelectedYear(e.target.value)}
+                   className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                >
+                  {years.map((year) => (
+                     <option key={year} value={year}>
+                       {year} 년
+                     </option>
+                  ))}
+                </select>
+                <select
+                   value={selectedMonth}
+                   onChange={(e) => setSelectedMonth(e.target.value)}
+                   className="border border-gray-500 rounded px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                >
+                  {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+                     <option key={month} value={month}>
+                       {month} 월
+                     </option>
+                  ))}
+                </select>
+         </div>
+      )}
       <table className="min-w-full bg-white border-t border-b border-gray-300 divide-y divide-gray-300 ">
         <thead>
           <tr>

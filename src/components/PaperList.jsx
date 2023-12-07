@@ -16,9 +16,9 @@ export default function PaperList({ category, state, adminData, MstData}) {
   const queryKey = [category, state, verificationStatus, adminData, MstData, yearMonth];
 
   if (!adminData && !MstData) {
-    queryFunction = () => getProduct(state);
+    queryFunction = () => getProduct(state, yearMonth);
   } else if (adminData && !MstData) {
-    queryFunction = () => getReceive(state);
+    queryFunction = () => getReceive(state, yearMonth);
   } else if (MstData) {
     queryFunction = () => getAll(verificationStatus, yearMonth);
   }
