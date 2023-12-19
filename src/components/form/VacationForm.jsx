@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import {getAllDataForUser} from "../../api/firebase";
+import {useAuthContext} from "../../context/AuthContext";
 
 // 초기 폼 데이터 설정
 const initVacationForm = {
@@ -15,7 +17,7 @@ const initVacationForm = {
       endDate: '',
       vacationReason: '',
       daysDifference: '',
-      isHalfDay: false, // 반차 상태 정보 추가
+      isHalfDay: false,
     },
   ],
   agree: [],
@@ -24,6 +26,8 @@ const initVacationForm = {
 
 const VacationForm = ({ product, handleChange }) => {
   const [vacations, setVacations] = useState(product?.Vacations || initVacationForm.Vacations);
+  const [usedDays, setUsedDays] = useState('');
+  const {user} = useAuthContext()
 
   const addVacationPeriod = () => {
     if (product.Vacations?.length < 3) {
@@ -91,6 +95,22 @@ const VacationForm = ({ product, handleChange }) => {
     handleChange({ target: { name: 'Vacations', value: vacations } });
   }, [vacations, handleChange]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = await getAllDataForUser(user.uid);
+        setUsedDays(userData)
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchData();
+  }, [handleChange, user.uid]);
+
+
+
+
   return (
     <div className='max-w-screen-lg mx-auto'>
       <div className='container bg-white p-2'>
@@ -148,7 +168,7 @@ const VacationForm = ({ product, handleChange }) => {
               pattern='\d*\.?\d*' // allows numbers and a single decimal point
               name='UsedDays'
               id='UsedDays'
-              value={product.UsedDays || ''}
+              value={usedDays}
               className='w-20 px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500'
               onChange={handleChange}
             />

@@ -1,12 +1,12 @@
-import { initializeApp } from 'firebase/app';
+import {initializeApp} from 'firebase/app';
 import {
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
-  sendPasswordResetEmail,
 } from 'firebase/auth';
 import {
   child,
@@ -21,11 +21,11 @@ import {
   set,
   update,
 } from 'firebase/database';
-import { deleteObject, getDownloadURL, getStorage, ref as Ref, uploadBytesResumable } from 'firebase/storage';
+import {deleteObject, getDownloadURL, getStorage, ref as Ref, uploadBytesResumable} from 'firebase/storage';
 
-import { v4 as uuid } from 'uuid';
+import {v4 as uuid} from 'uuid';
 import moment from 'moment';
-import { sendKakaoCreateProduct, sendKakaoModifyProduct } from './kakao';
+import {sendKakaoCreateProduct, sendKakaoModifyProduct} from './kakao';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_KEY,
@@ -874,6 +874,33 @@ export async function reorganizeAdminData() {
     console.log('Admin data reorganized successfully.');
   } catch (error) {
     console.error('Error reorganizing admin data:', error);
+    throw error;
+  }
+}
+
+export async function getAllDataForUser(userId) {
+  const db = getDatabase();
+  const productsRef = ref(db, `newProducts/${userId}`);
+
+  try {
+    const queryRef = query(productsRef, orderByChild('file'), equalTo('휴가계'));
+    const snapshot = await get(queryRef);
+
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const sortedData = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+      const latestData = sortedData[0];
+      const useDays = latestData.UsedDays
+      const totalDaysDifference = latestData.Vacations.reduce((total, vacation) => {
+        return total + parseFloat(vacation.daysDifference || 0);
+      }, 0);
+      return parseFloat(useDays) + totalDaysDifference;
+    } else {
+      console.log(`No data found for userId: ${userId}`);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
     throw error;
   }
 }
