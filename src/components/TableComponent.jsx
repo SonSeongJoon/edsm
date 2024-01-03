@@ -4,11 +4,29 @@ import { getUsersData } from '../api/firebase';
 import { useVerificationStatus } from '../context/VerificationStatusProvider';
 import moment from 'moment';
 
+// Function to save selected year and month to localStorage
+const saveSelectedYearMonthToLocalStorage = (year, month) => {
+  localStorage.setItem('selectedYear', year);
+  localStorage.setItem('selectedMonth', month);
+}
+
+// Function to load selected year and month from localStorage
+const loadSelectedYearMonthFromLocalStorage = () => {
+  const year = localStorage.getItem('selectedYear') || ''; // Default to an empty string if not found
+  let month = localStorage.getItem('selectedMonth') || ''; // Default to an empty string if not found
+
+
+  return { year, month };
+}
+
+
 export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst, onYearMonthChange }) => {
   const [selectedDept, setSelectedDept] = useState('전체');
   const [selectedName, setSelectedName] = useState('전체');
-  const [selectedYear, setSelectedYear] = useState(moment().format('YY'));
-  const [selectedMonth, setSelectedMonth] = useState(moment().format('MM'));
+  // Load selected year and month from localStorage when component mounts
+  const initialYearMonth = loadSelectedYearMonthFromLocalStorage();
+  const [selectedYear, setSelectedYear] = useState(initialYearMonth.year || moment().format('YY'));
+  const [selectedMonth, setSelectedMonth] = useState(initialYearMonth.month || moment().format('MM'));
 
   const [selectFilename, setSelectFilename] = useState('전체 구분');
   const [selectState, setSelectState] = useState('전체 상태');
@@ -25,9 +43,6 @@ export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst
   const currentYear = moment().year(); // 현재 연도를 얻기
   const startYear = 2023; // 서비스 시작 연도
   const years = Array.from({ length: currentYear - startYear + 1 }, (_, i) => (startYear + i).toString().slice(-2));
-
-
-
 
   const transformData = async () => {
     const usersData = await getUsersData();
@@ -100,13 +115,15 @@ export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst
   );
 
   useEffect(() => {
-    const handleYearMonthChange = () => {
-      const yearMonth = `${selectedYear}${selectedMonth}`; // 연도와 월을 합쳐서 문자열 생성
-      onYearMonthChange(yearMonth); // yearMonth 상태 업데이트
-    };
+    const yearMonth = `${selectedYear}${selectedMonth.padStart(2, '0')}` // Get the last 2 characters
+    console.log(yearMonth);
+    onYearMonthChange(yearMonth); // yearMonth 상태 업데이트
 
-    handleYearMonthChange();
+    // Save the selected year and month to localStorage
+    saveSelectedYearMonthToLocalStorage(selectedYear, selectedMonth);
   }, [selectedYear, selectedMonth, onYearMonthChange]);
+
+
 
   return (
     <div className="w-full text-xm sm:text-md bg-white">
