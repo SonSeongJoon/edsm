@@ -181,6 +181,7 @@ export async function addNewProduct(
             displayName: userName,
             admitName: matchedUser.name,
             yearMonth: yearMonth,
+
           });
 
           const link = `https://seouliredsm.netlify.app/receive/detail/${id}`;
@@ -392,29 +393,34 @@ export async function deleteProduct(productID) {
   if (newProductSnapshot.exists()) {
     const productData = newProductSnapshot.val();
     const userId = productData.userId;
+    const uidList = productData.agreeUid;
 
     const newProductRef = ref(db, `newProducts/${userId}/${productID}`);
-    const newAdminProductRef = ref(db, `new_admin/${userId}/${productID}`);
 
-    // referenced에서 product 데이터 삭제 작업
     const referencedDeleteTasks = productData.referenceList?.map(({ id }) => {
       const referencedProductRef = ref(db, `referenced/${id}/${productID}`);
       return remove(referencedProductRef);
     }) || [];
 
     const storageDeleteTasks = productData.downloadURL?.map((file) => {
-      if(file && file.url) {
+      if (file && file.url) {
         const url = new URL(file.url);
-        const fileRef = Ref(getStorage(), url.pathname);
+        const fileRef = ref(getStorage(), url.pathname);
         return deleteObject(fileRef);
       }
       return null;
     }).filter(task => task !== null) || [];
 
+    await Promise.all(
+       uidList.map(async (uid) => {
+         const newAdminProductRef = ref(db, `new_admin/${uid}/${productID}`);
+         await remove(newAdminProductRef);
+       })
+    );
+
     await Promise.all([
       remove(productRef),
       remove(newProductRef),
-      remove(newAdminProductRef),
       ...referencedDeleteTasks,
       ...storageDeleteTasks
     ]);
@@ -422,6 +428,8 @@ export async function deleteProduct(productID) {
     console.log('No product found with the given ID:', productID);
   }
 }
+
+
 
 
 

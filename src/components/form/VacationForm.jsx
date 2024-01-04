@@ -22,6 +22,7 @@ const initVacationForm = {
 	],
 	agree          : [],
 	agreeName      : [],
+	agreeUid: [],
 };
 
 const VacationForm = ({product, handleChange}) => {

@@ -11,6 +11,7 @@ const initReportGiftForm = {
 	startDate: '',
 	agree: [],
 	agreeName: [],
+	agreeUid: [],
 };
 
 const ReporterGiftForm = ({ product, handleChange }) => {

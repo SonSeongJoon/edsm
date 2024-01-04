@@ -12,6 +12,7 @@ const initApprovalForm = {
   endDate: '',
   agree: [],
   agreeName: [],
+  agreeUid: [],
   memo: '',
 };
 

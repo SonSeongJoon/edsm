@@ -9,6 +9,7 @@ const initExpendForm = {
   items: [{ title: '', amount: '', note: '' }],
   agree: [],
   agreeName: [],
+  agreeUid: [],
 };
 
 const ExpendForm = ({ product, setProduct, handleChange }) => {
