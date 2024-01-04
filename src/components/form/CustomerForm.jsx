@@ -10,6 +10,7 @@ const initCustomerForm = {
 	price: '',
 	agree: [],
 	agreeName: [],
+	agreeUid: [],
 };
 
 const CustomerForm = ({ product, handleChange }) => {

@@ -61,14 +61,14 @@ const Forms = {
   한도초과사전승인품의서: LimitExcessForm,
 };
 const approvers = [
-  { name: '서민아 이사', email: 'minah_seo@seoulir.co.kr' },
-  { name: '송원식 상무이사', email: 'wssong5790@seoulir.co.kr' },
-  { name: '송현길 이사', email: 'lesson201@seoulir.co.kr' },
-  { name: '권미경 책임', email: 'seoulir@seoulir.co.kr' },
-  { name: '김연재 수석매니저', email: 'sigguruwa@seoulir.co.kr' },
-  { name: '김성준 매니저', email: 'brian9292@seoulir.co.kr' },
-  { name: '한현석 대표이사', email: 'hshan@seoulir.co.kr' },
-  { name: '개발자', email: 'sonsj96@seoulir.co.kr' },
+  { name: '서민아 이사', email: 'minah_seo@seoulir.co.kr', uid:'xEAUBk2CYqOSUc1Gcmz98SPiXFb2' },
+  { name: '송원식 상무이사', email: 'wssong5790@seoulir.co.kr', uid:'B9hLIXoKvxYRMc9FEimI3ArEUeJ2'  },
+  { name: '송현길 이사', email: 'lesson201@seoulir.co.kr', uid:'tEMUT40vyOYTo6yRDz6UoVLTPIt1'  },
+  { name: '권미경 책임', email: 'seoulir@seoulir.co.kr', uid:'UI191S1EilPV0UM61Ru6BW0W8OI3'  },
+  { name: '김연재 수석매니저', email: 'sigguruwa@seoulir.co.kr', uid:'9AKLfmBEfVQdnKx4EGm9dQzRnFl2'  },
+  { name: '김성준 매니저', email: 'brian9292@seoulir.co.kr', uid:'AyexsvI6HUh5CZR6SeEaIiZQcL63'  },
+  { name: '한현석 대표이사', email: 'hshan@seoulir.co.kr' , uid:'ICaxrJuKoabKSpQlrAuFmmzRFIf2' },
+  { name: '개발자', email: 'sonsj96@seoulir.co.kr', uid:'7P1xLXPdIDasAwE1lLR1ccTMvIf2'  },
 ];
 export default function Write() {
   const navigator = useNavigate();
@@ -115,16 +115,12 @@ export default function Write() {
     setReferenceList([...referenceList, userInfo]);
     setSearchedName('');
   };
-  // 검색 입력창에서 키보드 이벤트 처리
   const handleKeyDown = (e) => {
     if (e.key === 'ArrowDown') {
-      // 아래 화살표 키를 눌렀을 때
       setActiveIndex((prev) => Math.min(prev + 1, filteredNames.length - 1));
     } else if (e.key === 'ArrowUp') {
-      // 위 화살표 키를 눌렀을 때
       setActiveIndex((prev) => Math.max(prev - 1, 0));
     } else if (e.key === 'Enter' && activeIndex >= 0) {
-      // 엔터 키를 눌렀을 때
       addReference(filteredNames[activeIndex]);
       setActiveIndex(-1);
     }
@@ -182,16 +178,19 @@ export default function Write() {
           ...prevProduct,
           agree: [...prevProduct.agree, approver.email],
           agreeName: [...prevProduct.agreeName, approver.name],
+          agreeUid: [...prevProduct.agreeUid, approver.uid], // Include agreeUid
         };
       } else {
         return {
           ...prevProduct,
           agree: prevProduct.agree.filter((email) => email !== approver.email),
-          agreeName: prevProduct.agreeName.filter((approverName) => approverName !== approver.name),
+          agreeName: prevProduct.agreeName.filter((name) => name !== approver.name),
+          agreeUid: prevProduct.agreeUid.filter((uid) => uid !== approver.uid), // Include agreeUid
         };
       }
     });
   };
+
 
   const handleChange = useCallback(
     (e) => {

@@ -10,6 +10,7 @@ const initAlternativeForm = {
 	whenTime: '00시~00시 (00시간)',
 	agree: [],
 	agreeName: [],
+	agreeUid: [],
 };
 
 const AlternativeForm = ({ product, handleChange }) => {

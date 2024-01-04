@@ -9,6 +9,7 @@ const initTravelForm = {
 	items: [{ title: '', amount: '', note: '' }],
 	agree: [],
 	agreeName: [],
+	agreeUid: [],
 };
 
 const TravelExpensesForm = ({ product, setProduct, handleChange }) => {

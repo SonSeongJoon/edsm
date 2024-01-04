@@ -9,6 +9,7 @@ const initOvertimeForm = {
 	useWhen: '',
 	agree: [],
 	agreeName: [],
+	agreeUid: [],
 };
 
 const OvertimeForm = ({ product, handleChange }) => {

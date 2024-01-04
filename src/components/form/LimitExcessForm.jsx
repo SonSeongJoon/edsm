@@ -9,6 +9,7 @@ const initLimitExcessForm = {
 	startDate: '',
 	agree: [],
 	agreeName: [],
+	agreeUid: [],
 };
 
 const LimitExcessForm = ({ product, handleChange }) => {
