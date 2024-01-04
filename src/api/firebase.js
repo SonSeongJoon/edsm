@@ -402,14 +402,15 @@ export async function deleteProduct(productID) {
       return remove(referencedProductRef);
     }) || [];
 
-    // Storage에서 관련 파일 삭제 작업 (downloadURL 필드가 존재하고, 배열 형태인 경우)
     const storageDeleteTasks = productData.downloadURL?.map((file) => {
-      const url = new URL(file.url);
-      const fileRef = Ref(getStorage(), url.pathname);
-      return deleteObject(fileRef);
-    }) || [];
+      if(file && file.url) {
+        const url = new URL(file.url);
+        const fileRef = Ref(getStorage(), url.pathname);
+        return deleteObject(fileRef);
+      }
+      return null;
+    }).filter(task => task !== null) || [];
 
-    // products, newProducts, new_admin에서 product 데이터 삭제
     await Promise.all([
       remove(productRef),
       remove(newProductRef),
