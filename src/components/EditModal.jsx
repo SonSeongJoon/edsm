@@ -8,6 +8,8 @@ import ModalReporterGift from "./html/modal/ModalReporterGift";
 import ModalTravelExpenses from "./html/modal/ModalTravelExpenses";
 import ModalCustomer from "./html/modal/ModalCustomer";
 import ModalLimitExcess from "./html/modal/ModalLimitExcess";
+import ModalHome from "./html/modal/ModalHome";
+import ModalHomeReport from "./html/modal/ModalHomeReport";
 
 export function EditModal({
   modalProduct,
@@ -35,6 +37,20 @@ export function EditModal({
     setLocalModalProduct((prevProduct) => {
       if (prevProduct.items.length >= 4) {
         alert('아이템은 최대 4개까지 추가할 수 있습니다.');
+        return prevProduct;
+      }
+      const newItem = {};
+      return {
+        ...prevProduct,
+        items: [...prevProduct.items, newItem],
+      };
+    });
+  };
+
+  const handleAddHomeItem = () => {
+    setLocalModalProduct((prevProduct) => {
+      if (prevProduct.items.length >= 8) {
+        alert('아이템은 최대 8개까지 추가할 수 있습니다.');
         return prevProduct;
       }
       const newItem = {};
@@ -97,6 +113,22 @@ export function EditModal({
            <ModalLimitExcess
               modalProduct={modalProduct}
               handleEditChange={handleEditChange}
+           />
+        ) : modalProduct.file === '재택근무신청서' ? (
+           <ModalHome
+              modalProduct={modalProduct}
+              handleEditChange={handleEditChange}
+              handleItemValue={handleItemValue}
+              handleRemoveItem={handleRemoveItem}
+              handleAddItem={handleAddHomeItem}
+           />
+        ) : modalProduct.file === '재택근무보고서' ? (
+           <ModalHomeReport
+              modalProduct={modalProduct}
+              handleEditChange={handleEditChange}
+              handleItemValue={handleItemValue}
+              handleRemoveItem={handleRemoveItem}
+              handleAddItem={handleAddHomeItem}
            />
         ) : null}
 
