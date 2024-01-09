@@ -405,7 +405,7 @@ export async function deleteProduct(productID) {
     const storageDeleteTasks = productData.downloadURL?.map((file) => {
       if (file && file.url) {
         const url = new URL(file.url);
-        const fileRef = ref(getStorage(), url.pathname);
+        const fileRef = Ref(getStorage(), url.pathname);
         return deleteObject(fileRef);
       }
       return null;
