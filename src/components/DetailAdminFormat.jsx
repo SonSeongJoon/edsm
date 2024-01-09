@@ -13,6 +13,8 @@ import ReporterGiftShow from './html/Show/ReporterGiftShow';
 import TravelExpensesShow from './html/Show/TravelExpensesShow';
 import CustomerShow from './html/Show/CustomerShow';
 import LimitExcessShow from "./html/Show/LimitExcessShow";
+import HomeShow from "./html/Show/HomeShow";
+import HomeReportShow from "./html/Show/HomeReportShow";
 
 const STATE_APPROVED = '승인';
 const STATE_PENDING = '대기';
@@ -28,6 +30,8 @@ const COMPONENT_MAP = {
   출장비정산서: TravelExpensesShow,
   고객사실비청구서: CustomerShow,
   한도초과사전승인품의서: LimitExcessShow,
+  재택근무신청서:HomeShow,
+  재택근무보고서:HomeReportShow,
 };
 
 export default function DetailAdminFormat({ displayProduct, product, navigate, states }) {
@@ -50,6 +54,7 @@ export default function DetailAdminFormat({ displayProduct, product, navigate, s
   }, [fetchInitialState]);
 
   const { path } = useParams();
+  console.log(displayProduct)
 
   const determineState = useCallback(
     (state) => {

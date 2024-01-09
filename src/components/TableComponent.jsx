@@ -115,14 +115,11 @@ export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst
   );
 
   useEffect(() => {
-    const yearMonth = `${selectedYear}${selectedMonth.padStart(2, '0')}` // Get the last 2 characters
-    console.log(yearMonth);
-    onYearMonthChange(yearMonth); // yearMonth 상태 업데이트
+    const yearMonth = `${selectedYear}${selectedMonth.padStart(2, '0')}`
+    onYearMonthChange(yearMonth);
 
-    // Save the selected year and month to localStorage
     saveSelectedYearMonthToLocalStorage(selectedYear, selectedMonth);
   }, [selectedYear, selectedMonth, onYearMonthChange]);
-
 
 
   return (

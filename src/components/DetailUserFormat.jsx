@@ -20,6 +20,8 @@ import CustomerShow from './html/Show/CustomerShow';
 import { htmlToFile } from '../js/convertToWord';
 import { useAuthContext } from '../context/AuthContext';
 import LimitExcessShow from "./html/Show/LimitExcessShow";
+import HomeShow from "./html/Show/HomeShow";
+import HomeReportShow from "./html/Show/HomeReportShow";
 
 export default function DetailUserFormat({
   showEditModal,
@@ -114,6 +116,9 @@ export default function DetailUserFormat({
     }
   };
 
+
+
+
   return (
     <div className='w-full xl:flex'>
       {showEditModal && (
@@ -146,6 +151,10 @@ export default function DetailUserFormat({
             <CustomerShow product={displayProduct} />
           ) : displayProduct.file === '한도초과사전승인품의서' ? (
              <LimitExcessShow product={displayProduct} />
+          ) : displayProduct.file === '재택근무신청서' ? (
+             <HomeShow product={displayProduct} />
+          ) : displayProduct.file === '재택근무보고서' ? (
+             <HomeReportShow product={displayProduct} />
           ) : null}
           <div className='mt-5 mb-3 text-sm'>
             <span className='font-bold'>수신자:</span>

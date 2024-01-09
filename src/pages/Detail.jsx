@@ -69,6 +69,7 @@ export default function Detail() {
 
   useEffect(() => {
     if (allState && product) {
+      console.log(allState)
       const filteredStates = allState
         .filter((stateItem) => stateItem.id === product.id)
         .map((stateItem) => ({
@@ -93,6 +94,7 @@ export default function Detail() {
     출장비정산서: TravelExpenses,
     대체휴무사용품의서: Alternative,
     한도초과사전승인품의서: LimitExcess,
+
   };
 
   const htmlString =
