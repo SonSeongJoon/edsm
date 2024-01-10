@@ -69,7 +69,6 @@ export default function Detail() {
 
   useEffect(() => {
     if (allState && product) {
-      console.log(allState)
       const filteredStates = allState
         .filter((stateItem) => stateItem.id === product.id)
         .map((stateItem) => ({
