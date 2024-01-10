@@ -31,12 +31,6 @@ const HomeShow = ({ product }) => {
 		allstate = 0;
 	}
 
-	console.log(allstate)
-
-
-
-
-
 	const navigate = useNavigate();
 	const handleWriteReportClick = () => {
 		// Create a new object without the 'id' property
