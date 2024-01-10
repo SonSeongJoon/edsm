@@ -15,9 +15,27 @@ const HomeShow = ({ product }) => {
 		workDate,
 		workTime,
 		workHow,
-		state
 	} = product;
-	console.log(product)
+	let count_agree = 0;
+	for (let key in product.admitMember) {
+		if (product.admitMember.hasOwnProperty(key)) {
+			count_agree++;
+		}
+	}
+	const count_member = product.agree.length;
+
+	let allstate;
+	if (count_member === count_agree) {
+		allstate = 1;
+	} else {
+		allstate = 0;
+	}
+
+	console.log(allstate)
+
+
+
+
 
 	const navigate = useNavigate();
 	const handleWriteReportClick = () => {
@@ -80,7 +98,7 @@ const HomeShow = ({ product }) => {
 						</div>
 					))}
 				</div>
-				{state === '승인' ? <div className='flex justify-end mt-3'>
+				{allstate === 1 ? <div className='flex justify-end mt-3'>
 					<button className='border border-red-500 px-2 py-1 rounded text-red-800 font-bold' onClick={handleWriteReportClick}>보고서 작성하기</button>
 				</div> : null}
 			</div>
