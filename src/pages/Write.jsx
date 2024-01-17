@@ -74,7 +74,7 @@ const approvers = [
 	{name: '한현석 대표이사', email: 'hshan@seoulir.co.kr', uid: 'ICaxrJuKoabKSpQlrAuFmmzRFIf2'},
 	{name: '윤홍민 매니저', email: 'yoon.hm@seoulir.co.kr', uid: 'l82mZobYllanxiNrSP9eQjY7X862'},
 	{name: '손성준 매니저', email: 'sonsj97@seoulir.co.kr', uid: 'yDjIL1ZvC2X0RzYo8qB9ruXRNEb2'},
-	{name: '개발자', email: 'sonsj96@seoulir.co.kr', uid: '7P1xLXPdIDasAwE1lLR1ccTMvIf2'},
+	// {name: '개발자', email: 'sonsj96@seoulir.co.kr', uid: '7P1xLXPdIDasAwE1lLR1ccTMvIf2'},
 ];
 export default function Write() {
 	const navigator = useNavigate();
