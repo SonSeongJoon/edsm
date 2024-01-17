@@ -108,13 +108,13 @@ export const Customer = ({
             </tr>
             <tr>
                 <td>제 목</td>
-                <td colspan="6" style="text-align: left;">${title}</td>
+                <td colspan="8" style="text-align: left;">${title}</td>
             </tr>
             <tr>
-                <td colspan="6">청 구 내 역</td>
+                <td colspan="8">청 구 내 역</td>
             </tr>
             <tr style="height: 500px;">
-                <td colspan="6" style="text-align: left;" >
+                <td colspan="8" style="text-align: left;" >
                     <p>회사명: ${formattedContent}</p> 
                     <p>청구내역: ${data}</p> 
                     <p>사후정산수수료 적용 여부: ${charge}</p>
@@ -122,7 +122,7 @@ export const Customer = ({
                 </td>
             </tr>
             <tr>
-                <td colspan="6" style="text-align: left;">
+                <td colspan="8" style="text-align: left;">
                     <p>상기와 같이 청구서 확인을 요청 하오니 결재를 바랍니다.</p>
                 </td>
             </tr>
