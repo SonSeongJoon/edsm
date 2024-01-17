@@ -33,11 +33,9 @@ const HomeShow = ({ product }) => {
 
 	const navigate = useNavigate();
 	const handleWriteReportClick = () => {
-		// Create a new object without the 'id' property
 		const productWithoutId = { ...product };
 		delete productWithoutId.id;
 
-		// Navigate to the '/write' route with the modified product data as state
 		navigate('/write', { state: { product: productWithoutId } });
 	};
 
