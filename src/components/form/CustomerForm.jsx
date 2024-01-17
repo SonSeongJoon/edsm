@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment'; // moment 라이브러리를 가져옵니다.
+import moment from 'moment';
 
 const initCustomerForm = {
 	file: '고객사실비청구서',
