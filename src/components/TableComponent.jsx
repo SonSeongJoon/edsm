@@ -246,10 +246,16 @@ export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst
                 </select>
          </div>
       )}
-      <div className='flex'>
-        &nbsp; 현재 날짜는 &nbsp;<p className='text-red-600 font-bold'>{currentDate}</p>&nbsp;입니다.
-        지금 보시는 데이터는 <p className='text-red-600 font-bold'>&nbsp;20{selectedYear}년 {selectedMonth}월자 데이터</p>입니다.
+      <div className='m-2 text-xm sm:text-md'>
+        <div className='flex'>
+          현재 날짜는 &nbsp;<p className='text-red-600 font-bold'>{currentDate}</p>&nbsp;입니다.
+        </div>
+        <div className='flex'>
+          지금 보시는 데이터는 <p className='text-blue-600 font-bold'>&nbsp;20{selectedYear}년 {selectedMonth}월자 데이터</p>입니다.
+        </div>
       </div>
+
+
 
       <table className="min-w-full bg-white border-t border-b border-gray-300 divide-y divide-gray-300 ">
         <thead>
