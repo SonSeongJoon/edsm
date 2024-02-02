@@ -39,6 +39,8 @@ export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst
   const [uniqueState, setUniqueState] = useState([]);
   const [uniqueCheck, setUniqueCheck] = useState([]);
   const { verificationStatus, setVerificationStatus } = useVerificationStatus();
+  const currentDate = moment().format('YYYY년 MM월');
+
 
   const currentYear = moment().year(); // 현재 연도를 얻기
   const startYear = 2023; // 서비스 시작 연도
@@ -244,7 +246,10 @@ export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst
                 </select>
          </div>
       )}
-      <div className='flex'>&nbsp;현재 <p className='text-red-600 font-bold'>&nbsp;20{selectedYear}년 {selectedMonth}월</p>&nbsp;데이터를 확인 중이십니다.</div>
+      <div className='flex'>
+        &nbsp; 현재 날짜는 &nbsp;<p className='text-red-600 font-bold'>{currentDate}</p>&nbsp;입니다.
+        지금 보시는 데이터는 <p className='text-red-600 font-bold'>&nbsp;20{selectedYear}년 {selectedMonth}월자 데이터</p>입니다.
+      </div>
 
       <table className="min-w-full bg-white border-t border-b border-gray-300 divide-y divide-gray-300 ">
         <thead>
