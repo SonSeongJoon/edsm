@@ -244,6 +244,8 @@ export const TableComponent = ({ isLoading, error, currentItems, isAdmins, isMst
                 </select>
          </div>
       )}
+      <div className='flex'>&nbsp;현재 <p className='text-red-600 font-bold'>&nbsp;20{selectedYear}년 {selectedMonth}월</p>&nbsp;데이터를 확인 중이십니다.</div>
+
       <table className="min-w-full bg-white border-t border-b border-gray-300 divide-y divide-gray-300 ">
         <thead>
           <tr>
