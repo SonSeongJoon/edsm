@@ -1,16 +1,20 @@
 export const Alternative = ({
-  file,
-  name,
-  dept,
-  title,
-  whatYear,
-  whenYear,
-  whatTime,
-  whenTime,
-  admitMember,
-  corporation,
-  date,
-}) => {
+                              file,
+                              name,
+                              dept,
+                              title,
+                              whatYear,
+                              whenYear,
+                              whatTime,
+                              whenTime,
+                              whatYear2,
+                              whatTime2,
+                              whatYear3,
+                              whatTime3,
+                              admitMember,
+                              corporation,
+                              date,
+                            }) => {
   let keys = [];
 
   if (admitMember) {
@@ -85,7 +89,9 @@ export const Alternative = ({
             <tr style="height: 500px;">
                 <td colspan="4" style="text-align: left;" >
                     <p>휴무자: ${name}</p> 
-                    <p>초과근무 일시: ${whatYear} ${whatTime}</p>  <!-- 초과근무 일시 정보 -->
+                    <p>초과근무 일시 1: ${whatYear} ${whatTime}</p>  <!-- 초과근무 일시 1 정보 -->
+                    <p>초과근무 일시 2: ${whatYear2} ${whatTime2}</p>  <!-- 초과근무 일시 2 정보 -->
+                    <p>초과근무 일시 3: ${whatYear3} ${whatTime3}</p>  <!-- 초과근무 일시 3 정보 -->
                     <p>대체휴무 일시: ${whenYear} ${whenTime}</p>  <!-- 대체휴무 일시 정보 -->
                 </td>
             </tr>
