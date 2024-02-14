@@ -8,6 +8,10 @@ const initAlternativeForm = {
 	whenYear: '',
 	whatTime: '00시~00시 (00시간)',
 	whenTime: '00시~00시 (00시간)',
+	whatYear2: '',
+	whatTime2: '00시~00시 (00시간)',
+	whatYear3: '',
+	whatTime3: '00시~00시 (00시간)',
 	agree: [],
 	agreeName: [],
 	agreeUid: [],
@@ -44,7 +48,7 @@ const AlternativeForm = ({ product, handleChange }) => {
 
 					{/* Period Section */}
 					<div className="mb-3 flex items-center">
-						<div className="font-bold mr-3">초과근무 일시</div>
+						<div className="font-bold mr-3">초과근무 일시 1</div>
 						{/* Date input */}
 						<input
 							type="date"
@@ -57,6 +61,48 @@ const AlternativeForm = ({ product, handleChange }) => {
 							name="whatTime"
 							type="text"
 							value={product.whatTime || ''}
+							placeholder='개인별 매출 기여도 정리'
+							className="w-1/3 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+							onChange={handleChange}
+						/>
+					</div>
+
+					{/* Additional Periods */}
+					<div className="mb-3 flex items-center">
+						<div className="font-bold mr-3">초과근무 일시 2</div>
+						{/* Date input */}
+						<input
+							type="date"
+							name="whatYear2"
+							value={product.whatYear2 || ''}
+							className="w-1/4 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mr-3"
+							onChange={handleChange}
+						/>
+						<input
+							name="whatTime2"
+							type="text"
+							value={product.whatTime2 || ''}
+							placeholder='개인별 매출 기여도 정리'
+							className="w-1/3 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+							onChange={handleChange}
+						/>
+					</div>
+
+					{/* Additional Periods */}
+					<div className="mb-6 flex items-center">
+						<div className="font-bold mr-3">초과근무 일시 3</div>
+						{/* Date input */}
+						<input
+							type="date"
+							name="whatYear3"
+							value={product.whatYear3 || ''}
+							className="w-1/4 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mr-3"
+							onChange={handleChange}
+						/>
+						<input
+							name="whatTime3"
+							type="text"
+							value={product.whatTime3 || ''}
 							placeholder='개인별 매출 기여도 정리'
 							className="w-1/3 px-2 sm:px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
 							onChange={handleChange}
@@ -95,4 +141,5 @@ const AlternativeForm = ({ product, handleChange }) => {
 		</div>
 	);
 };
-export {AlternativeForm, initAlternativeForm};
+
+export { AlternativeForm, initAlternativeForm };
